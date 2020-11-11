@@ -1,0 +1,3 @@
+User-agent: *
+
+Sitemap: https://yuanyatianchi.github.io/sitemap.xml
