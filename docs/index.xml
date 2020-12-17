@@ -17,6 +17,15 @@
     </item>
     
     <item>
+      <title>redis</title>
+      <link>https://yuanyatianchi.github.io/post/kv.redis/</link>
+      <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/kv.redis/</guid>
+      <description>redis https://redis.io/，http://www.redis.cn/ Redis的特性 速度快 数据存在内存（主要原因） c语言编写（50000line，单机的核心代码只有23000line） 单线程</description>
+    </item>
+    
+    <item>
       <title>Markdown Syntax</title>
       <link>https://yuanyatianchi.github.io/post/markdown-syntax/</link>
       <pubDate>Mon, 11 May 2020 00:00:00 +0000</pubDate>
