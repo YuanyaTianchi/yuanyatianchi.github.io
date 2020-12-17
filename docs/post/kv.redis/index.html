@@ -204,7 +204,7 @@
 </ul>
 </li>
 </ul>
-<h1 id="client">client</h1>
+<h2 id="client">client</h2>
 <p><a href="https://redis.io/clients">https://redis.io/clients</a> ，redis客户端每种语言都有很多，自行选择</p>
 <h3 id="go">go</h3>
 <h4 id="redigo">redigo</h4>
@@ -350,7 +350,7 @@ try {
 </ul>
 <h3 id="python">python</h3>
 <h4 id="redis-py">redis-py</h4>
-<h1 id="hello">hello</h1>
+<h2 id="hello">hello</h2>
 <h6 id="redis安装">redis安装</h6>
 <pre><code class="language-shell">wget http://download.redis.io/releases/redis-3.0.7.tar.gz #下载
 tar -xzf redis-3.0.7.tar.gz #解压
@@ -451,7 +451,7 @@ $ set hello &quot;world&quot;
 $ get hello
 $ del hello
 </code></pre>
-<h1 id="api">api</h1>
+<h2 id="api">api</h2>
 <ul>
 <li>Redis API使用和理解
 <ul>
@@ -951,7 +951,7 @@ public VideoInfo get(long id) {
 </ul>
 </li>
 </ul>
-<h2 id="更多功能">更多功能</h2>
+<h3 id="更多功能">更多功能</h3>
 <h3 id="慢查询">慢查询</h3>
 <ul>
 <li>一个查询的生命周期：client 发送命令→阻塞等待排队执行（redis单线程，命令执行类似于队列）→执行命令→返回结果
@@ -1267,7 +1267,7 @@ redis&gt; pfcount 2017_03_06:unique:ids
 </ul>
 </li>
 </ul>
-<h1 id="持久化">持久化</h1>
+<h2 id="持久化">持久化</h2>
 <ul>
 <li>持久化：redis所有数据保持在内存中,对数据的更新将异步地保存到磁盘上
 <ul>
@@ -1662,7 +1662,7 @@ world
 </li>
 <li>单机多实例部署</li>
 </ul>
-<h1 id="redis缓存">Redis缓存</h1>
+<h2 id="redis缓存">Redis缓存</h2>
 <ul>
 <li>缓存的使用与设计
 <ul>
@@ -1676,7 +1676,7 @@ world
 </ul>
 </li>
 </ul>
-<h2 id="缓存的受益与成本">缓存的受益与成本</h2>
+<h3 id="缓存的受益与成本">缓存的受益与成本</h3>
 <ul>
 <li>收益
 <ul>
@@ -1720,7 +1720,7 @@ world
 </ul>
 </li>
 </ul>
-<h2 id="缓存更新策略">缓存更新策略</h2>
+<h3 id="缓存更新策略">缓存更新策略</h3>
 <p>缓存的数据通常都有生命周期，需要做定期更新或删除以保证空间在可控范围内，且保证数据的定期更新。但是缓存中的数据和真实的数据可能存在不一致，需要一个合理的更新策略来保证数据的不一致在可容忍范围内</p>
 <ul>
 <li>
@@ -1768,7 +1768,7 @@ world
 <li>低一致性环境：最大内存和淘汰策略。随意往缓存里扔就行了，达到最大内存就淘汰即可，淘汰什么也无所谓，没有的话下次再到存储层读取重新构建缓存即可</li>
 <li>高一致性情境：超时剔除、主动更新结合，超时策略为主动更新兜底，最大内存和淘汰策略做最终兜底。主动更新的代码是开发人员自己维护的，万一出了问题，没有将真正的数据删除，后期我们无法发现这样的问题，那么我们就给数据设置一个较长的过期时间，如果出了问题，最终数据也会被超时剔除，当然这里的数据指真正有生命周期的，确实要在一定时间后过期的，如果有数据真的是不会过期，就不能设置过期时间。最后是最大内存和淘汰策略兜底，因为无法保证那天监控不到位内存就上去了，保证高可用性，而不会直接爆内存导致缓存不可用</li>
 </ul>
-<h2 id="缓存粒度控制">缓存粒度控制</h2>
+<h3 id="缓存粒度控制">缓存粒度控制</h3>
 <ul>
 <li>从MySQL获取用户信息：select * from user where id= {id}</li>
 <li>设置用户信息缓存：set user:{id} &lsquo;select * from user where id= {id}'。缓存数据来源于存储层，是需要做一个两者间映射的，key需要id值，value是select * from user where id= {id}的结果值，可能需要很多操作，如果对它做一个压缩，或者不使用字符串类型，使用hash类型，将每一个属性变成hash的field和value</li>
@@ -1786,7 +1786,7 @@ world
 <li>占用空间：部分属性更好</li>
 <li>代码维护：表面上全量属性更好。不会出现有新的业务需求时，需要用到的字段没有，还要重新到存储层单独取字段又更新到缓存。但是大部分时候，需求和业务固定了，我们只需要缓存我们需要的属性，而不需要过多考虑扩展性，虽然考虑扩展性是一个很好的习惯，但是在使用缓存的时候要更多考虑空间占用和性能问题，因为内存空间珍贵，而缓存也更是为了解决性能问题而存在的。所以还是要综合考虑</li>
 </ul>
-<h2 id="缓存穿透优化">缓存穿透优化</h2>
+<h3 id="缓存穿透优化">缓存穿透优化</h3>
 <ul>
 <li>
 <p>缓存穿透：key对应的数据在数据源并不存在，每次针对此key的请求从缓存获取不到，请求都会到数据源，从而可能压垮数据源。比如用一个不存在的用户id获取用户信息，不论缓存还是数据库都没有，若黑客利用此漏洞进行攻击可能压垮数据库。</p>
@@ -1851,18 +1851,18 @@ public String getPassThrough(String key) {
 </ul>
 </li>
 </ul>
-<h2 id="缓存击穿">缓存击穿</h2>
+<h3 id="缓存击穿">缓存击穿</h3>
 <p>缓存击穿：key对应的数据存在，但在redis中过期，此时若有大量并发请求过来，这些请求发现缓存过期一般都会从后端DB加载数据并回设到缓存，这个时候大并发的请求可能会瞬间把后端DB压垮。业界比较常用的做法，是使用mutex。简单地来说，就是在缓存失效的时候（判断拿出来的值为空），不是立即去load db，而是先使用缓存工具的某些带成功操作返回值的操作（比如Redis的SETNX或者Memcache的ADD）去set一个mutex key，当操作返回成功时，再进行load db的操作并回设缓存；否则，就重试整个get缓存的方法</p>
 <ul>
 <li>解决：通过redis的setnx（不存在才set）设置key做互斥锁，设置成功的才去数据库加载数据</li>
 </ul>
-<h2 id="缓存雪崩优化">缓存雪崩优化</h2>
+<h3 id="缓存雪崩优化">缓存雪崩优化</h3>
 <ul>
 <li>缓存雪崩：当缓存服务器重启或者大量缓存集中在某一个时间段失效，这样在失效的时候，也会给后端系统(比如DB)带来很大压力。加锁或者请求队列，还有尽量不要使大量数据的过期时间在同一个时间段</li>
 <li>缓存失效时的雪崩效应对底层系统的冲击非常可怕！大多数系统设计者考虑用加锁或者队列的方式保证来保证不会有大量的线程对数据库一次性进行读写，从而避免失效时大量的并发请求落到底层存储系统上。还有一个简单方案就时讲缓存失效时间分散开，比如我们可以在原有的失效时间基础上增加一个随机值，比如1-5分钟随机，这样每一个缓存的过期时间的重复率就会降低，就很难引发集体失效的事件</li>
 </ul>
 <p><a href="https://zhuanlan.zhihu.com/p/75588064">https://zhuanlan.zhihu.com/p/75588064</a></p>
-<h2 id="无底洞问题优化">无底洞问题优化</h2>
+<h3 id="无底洞问题优化">无底洞问题优化</h3>
 <ul>
 <li>
 <p>问题描述</p>
@@ -1898,7 +1898,7 @@ public String getPassThrough(String key) {
 </li>
 <li></li>
 </ul>
-<h2 id="热点key重建优化">热点key重建优化</h2>
+<h3 id="热点key重建优化">热点key重建优化</h3>
 <ul>
 <li>
 <p>缓存重建：到cache中获取数据，miss则到数据源获取，这个过程就是缓存重建</p>
@@ -1993,7 +1993,7 @@ String get(String key){
 </table>
 </li>
 </ul>
-<h2 id="总结">总结</h2>
+<h3 id="总结">总结</h3>
 <ul>
 <li>缓存收益：加速读写、降低后端存储负载。</li>
 <li>缓存成本：缓存和存储数据不一致性、代码维护成本、运维成本。</li>
@@ -2003,7 +2003,7 @@ String get(String key){
 <li>雪崩问题:缓存层高可用、客户端降级、提前演练是解决雪崩问题的重要方法。</li>
 <li>热点key问题:互斥锁、“永远不过期”能够在一-定程度 上解决热点key问题，开发人员在使用时要了解它们各自的使用成本。</li>
 </ul>
-<h1 id="redisbloomfilter">RedisBloomFilter</h1>
+<h2 id="redisbloomfilter">RedisBloomFilter</h2>
 <p>基于Redis的分布式布隆过滤器</p>
 <ul>
 <li>引出布隆过滤器</li>
@@ -2013,7 +2013,7 @@ String get(String key){
 <li>Redis单机布隆过滤器</li>
 <li>Redis分布式布隆过滤器</li>
 </ul>
-<h2 id="引出布隆过滤器">引出布隆过滤器</h2>
+<h3 id="引出布隆过滤器">引出布隆过滤器</h3>
 <ul>
 <li>问题：现有50亿个电话号码，现有10万个电话号码，要 <strong>快速、准确</strong> 判断这些电话号码是否已经存在?
 <ul>
@@ -2054,7 +2054,7 @@ String get(String key){
 </ul>
 </li>
 </ul>
-<h2 id="布隆过滤器原理">布隆过滤器原理</h2>
+<h3 id="布隆过滤器原理">布隆过滤器原理</h3>
 <ul>
 <li>构建
 <ul>
@@ -2079,7 +2079,7 @@ String get(String key){
 </li>
 <li>判断元素存在：让元素走一遍同样的过程：如果得到的位置在二进制向量上都是1，则在表示存在，反之表示不存在</li>
 </ul>
-<h2 id="布隆过滤器误差率">布隆过滤器误差率</h2>
+<h3 id="布隆过滤器误差率">布隆过滤器误差率</h3>
 <ul>
 <li>
 <p>误差率：肯定存在误差，对的肯定是对的，错的可能是对的，错的也可能恰好都命中了</p>
@@ -2124,7 +2124,7 @@ $$</p>
 </ul>
 </li>
 </ul>
-<h2 id="本地布隆过滤器">本地布隆过滤器</h2>
+<h3 id="本地布隆过滤器">本地布隆过滤器</h3>
 <ul>
 <li>现有库：guava，https://github.com/google/guava</li>
 <li>本地布隆过滤器的问题
@@ -2135,7 +2135,7 @@ $$</p>
 </ul>
 </li>
 </ul>
-<h2 id="redis单机布隆过滤器">Redis单机布隆过滤器</h2>
+<h3 id="redis单机布隆过滤器">Redis单机布隆过滤器</h3>
 <ul>
 <li>基于位图：布隆过滤器的二进制向量天然吻合redis位图，redis位图提供了setbit、getbit等功能</li>
 <li>实现
@@ -2547,7 +2547,7 @@ public class BloomFilterBuilder {
 
 }
 </code></pre>
-<h3 id="存在的问题">存在的问题</h3>
+<h4 id="存在的问题">存在的问题</h4>
 <ul>
 <li>速度慢：比本地慢，输在网络
 <ul>
@@ -2560,7 +2560,7 @@ public class BloomFilterBuilder {
 </ul>
 </li>
 </ul>
-<h2 id="redis分布式布隆过滤器">Redis分布式布隆过滤器</h2>
+<h3 id="redis分布式布隆过滤器">Redis分布式布隆过滤器</h3>
 <ul>
 <li>实现方法：基于单机改改即可
 <ul>
@@ -2569,7 +2569,7 @@ public class BloomFilterBuilder {
 </ul>
 </li>
 </ul>
-<h1 id="主从">主从</h1>
+<h2 id="主从">主从</h2>
 <ul>
 <li>
 <p>单机存在的问题：机器故障（分布式问题）、容量瓶颈（分布式问题）、QPS瓶颈（高可用问题）</p>
@@ -2747,7 +2747,7 @@ sys&gt; redis-cli -p 6380 info replication #在客户端外查看
 </ul>
 </li>
 </ul>
-<h1 id="redissentinel">RedisSentinel</h1>
+<h2 id="redissentinel">RedisSentinel</h2>
 <ul>
 <li>
 <p>主从复制高可用？：主从复制存在问题</p>
@@ -2987,7 +2987,7 @@ sentinel down-after-milliseconds mymaster 30000
 <p>Redis Sentinel在对节点做失败判定时分为主观下线和客观下线</p>
 <p>看懂Redis Sentinel故障转移日志对于Redis Sentinel以及问题排查非常有帮助</p>
 <p>Redis Sentinel实现读写分离高可用可以依赖Sentinel节点的消息通知，获取Redis数据节点的状态变化</p>
-<h1 id="rediscluster">RedisCluster</h1>
+<h2 id="rediscluster">RedisCluster</h2>
 <ul>
 <li>呼唤集群</li>
 <li>数据分布</li>
@@ -2997,7 +2997,7 @@ sentinel down-after-milliseconds mymaster 30000
 <li>集群原理</li>
 <li>开发运维常见问题</li>
 </ul>
-<h2 id="呼唤集群">呼唤集群</h2>
+<h3 id="呼唤集群">呼唤集群</h3>
 <ul>
 <li>为什么呼唤集群
 <ul>
@@ -3020,7 +3020,7 @@ sentinel down-after-milliseconds mymaster 30000
 </ul>
 </li>
 </ul>
-<h2 id="数据分布">数据分布</h2>
+<h3 id="数据分布">数据分布</h3>
 <ul>
 <li>
 <p>分布式数据库-数据分区：全量数据→分区规则→子集-1、子集-2&hellip;子集-n</p>
@@ -3085,7 +3085,7 @@ sentinel down-after-milliseconds mymaster 30000
 </ul>
 </li>
 </ul>
-<h2 id="搭建集群">搭建集群</h2>
+<h3 id="搭建集群">搭建集群</h3>
 <ul>
 <li>
 <p>基本架构</p>
@@ -3279,7 +3279,7 @@ cp ${REDIS_ HOME}/src/redis-trib.rb /usr/local/bin
 </ul>
 </li>
 </ul>
-<h2 id="集群伸缩">集群伸缩</h2>
+<h3 id="集群伸缩">集群伸缩</h3>
 <ul>
 <li>
 <p>伸缩原理：集群伸缩=槽和数据在节点之间的移动</p>
@@ -3399,7 +3399,7 @@ redis-trib.rb del-node 127.0.0.1:7000 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx #
 </ul>
 </li>
 </ul>
-<h2 id="客户端路由">客户端路由</h2>
+<h3 id="客户端路由">客户端路由</h3>
 <ul>
 <li>
 <p>moved重定向：moved表示已经确定不在本节点了，完成式，已经迁移完毕了</p>
@@ -3659,8 +3659,8 @@ for (Entry&lt;String, JedisPool&gt; entry : jedisPoolMap.entrySet() {
 </ul>
 </li>
 </ul>
-<h2 id="故障转移">故障转移</h2>
-<h3 id="故障发现">故障发现</h3>
+<h3 id="故障转移">故障转移</h3>
+<h4 id="故障发现">故障发现</h4>
 <ul>
 <li>
 <h2 id="通过pingpong消息实现故障发现不需要sentinel">通过ping/pong消息实现故障发现:不需要sentinel</h2>
@@ -3673,7 +3673,7 @@ for (Entry&lt;String, JedisPool&gt; entry : jedisPoolMap.entrySet() {
 </ul>
 </li>
 </ul>
-<h3 id="故障恢复">故障恢复</h3>
+<h4 id="故障恢复">故障恢复</h4>
 <ul>
 <li>资格检查：对多个从节点进行资格检查，在资格审查范围内的从节点才有资格去做故障恢复的工作
 <ul>
@@ -3695,7 +3695,7 @@ for (Entry&lt;String, JedisPool&gt; entry : jedisPoolMap.entrySet() {
 </ul>
 </li>
 </ul>
-<h3 id="故障转移演练">故障转移演练</h3>
+<h4 id="故障转移演练">故障转移演练</h4>
 <p>1.执行kill -9节点模拟宕机</p>
 <p>2.观察客户端故障恢复时间：大概不到20秒</p>
 <p>3.观察各个节点的日志</p>
@@ -3713,8 +3713,8 @@ for (Entry&lt;String, JedisPool&gt; entry : jedisPoolMap.entrySet() {
 </li>
 <li>7002：清除7000主节点的一些信息，如FAIL信息；等等，不再多看，有兴趣自己看</li>
 </ul>
-<h2 id="开发运维常见问题-1">开发运维常见问题</h2>
-<h3 id="集群完整性">集群完整性</h3>
+<h3 id="开发运维常见问题-1">开发运维常见问题</h3>
+<h4 id="集群完整性">集群完整性</h4>
 <ul>
 <li>cluster-require-full-coverage，默认为yes
 <ul>
@@ -3724,7 +3724,7 @@ for (Entry&lt;String, JedisPool&gt; entry : jedisPoolMap.entrySet() {
 </ul>
 </li>
 </ul>
-<h3 id="带宽消耗">带宽消耗</h3>
+<h4 id="带宽消耗">带宽消耗</h4>
 <ul>
 <li>问题
 <ul>
@@ -3754,12 +3754,12 @@ for (Entry&lt;String, JedisPool&gt; entry : jedisPoolMap.entrySet() {
 </ul>
 </li>
 </ul>
-<h3 id="pubsub广播">Pub/Sub广播</h3>
+<h4 id="pubsub广播">Pub/Sub广播</h4>
 <ul>
 <li>问题：publish在集群每个节点广播，加重带宽。对任意节点执行publish发布消息，publish将广播到整个集群</li>
 <li>解决：单独&quot;走&quot;一套Redis Sentinel。因为发布订阅的功能本身比较独立</li>
 </ul>
-<h3 id="集群倾斜">集群倾斜</h3>
+<h4 id="集群倾斜">集群倾斜</h4>
 <ul>
 <li>集群倾斜
 <ul>
@@ -3808,7 +3808,7 @@ for (Entry&lt;String, JedisPool&gt; entry : jedisPoolMap.entrySet() {
 </ul>
 </li>
 </ul>
-<h3 id="读写分离">读写分离</h3>
+<h4 id="读写分离">读写分离</h4>
 <ul>
 <li>只读连接：集群模式的从节点不接受任何读写请求
 <ul>
@@ -3824,7 +3824,7 @@ for (Entry&lt;String, JedisPool&gt; entry : jedisPoolMap.entrySet() {
 </li>
 <li>建议：redis集群使用读写分离成本很高，尽量选择扩展集群规模，而不是利用从节点来实现读写分离。实在没有集群扩展成本，也可以考虑自己实现客户端来实现读写分离</li>
 </ul>
-<h3 id="数据迁移">数据迁移</h3>
+<h4 id="数据迁移">数据迁移</h4>
 <ul>
 <li>
 <p>官方迁移工具: redis-trib.rb import</p>
@@ -3846,7 +3846,7 @@ for (Entry&lt;String, JedisPool&gt; entry : jedisPoolMap.entrySet() {
 </ul>
 </li>
 </ul>
-<h3 id="集群vs单机">集群vs单机</h3>
+<h4 id="集群vs单机">集群vs单机</h4>
 <ul>
 <li>集群限制
 <ul>
@@ -3871,7 +3871,7 @@ for (Entry&lt;String, JedisPool&gt; entry : jedisPoolMap.entrySet() {
 </ul>
 </li>
 </ul>
-<h2 id="总结-2">总结</h2>
+<h3 id="总结-2">总结</h3>
 <ul>
 <li>Redis cluster数据分区规则采用虚拟槽方式(16384个槽) ,每个节点负责一部分槽和相关数据,实现数据和请求的负载均衡。</li>
 <li>搭建集群划分四个步骤:准备节点、节点握手、分配槽、复制。redis-trib.rb工具用于快速搭建集群。</li>
@@ -3885,8 +3885,8 @@ for (Entry&lt;String, JedisPool&gt; entry : jedisPoolMap.entrySet() {
 <li>集群自动故障转移过程分为故障发现和节点恢复。节点下线分为主观下线和客观下线,当超过半数主节点认为故障节点为主观下线时标记它为客观下线状态。从节点负责对客观下线的主节点触发故障恢复流程,保证集群的可用性。</li>
 <li>开发运维常见问题包括：超大规模集群带宽消耗，pub/sub广播问题，集群倾斜问题，单机和集群对比等</li>
 </ul>
-<h1 id="开发规范">开发规范</h1>
-<h2 id="键值设计">键值设计</h2>
+<h2 id="开发规范">开发规范</h2>
+<h3 id="键值设计">键值设计</h3>
 <ul>
 <li>
 <p>key设计</p>
@@ -4042,7 +4042,7 @@ object encoding key #查看key的编码。内部编码各不相同：int、raw�
 </ul>
 </li>
 </ul>
-<h2 id="选择合适的数据结构">选择合适的数据结构</h2>
+<h3 id="选择合适的数据结构">选择合适的数据结构</h3>
 <ul>
 <li>
 <p>实体类型(数据结构内存优化:例如ziplist ,注意内存和性能的平衡)</p>
@@ -4166,7 +4166,7 @@ hmset user:1 name tom age 19 favor football</p>
 </ul>
 </li>
 </ul>
-<h2 id="过期设计">过期设计</h2>
+<h3 id="过期设计">过期设计</h3>
 <ul>
 <li>
 <p>键值生命周期：Redis不是垃圾桶，不要什么东西都扔给redis，还不控制缓存时间</p>
@@ -4176,7 +4176,7 @@ hmset user:1 name tom age 19 favor football</p>
 </ul>
 </li>
 </ul>
-<h2 id="命令优化">命令优化</h2>
+<h3 id="命令优化">命令优化</h3>
 <ul>
 <li>[推荐] O(N)以上命令关注N的数量：例如，hgetall、Irange、 smembers、zrange、 sinter等并非不能使用,但是需要明确N的值。有遍历的需求可以使用hscan、sscan、 zscan代替。即主要考虑n的大小</li>
 <li>[推荐]禁用命令：禁止线上使用keys、flushall、 flushdb等，通过redis的rename机制禁掉命令，或者使用scan的方式渐进式处理。</li>
@@ -4190,7 +4190,7 @@ hmset user:1 name tom age 19 favor football</p>
 </li>
 <li>[建议] 必要情况下使用monitor命令时，要注意不要长时间使用。monitor可以查看redis监控redis执行的命令，但是如果并发量过高，会有大流量打在monitor-client（monitor也是一个redis客户端）上，会造成monitor无法实时消费大量的流量，会导致输出缓冲区暴增，会占用redis内存，撑爆redis内存</li>
 </ul>
-<h2 id="客户端优化">客户端优化</h2>
+<h3 id="客户端优化">客户端优化</h3>
 <p>Java客户端优化</p>
 <ul>
 <li>
@@ -4228,9 +4228,9 @@ try {
 </code></pre>
 </li>
 </ul>
-<h1 id="开发运维常见坑">开发运维常见坑</h1>
-<h1 id="redis内存管理">Redis内存管理</h1>
-<h1 id="rediscachecloud">RedisCacheCloud</h1>
+<h2 id="开发运维常见坑">开发运维常见坑</h2>
+<h2 id="redis内存管理">Redis内存管理</h2>
+<h2 id="rediscachecloud">RedisCacheCloud</h2>
 <p><a href="https://github.com/sohutv/cachecloud">https://github.com/sohutv/cachecloud</a></p>
 <p>Redis云平台CacheCloud。老师自己在原来公司参与开发的</p>
 <ul>
@@ -4241,7 +4241,7 @@ try {
 <li>用户功能</li>
 <li>运维功能</li>
 </ul>
-<h2 id="redis规模化运维">Redis规模化运维</h2>
+<h3 id="redis规模化运维">Redis规模化运维</h3>
 <ul>
 <li>遇到的问题
 <ul>
@@ -4277,12 +4277,12 @@ try {
 </ul>
 </li>
 </ul>
-<h2 id="快速构建">快速构建</h2>
+<h3 id="快速构建">快速构建</h3>
 <p><a href="https://github.com/sohutv/cachecloud/wiki">https://github.com/sohutv/cachecloud/wiki</a></p>
-<h2 id="机器部署">机器部署</h2>
-<h2 id="应用接入">应用接入</h2>
-<h2 id="用户功能">用户功能</h2>
-<h2 id="运维功能">运维功能</h2>
+<h3 id="机器部署">机器部署</h3>
+<h3 id="应用接入">应用接入</h3>
+<h3 id="用户功能">用户功能</h3>
+<h3 id="运维功能">运维功能</h3>
 
     </div>
 </article>
@@ -4399,25 +4399,19 @@ try {
         <h3>TOC</h3>
         <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#client">client</a>
       <ul>
         <li><a href="#go">go</a></li>
         <li><a href="#java">java</a></li>
         <li><a href="#python">python</a></li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li>
+    <li><a href="#hello">hello</a>
       <ul>
         <li></li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li>
+    <li><a href="#api">api</a>
       <ul>
         <li><a href="#通用命令">通用命令</a></li>
         <li><a href="#字符串">字符串</a></li>
@@ -4425,10 +4419,7 @@ try {
         <li><a href="#list">list</a></li>
         <li><a href="#set">set</a></li>
         <li><a href="#zset">zset</a></li>
-      </ul>
-    </li>
-    <li><a href="#更多功能">更多功能</a>
-      <ul>
+        <li><a href="#更多功能">更多功能</a></li>
         <li><a href="#慢查询">慢查询</a></li>
         <li><a href="#pipeline">pipeline</a></li>
         <li><a href="#发布订阅">发布订阅</a></li>
@@ -4437,97 +4428,79 @@ try {
         <li><a href="#geo">GEO</a></li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li>
+    <li><a href="#持久化">持久化</a>
       <ul>
         <li></li>
       </ul>
     </li>
     <li><a href="#开发运维常见问题">开发运维常见问题</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#缓存的受益与成本">缓存的受益与成本</a></li>
-    <li><a href="#缓存更新策略">缓存更新策略</a></li>
-    <li><a href="#缓存粒度控制">缓存粒度控制</a></li>
-    <li><a href="#缓存穿透优化">缓存穿透优化</a></li>
-    <li><a href="#缓存击穿">缓存击穿</a></li>
-    <li><a href="#缓存雪崩优化">缓存雪崩优化</a></li>
-    <li><a href="#无底洞问题优化">无底洞问题优化</a></li>
-    <li><a href="#热点key重建优化">热点key重建优化</a></li>
-    <li><a href="#总结">总结</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#引出布隆过滤器">引出布隆过滤器</a></li>
-    <li><a href="#布隆过滤器原理">布隆过滤器原理</a></li>
-    <li><a href="#布隆过滤器误差率">布隆过滤器误差率</a></li>
-    <li><a href="#本地布隆过滤器">本地布隆过滤器</a></li>
-    <li><a href="#redis单机布隆过滤器">Redis单机布隆过滤器</a>
+    <li><a href="#redis缓存">Redis缓存</a>
       <ul>
-        <li></li>
-        <li><a href="#存在的问题">存在的问题</a></li>
+        <li><a href="#缓存的受益与成本">缓存的受益与成本</a></li>
+        <li><a href="#缓存更新策略">缓存更新策略</a></li>
+        <li><a href="#缓存粒度控制">缓存粒度控制</a></li>
+        <li><a href="#缓存穿透优化">缓存穿透优化</a></li>
+        <li><a href="#缓存击穿">缓存击穿</a></li>
+        <li><a href="#缓存雪崩优化">缓存雪崩优化</a></li>
+        <li><a href="#无底洞问题优化">无底洞问题优化</a></li>
+        <li><a href="#热点key重建优化">热点key重建优化</a></li>
+        <li><a href="#总结">总结</a></li>
       </ul>
     </li>
-    <li><a href="#redis分布式布隆过滤器">Redis分布式布隆过滤器</a></li>
-  </ul>
-
-  <ul>
-    <li>
+    <li><a href="#redisbloomfilter">RedisBloomFilter</a>
+      <ul>
+        <li><a href="#引出布隆过滤器">引出布隆过滤器</a></li>
+        <li><a href="#布隆过滤器原理">布隆过滤器原理</a></li>
+        <li><a href="#布隆过滤器误差率">布隆过滤器误差率</a></li>
+        <li><a href="#本地布隆过滤器">本地布隆过滤器</a></li>
+        <li><a href="#redis单机布隆过滤器">Redis单机布隆过滤器</a></li>
+        <li><a href="#redis分布式布隆过滤器">Redis分布式布隆过滤器</a></li>
+      </ul>
+    </li>
+    <li><a href="#主从">主从</a></li>
+    <li><a href="#redissentinel">RedisSentinel</a>
       <ul>
         <li></li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li><a href="#呼唤集群">呼唤集群</a></li>
-    <li><a href="#数据分布">数据分布</a></li>
-    <li><a href="#搭建集群">搭建集群</a></li>
-    <li><a href="#集群伸缩">集群伸缩</a></li>
-    <li><a href="#客户端路由">客户端路由</a></li>
-    <li><a href="#故障转移">故障转移</a>
+    <li><a href="#rediscluster">RedisCluster</a>
       <ul>
-        <li><a href="#故障发现">故障发现</a></li>
+        <li><a href="#呼唤集群">呼唤集群</a></li>
+        <li><a href="#数据分布">数据分布</a></li>
+        <li><a href="#搭建集群">搭建集群</a></li>
+        <li><a href="#集群伸缩">集群伸缩</a></li>
+        <li><a href="#客户端路由">客户端路由</a></li>
+        <li><a href="#故障转移">故障转移</a></li>
       </ul>
     </li>
     <li><a href="#通过pingpong消息实现故障发现不需要sentinel">通过ping/pong消息实现故障发现:不需要sentinel</a>
       <ul>
-        <li><a href="#故障恢复">故障恢复</a></li>
-        <li><a href="#故障转移演练">故障转移演练</a></li>
+        <li></li>
+        <li><a href="#开发运维常见问题-1">开发运维常见问题</a></li>
+        <li><a href="#总结-2">总结</a></li>
       </ul>
     </li>
-    <li><a href="#开发运维常见问题-1">开发运维常见问题</a>
+    <li><a href="#开发规范">开发规范</a>
       <ul>
-        <li><a href="#集群完整性">集群完整性</a></li>
-        <li><a href="#带宽消耗">带宽消耗</a></li>
-        <li><a href="#pubsub广播">Pub/Sub广播</a></li>
-        <li><a href="#集群倾斜">集群倾斜</a></li>
-        <li><a href="#读写分离">读写分离</a></li>
-        <li><a href="#数据迁移">数据迁移</a></li>
-        <li><a href="#集群vs单机">集群vs单机</a></li>
+        <li><a href="#键值设计">键值设计</a></li>
+        <li><a href="#选择合适的数据结构">选择合适的数据结构</a></li>
+        <li><a href="#过期设计">过期设计</a></li>
+        <li><a href="#命令优化">命令优化</a></li>
+        <li><a href="#客户端优化">客户端优化</a></li>
       </ul>
     </li>
-    <li><a href="#总结-2">总结</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#键值设计">键值设计</a></li>
-    <li><a href="#选择合适的数据结构">选择合适的数据结构</a></li>
-    <li><a href="#过期设计">过期设计</a></li>
-    <li><a href="#命令优化">命令优化</a></li>
-    <li><a href="#客户端优化">客户端优化</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#redis规模化运维">Redis规模化运维</a></li>
-    <li><a href="#快速构建">快速构建</a></li>
-    <li><a href="#机器部署">机器部署</a></li>
-    <li><a href="#应用接入">应用接入</a></li>
-    <li><a href="#用户功能">用户功能</a></li>
-    <li><a href="#运维功能">运维功能</a></li>
+    <li><a href="#开发运维常见坑">开发运维常见坑</a></li>
+    <li><a href="#redis内存管理">Redis内存管理</a></li>
+    <li><a href="#rediscachecloud">RedisCacheCloud</a>
+      <ul>
+        <li><a href="#redis规模化运维">Redis规模化运维</a></li>
+        <li><a href="#快速构建">快速构建</a></li>
+        <li><a href="#机器部署">机器部署</a></li>
+        <li><a href="#应用接入">应用接入</a></li>
+        <li><a href="#用户功能">用户功能</a></li>
+        <li><a href="#运维功能">运维功能</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
     </div>
@@ -4648,25 +4621,19 @@ try {
         <h3>TOC</h3>
         <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#client">client</a>
       <ul>
         <li><a href="#go">go</a></li>
         <li><a href="#java">java</a></li>
         <li><a href="#python">python</a></li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li>
+    <li><a href="#hello">hello</a>
       <ul>
         <li></li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li>
+    <li><a href="#api">api</a>
       <ul>
         <li><a href="#通用命令">通用命令</a></li>
         <li><a href="#字符串">字符串</a></li>
@@ -4674,10 +4641,7 @@ try {
         <li><a href="#list">list</a></li>
         <li><a href="#set">set</a></li>
         <li><a href="#zset">zset</a></li>
-      </ul>
-    </li>
-    <li><a href="#更多功能">更多功能</a>
-      <ul>
+        <li><a href="#更多功能">更多功能</a></li>
         <li><a href="#慢查询">慢查询</a></li>
         <li><a href="#pipeline">pipeline</a></li>
         <li><a href="#发布订阅">发布订阅</a></li>
@@ -4686,97 +4650,79 @@ try {
         <li><a href="#geo">GEO</a></li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li>
+    <li><a href="#持久化">持久化</a>
       <ul>
         <li></li>
       </ul>
     </li>
     <li><a href="#开发运维常见问题">开发运维常见问题</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#缓存的受益与成本">缓存的受益与成本</a></li>
-    <li><a href="#缓存更新策略">缓存更新策略</a></li>
-    <li><a href="#缓存粒度控制">缓存粒度控制</a></li>
-    <li><a href="#缓存穿透优化">缓存穿透优化</a></li>
-    <li><a href="#缓存击穿">缓存击穿</a></li>
-    <li><a href="#缓存雪崩优化">缓存雪崩优化</a></li>
-    <li><a href="#无底洞问题优化">无底洞问题优化</a></li>
-    <li><a href="#热点key重建优化">热点key重建优化</a></li>
-    <li><a href="#总结">总结</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#引出布隆过滤器">引出布隆过滤器</a></li>
-    <li><a href="#布隆过滤器原理">布隆过滤器原理</a></li>
-    <li><a href="#布隆过滤器误差率">布隆过滤器误差率</a></li>
-    <li><a href="#本地布隆过滤器">本地布隆过滤器</a></li>
-    <li><a href="#redis单机布隆过滤器">Redis单机布隆过滤器</a>
+    <li><a href="#redis缓存">Redis缓存</a>
       <ul>
-        <li></li>
-        <li><a href="#存在的问题">存在的问题</a></li>
+        <li><a href="#缓存的受益与成本">缓存的受益与成本</a></li>
+        <li><a href="#缓存更新策略">缓存更新策略</a></li>
+        <li><a href="#缓存粒度控制">缓存粒度控制</a></li>
+        <li><a href="#缓存穿透优化">缓存穿透优化</a></li>
+        <li><a href="#缓存击穿">缓存击穿</a></li>
+        <li><a href="#缓存雪崩优化">缓存雪崩优化</a></li>
+        <li><a href="#无底洞问题优化">无底洞问题优化</a></li>
+        <li><a href="#热点key重建优化">热点key重建优化</a></li>
+        <li><a href="#总结">总结</a></li>
       </ul>
     </li>
-    <li><a href="#redis分布式布隆过滤器">Redis分布式布隆过滤器</a></li>
-  </ul>
-
-  <ul>
-    <li>
+    <li><a href="#redisbloomfilter">RedisBloomFilter</a>
+      <ul>
+        <li><a href="#引出布隆过滤器">引出布隆过滤器</a></li>
+        <li><a href="#布隆过滤器原理">布隆过滤器原理</a></li>
+        <li><a href="#布隆过滤器误差率">布隆过滤器误差率</a></li>
+        <li><a href="#本地布隆过滤器">本地布隆过滤器</a></li>
+        <li><a href="#redis单机布隆过滤器">Redis单机布隆过滤器</a></li>
+        <li><a href="#redis分布式布隆过滤器">Redis分布式布隆过滤器</a></li>
+      </ul>
+    </li>
+    <li><a href="#主从">主从</a></li>
+    <li><a href="#redissentinel">RedisSentinel</a>
       <ul>
         <li></li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li><a href="#呼唤集群">呼唤集群</a></li>
-    <li><a href="#数据分布">数据分布</a></li>
-    <li><a href="#搭建集群">搭建集群</a></li>
-    <li><a href="#集群伸缩">集群伸缩</a></li>
-    <li><a href="#客户端路由">客户端路由</a></li>
-    <li><a href="#故障转移">故障转移</a>
+    <li><a href="#rediscluster">RedisCluster</a>
       <ul>
-        <li><a href="#故障发现">故障发现</a></li>
+        <li><a href="#呼唤集群">呼唤集群</a></li>
+        <li><a href="#数据分布">数据分布</a></li>
+        <li><a href="#搭建集群">搭建集群</a></li>
+        <li><a href="#集群伸缩">集群伸缩</a></li>
+        <li><a href="#客户端路由">客户端路由</a></li>
+        <li><a href="#故障转移">故障转移</a></li>
       </ul>
     </li>
     <li><a href="#通过pingpong消息实现故障发现不需要sentinel">通过ping/pong消息实现故障发现:不需要sentinel</a>
       <ul>
-        <li><a href="#故障恢复">故障恢复</a></li>
-        <li><a href="#故障转移演练">故障转移演练</a></li>
+        <li></li>
+        <li><a href="#开发运维常见问题-1">开发运维常见问题</a></li>
+        <li><a href="#总结-2">总结</a></li>
       </ul>
     </li>
-    <li><a href="#开发运维常见问题-1">开发运维常见问题</a>
+    <li><a href="#开发规范">开发规范</a>
       <ul>
-        <li><a href="#集群完整性">集群完整性</a></li>
-        <li><a href="#带宽消耗">带宽消耗</a></li>
-        <li><a href="#pubsub广播">Pub/Sub广播</a></li>
-        <li><a href="#集群倾斜">集群倾斜</a></li>
-        <li><a href="#读写分离">读写分离</a></li>
-        <li><a href="#数据迁移">数据迁移</a></li>
-        <li><a href="#集群vs单机">集群vs单机</a></li>
+        <li><a href="#键值设计">键值设计</a></li>
+        <li><a href="#选择合适的数据结构">选择合适的数据结构</a></li>
+        <li><a href="#过期设计">过期设计</a></li>
+        <li><a href="#命令优化">命令优化</a></li>
+        <li><a href="#客户端优化">客户端优化</a></li>
       </ul>
     </li>
-    <li><a href="#总结-2">总结</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#键值设计">键值设计</a></li>
-    <li><a href="#选择合适的数据结构">选择合适的数据结构</a></li>
-    <li><a href="#过期设计">过期设计</a></li>
-    <li><a href="#命令优化">命令优化</a></li>
-    <li><a href="#客户端优化">客户端优化</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#redis规模化运维">Redis规模化运维</a></li>
-    <li><a href="#快速构建">快速构建</a></li>
-    <li><a href="#机器部署">机器部署</a></li>
-    <li><a href="#应用接入">应用接入</a></li>
-    <li><a href="#用户功能">用户功能</a></li>
-    <li><a href="#运维功能">运维功能</a></li>
+    <li><a href="#开发运维常见坑">开发运维常见坑</a></li>
+    <li><a href="#redis内存管理">Redis内存管理</a></li>
+    <li><a href="#rediscachecloud">RedisCacheCloud</a>
+      <ul>
+        <li><a href="#redis规模化运维">Redis规模化运维</a></li>
+        <li><a href="#快速构建">快速构建</a></li>
+        <li><a href="#机器部署">机器部署</a></li>
+        <li><a href="#应用接入">应用接入</a></li>
+        <li><a href="#用户功能">用户功能</a></li>
+        <li><a href="#运维功能">运维功能</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
     </div>
