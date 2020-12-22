@@ -28,6 +28,11 @@
   </url>
   
   <url>
+    <loc>https://yuanyatianchi.github.io/post/db.sql.mysql/</loc>
+    <lastmod>2020-11-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://yuanyatianchi.github.io/tags/mysql/</loc>
     <lastmod>2020-11-11T00:00:00+00:00</lastmod>
   </url>
@@ -44,11 +49,6 @@
   
   <url>
     <loc>https://yuanyatianchi.github.io/tags/redis/</loc>
-    <lastmod>2020-11-11T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://yuanyatianchi.github.io/post/db.sql.mysql/</loc>
     <lastmod>2020-11-11T00:00:00+00:00</lastmod>
   </url>
   

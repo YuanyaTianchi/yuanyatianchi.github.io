@@ -1,6 +1,6 @@
 +++
 
-title = "redis"
+title = "MySQL"
 date = "2020-11-11"
 description = "mysql"
 tags = ["db", "mysql"]

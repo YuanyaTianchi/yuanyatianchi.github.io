@@ -26,21 +26,21 @@
     </item>
     
     <item>
+      <title>MySQL</title>
+      <link>https://yuanyatianchi.github.io/post/db.sql.mysql/</link>
+      <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/db.sql.mysql/</guid>
+      <description>mysql https://www.mysql.com/ ，https://www.mysql.com/cn/ 3306 sql DDL，数据定义语言。定义和管理数据对象，如数据库，数据表等。CREATE、DROP、ALTER DML，数据操作语言。用于操作数据库对象中所</description>
+    </item>
+    
+    <item>
       <title>Redis</title>
       <link>https://yuanyatianchi.github.io/post/db.kv.redis/</link>
       <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>https://yuanyatianchi.github.io/post/db.kv.redis/</guid>
       <description>redis https://redis.io/，http://www.redis.cn/ Redis的特性 速度快 数据存在内存（主要原因） c语言编写（50000line，单机的核心代码只有23000line） 单线程</description>
-    </item>
-    
-    <item>
-      <title>redis</title>
-      <link>https://yuanyatianchi.github.io/post/db.sql.mysql/</link>
-      <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://yuanyatianchi.github.io/post/db.sql.mysql/</guid>
-      <description>mysql https://www.mysql.com/ ，https://www.mysql.com/cn/ 3306 sql DDL，数据定义语言。定义和管理数据对象，如数据库，数据表等。CREATE、DROP、ALTER DML，数据操作语言。用于操作数据库对象中所</description>
     </item>
     
   </channel>
