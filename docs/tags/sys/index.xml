@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>sys on 鸢雅</title>
+    <link>https://yuanyatianchi.github.io/tags/sys/</link>
+    <description>Recent content in sys on 鸢雅</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 11 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://yuanyatianchi.github.io/tags/sys/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Linux</title>
+      <link>https://yuanyatianchi.github.io/post/ops.linux/</link>
+      <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/ops.linux/</guid>
+      <description>linux 内容综述 Linux背景介绍 系统操作 服务管理 Shell脚本 文本操作 常用服务搭建 Linux：两种含义 Linus Benedict Torvalds（Linux之父）编写的开源操作系统的内核 广义上的基于 Linux内核 的 Linux操</description>
+    </item>
+    
+  </channel>
+</rss>

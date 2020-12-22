@@ -13,7 +13,22 @@
   </url>
   
   <url>
-    <loc>https://yuanyatianchi.github.io/post/hugo/</loc>
+    <loc>https://yuanyatianchi.github.io/post/blog.hugo/</loc>
+    <lastmod>2020-11-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://yuanyatianchi.github.io/post/ops.linux/</loc>
+    <lastmod>2020-11-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://yuanyatianchi.github.io/tags/linux/</loc>
+    <lastmod>2020-11-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://yuanyatianchi.github.io/tags/mysql/</loc>
     <lastmod>2020-11-11T00:00:00+00:00</lastmod>
   </url>
   
@@ -23,12 +38,22 @@
   </url>
   
   <url>
+    <loc>https://yuanyatianchi.github.io/post/db.kv.redis/</loc>
+    <lastmod>2020-11-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://yuanyatianchi.github.io/tags/redis/</loc>
     <lastmod>2020-11-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://yuanyatianchi.github.io/post/kv.redis/</loc>
+    <loc>https://yuanyatianchi.github.io/post/db.sql.mysql/</loc>
+    <lastmod>2020-11-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://yuanyatianchi.github.io/tags/sys/</loc>
     <lastmod>2020-11-11T00:00:00+00:00</lastmod>
   </url>
   

@@ -8,21 +8,39 @@
     <language>en</language>
     <lastBuildDate>Wed, 11 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://yuanyatianchi.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>hugo</title>
-      <link>https://yuanyatianchi.github.io/post/hugo/</link>
+      <title>Hugo</title>
+      <link>https://yuanyatianchi.github.io/post/blog.hugo/</link>
       <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://yuanyatianchi.github.io/post/hugo/</guid>
+      <guid>https://yuanyatianchi.github.io/post/blog.hugo/</guid>
       <description>hugo git、go环境 下载解压并配置环境变量：https://github.com/gohugoio/hugo/releases/download/v0.78.0/hugo_0.78.0_Windows-</description>
     </item>
     
     <item>
-      <title>redis</title>
-      <link>https://yuanyatianchi.github.io/post/kv.redis/</link>
+      <title>Linux</title>
+      <link>https://yuanyatianchi.github.io/post/ops.linux/</link>
       <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://yuanyatianchi.github.io/post/kv.redis/</guid>
+      <guid>https://yuanyatianchi.github.io/post/ops.linux/</guid>
+      <description>linux 内容综述 Linux背景介绍 系统操作 服务管理 Shell脚本 文本操作 常用服务搭建 Linux：两种含义 Linus Benedict Torvalds（Linux之父）编写的开源操作系统的内核 广义上的基于 Linux内核 的 Linux操</description>
+    </item>
+    
+    <item>
+      <title>Redis</title>
+      <link>https://yuanyatianchi.github.io/post/db.kv.redis/</link>
+      <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/db.kv.redis/</guid>
       <description>redis https://redis.io/，http://www.redis.cn/ Redis的特性 速度快 数据存在内存（主要原因） c语言编写（50000line，单机的核心代码只有23000line） 单线程</description>
+    </item>
+    
+    <item>
+      <title>redis</title>
+      <link>https://yuanyatianchi.github.io/post/db.sql.mysql/</link>
+      <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/db.sql.mysql/</guid>
+      <description>mysql https://www.mysql.com/ ，https://www.mysql.com/cn/ 3306 sql DDL，数据定义语言。定义和管理数据对象，如数据库，数据表等。CREATE、DROP、ALTER DML，数据操作语言。用于操作数据库对象中所</description>
     </item>
     
     <item>

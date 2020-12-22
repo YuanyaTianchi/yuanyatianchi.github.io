@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.78.0" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/amzrk2/cdn-stcapi@1/favicons/favicon.ico" />
+
+
+<title>Linux - 鸢雅</title>
+
+
+<meta name="author" content="DSRKafuU" />
+
+
+<meta name="description" content="linux" />
+
+
+<meta name="keywords" content="sys, linux" />
+
+<meta property="og:title" content="Linux" />
+<meta property="og:description" content="linux" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yuanyatianchi.github.io/post/ops.linux/" />
+<meta property="og:image" content="https://yuanyatianchi.github.io/img/og.png"/>
+<meta property="article:published_time" content="2020-11-11T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-11-11T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://yuanyatianchi.github.io/img/og.png"/>
+
+<meta name="twitter:title" content="Linux"/>
+<meta name="twitter:description" content="linux"/>
+
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+<link rel="stylesheet" href="https://yuanyatianchi.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+</head>
+
+<body data-theme="auto">
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://yuanyatianchi.github.io">鸢雅</a>
+            
+            <span class="title-sub">A minimal Hugo theme.</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://yuanyatianchi.github.io/post/ops.linux/">Linux</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2020-11-11</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;21994 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/sys">sys</a>&nbsp;<a href="/tags/linux">linux</a>&nbsp;</span>
+
+    </div>
+    
+    
+    <div class="post-content markdown-body">
+        <h1 id="linux">linux</h1>
+<ul>
+<li>
+<p>内容综述</p>
+<ul>
+<li>Linux背景介绍</li>
+<li>系统操作</li>
+<li>服务管理</li>
+<li>Shell脚本</li>
+<li>文本操作</li>
+<li>常用服务搭建</li>
+</ul>
+</li>
+<li>
+<p>Linux：两种含义</p>
+<ul>
+<li>Linus Benedict Torvalds（Linux之父）编写的开源操作系统的内核</li>
+<li>广义上的基于 Linux内核 的 Linux操作系统</li>
+</ul>
+</li>
+<li>
+<p>内核版本：https://www.kernel.org/</p>
+<ul>
+<li>内核版本分为三个部分：主版本号、次版本号、末版本号</li>
+<li>次版本号是奇数为开发版，偶数为稳定版。但是实际上在2.6以后不这么区分了</li>
+</ul>
+</li>
+<li>
+<p>发行版本：RedHat Enterprise Linux、Fedora、CentOS、Debian、Ubuntu&hellip;</p>
+</li>
+<li>
+<p>终端：图形终端，命令行终端，远程终端（SSH、VNC）</p>
+</li>
+</ul>
+<h2 id="hello">hello</h2>
+<ul>
+<li>镜像
+<ul>
+<li>CentOS：http://mirrors.aliyun.com/centos/ ，7.8.2003/isos/x86_64/CentOS-7-x86_64-DVD-2003.iso</li>
+<li>Ubuntu：http://mirrors.aliyun.com/ubuntu-releases/ ，20.04/ubuntu-20.04.1-live-server-amd64.iso</li>
+</ul>
+</li>
+</ul>
+<h3 id="环境">环境</h3>
+<h4 id="virtualbox">VirtualBox</h4>
+<ol>
+<li>新建</li>
+<li>名称：centos7 → 文件夹：D:\it\virtual_machine\VirtualBoxVM → 类型：Linux → 版本：Red Hat (64-bit)</li>
+<li>内存大小：2048mb</li>
+<li>现在创建虚拟硬盘 → VDI (VirtualBox 磁盘映像) → 动态分配 → 硬盘大小：20G</li>
+<li>设置 → 存储 → 右侧光盘图标选择虚拟盘 → OK</li>
+<li>启动 → Install CentOS Linux 7 → English</li>
+<li>DATE &amp; TIME → Asia Shanghai</li>
+<li>SOFTWARE SELECTION → Minimal Install</li>
+<li>INSTALL ATION DESTINATION → 直接点done即可</li>
+<li>NETWORK &amp; HOST NAME → Ethernet (enp0s3)：ON</li>
+<li>开始安装 → 设置ROOT PASSWORD → 安装成功后reboot</li>
+</ol>
+<h4 id="vmware">VMware</h4>
+<ol>
+<li>新建虚拟机，自定义，稍后安装操作系统，2cpu2核心以上，内存2048以上，NAT网络，LSI Logic，SCSI</li>
+<li>创建新虚拟磁盘，磁盘大小20G以上，将虚拟磁盘存储为单个文件</li>
+</ol>
+<ul>
+<li>CentOS 修改<code>/etc/sysconfig/network-scripts/ifcfg-ens33</code>中<code>NOBOOT=yes</code>，表示系统启动时激活网卡</li>
+</ul>
+<h3 id="目录">目录</h3>
+<ul>
+<li>目录
+<ul>
+<li>/：根目录</li>
+<li>/root：root用户的家目录</li>
+<li>/home/username：普通用户的家目录</li>
+<li>/etc：配置文件目录</li>
+<li>/bin：命令目录</li>
+<li>/sbin：管理命令目录</li>
+<li>/usr/bin、/usr/sbin：系统预装的其他命令</li>
+</ul>
+</li>
+</ul>
+<h2 id="命令行">命令行</h2>
+<ul>
+<li>命令（command）：通过使用命令调用对应的命令程序文件，如使用<code>ls</code>命令将调用<code>/bin/ls</code>程序文件</li>
+<li>参数（option选项）：</li>
+</ul>
+<h3 id="语法">语法</h3>
+<ul>
+<li>命令 &lt;必选参数1 | 必选参数2&gt; [-option {必选参数1 | 必选参数2 | 必选参数3}] [可选参数&hellip;] {(默认参数) | 参数 | 参数}</li>
+<li>命令行语法符号
+<ul>
+<li>方括号**<input disabled="" type="checkbox"> **：可选参数，在命令中根据需要加以取舍</li>
+<li>尖括号**&lt; &gt;**：必选参数，实际使用时应将其替换为所需要的参数</li>
+<li>大括号**{ }**：必选参数, 内部使用, 包含此处允许使用的参数</li>
+<li>小括号**()**：指明参数的默认值, 只用于{ }中</li>
+<li>管道符（竖线）<strong>|</strong>：分隔多个互斥参数, 含义为&quot;或&quot;, 使用时只能选择一个</li>
+<li>省略号**&hellip;**：多个参数</li>
+<li>分号**;**：分割多个命令，命令将按顺序执行</li>
+</ul>
+</li>
+<li>注意：命令行语法（包括在 UNIX 和 Linux 平台中使用的用户名、密码和文件名）是区分大小写的，如commandline、CommandLine、COMMANDLINE 是不一样的</li>
+</ul>
+<h3 id="简写">简写</h3>
+<ul>
+<li>多参数简写</li>
+</ul>
+<pre><code class="language-shell">ls -l -r -t -R
+ls -lrtR #简写
+</code></pre>
+<ul>
+<li>当前目录简写</li>
+</ul>
+<pre><code class="language-shell">ls ./
+ls .   #简写。具体到文件（或目录）时无法使用&quot;.&quot;作简写
+ls     #简写
+
+cd ../
+cd ..  #简写
+
+cat ./config.yml
+cat config.yml #简写
+</code></pre>
+<h3 id="用户">用户</h3>
+<pre><code class="language-shell">clear     #清屏。或者快捷键CTRL+L
+su - root #切换到root用户
+exit      #退出当前系统用户
+init 0    #关机
+</code></pre>
+<h3 id="帮助命令">帮助命令</h3>
+<ul>
+<li>为什么要学习帮助命令：Linux的基本操作方式是命令行，海量的命令不适合“死记硬背”，你要升级你的大脑</li>
+<li>使用网络资源（搜索引擎和官方文档)</li>
+</ul>
+<h6 id="help">help</h6>
+<pre><code class="language-shell">help cd   #查看内部命令帮助
+type cd   #查看命令类型。shell（命令解释器）自带的命令称为内部命令，其他的是外部命令
+ls --help #查看外部命令帮助
+</code></pre>
+<h6 id="info">info</h6>
+<pre><code class="language-shell">info ls #查看ls命令的信息。info比help更详细，作为help的补充
+</code></pre>
+<h6 id="man">man</h6>
+<ul>
+<li><code>man [(1)|2|3|4|5|6|7|8|9] [文件名]</code>：查看指定文件（程序）对应的手册（如果有的话）。这里1-9指定要查看手册的类型，因为系统中很多重名文件，所以需要分类来区分</li>
+<li>按<code>Q</code>退出手册</li>
+</ul>
+<pre><code class="language-shell">man man   #查看man命令的手册。可以看到默认的选项&quot;1&quot;，表示查看 可执行程序或shell命令 这一类型的文件的手册
+
+man ls    #查看ls命令的手册。选项&quot;1&quot;是默认选项，可以省略
+man 1 ls
+man -a ls #查看所有名为ls的文件的手册
+</code></pre>
+<h3 id="文件">文件</h3>
+<ul>
+<li>一切皆文件</li>
+<li>TAB快捷键补全文件（目录）名</li>
+<li>路径：
+<ul>
+<li>/</li>
+<li>./</li>
+<li>../</li>
+</ul>
+</li>
+</ul>
+<h4 id="查看">查看</h4>
+<h6 id="pwd">pwd</h6>
+<pre><code class="language-shell">pwd #显示当前的目录名称
+</code></pre>
+<h6 id="cd">cd</h6>
+<ul>
+<li>更改当前的操作目录
+<ul>
+<li><code>cd /path/to/...</code>：绝对路径</li>
+<li><code>cd ./path/to/...</code>：相对路径</li>
+<li><code>cd ../path/to/...</code>：相对路径</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-shell">man cd #将查看/bin/bash（一个命令解释器shell的实现）的手册，因为cd是bash的内置命令
+
+cd ../ #回到上一级目录
+cd ..  #简写
+
+cd - #回到上一次使用的目录。即可以实现两个目录来回切换的效果
+</code></pre>
+<h6 id="ls">ls</h6>
+<ul>
+<li><code>ls [option]... [path]...</code>：查看指定目录下的文件：ls / /root，可以同时显示/和/root下的目录</li>
+<li>参数（常用）
+<ul>
+<li>-l：ls -l，等于ls -l .，等于ls -l ./，.和./表示当前目录，省略而已。默认根据文件名顺序显示
+<ul>
+<li>长格式显示文件：文件类型和权限，文件个数，创建用户，创建用户所属用户组，文件大小，最后修改时间，文件名</li>
+<li>文件类型：文件为-，目录为d</li>
+</ul>
+</li>
+<li>-a：显示隐藏文件。文件名以&quot;.&ldquo;开头即隐藏文件</li>
+<li>-r：逆序显示（根据文件名）</li>
+<li>-h：文件大小将使用单位m、g、t等（根据文件大小自判定的）</li>
+<li>-t：按照时间顺序显示</li>
+<li>-R：递归显示所有文件</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-shell">ls -lrt / /root #列出 / 和 /root 下的所有文件
+</code></pre>
+<h4 id="新建">新建</h4>
+<h6 id="touch">touch</h6>
+<ul>
+<li><code>touch &lt;路径文件名&gt;</code>：新建文件</li>
+</ul>
+<pre><code class="language-shell">
+</code></pre>
+<h6 id="mkdir">mkdir</h6>
+<ul>
+<li><code>mkdir [option]... [dirName]...</code>：新建文件夹</li>
+</ul>
+<pre><code class="language-shell">mkdir ./a/1 ./a/2 #指定路径新建文件夹
+mkdir a #在当前目录新建文件夹可以简写
+mkdir -p /a/b/c/d/e #-p忽略报错，已存在的不会提示报错，路径上不存在的目录也都将被新建
+</code></pre>
+<h4 id="删除">删除</h4>
+<h6 id="rm">rm</h6>
+<pre><code class="language-shell">rmdir /a #只能删除空的目录
+rm -r /a #可以删除非空目录，但是会进行递归提示询问
+rm -r -f /a #参数f使删除时不进行递归提示询问
+rm -rf / a  #参数f风险很大，一定要检查好参数，如果像这样/和a之间多了个空格，即删除整个根目录和当前目录下的a目录中的所有文件，gg
+</code></pre>
+<h4 id="修改">修改</h4>
+<h6 id="cp">cp</h6>
+<ul>
+<li><code>cp &lt;源文件名&gt; &lt;目标文件名&gt;</code>：复制文件</li>
+<li><code>-r</code>：可以复制目录</li>
+<li><code>-v</code>：显示复制进度</li>
+<li><code>-p</code>：保留文件原来的时间属性</li>
+<li><code>-a</code>：保留文件原来的所有属性（<code>ls -l</code>能看到）</li>
+</ul>
+<pre><code class="language-shell">cp /a/
+</code></pre>
+<h6 id="mv">mv</h6>
+<ul>
+<li><code>mv &lt;源&gt; &lt;目标&gt;</code>：移动。在同一个目录内移动即实现改名</li>
+</ul>
+<pre><code class="language-shell">mv ./a1/b ./a2 #移动b到a2目录下
+mv ./a1/b ./a2/bre #移动并重命名
+mv file* ./a #*匹配1或多个字符，所有对应的文件都可以被移动
+</code></pre>
+<ul>
+<li>通配符
+<ul>
+<li>定义: shell  内建的符号</li>
+<li>用途:操作多个相似（有简单规律）的文件</li>
+<li>常用通配符
+<ul>
+<li>*：匹配任何字符串</li>
+<li>?：匹配1个字符串</li>
+<li>[xyz]：匹配xyz任意一个字符</li>
+</ul>
+</li>
+<li>[a-z]：匹配一个范围</li>
+<li>[!xyz]、[^xyz]：不匹配</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>*：匹配一或多个字符</li>
+<li>?：匹配一个字符</li>
+</ul>
+</li>
+</ul>
+<h3 id="文本">文本</h3>
+<h6 id="cat">cat</h6>
+<ul>
+<li>cat：文本内容显示到终端</li>
+</ul>
+<h6 id="head">head</h6>
+<ul>
+<li>head：查看文件开头。默认显示10行，-5参数显示5行</li>
+</ul>
+<h6 id="tail">tail</h6>
+<ul>
+<li>tail：查看文件结尾。默认显示10行，-5参数显示5行
+<ul>
+<li>常用参数-f 文件内容更新后，显示信息同步更新，ctrl+c停止</li>
+</ul>
+</li>
+</ul>
+<h6 id="wc">wc</h6>
+<ul>
+<li>wc：统计文件内容信息。-l参数显示文件行数</li>
+</ul>
+<h6 id="more">more</h6>
+<ul>
+<li>more：将分页显示</li>
+<li>less more</li>
+</ul>
+<h3 id="打包和压缩">打包和压缩</h3>
+<ul>
+<li>Linux的备份压缩
+<ul>
+<li>最早的Linux备份介质是磁带，使用的命令是tar，即打包</li>
+<li>可以对打包后的磁带文件进行压缩储存，压缩的命令是gzip和bzip2</li>
+<li>经常使用的扩展名是.tar.gz.tar.bz2.tgz</li>
+</ul>
+</li>
+<li>/etc一般是保存配置文件的目录，属于重点备份的文件，以etc为例进行打包和压缩</li>
+<li><code>tar [option]... &lt;目标.tar.压缩方式&gt; &lt;源&gt;</code>：可以采用双扩展名以方便知道是那种方式打包的</li>
+</ul>
+<pre><code class="language-shell">#打包
+tar cf /tmp/etc-bk.tar /etc #c表示打包，f指定文件，tar的选项没有-或者--作选项引导符；
+#解包
+tar xf /tmp/etc-bk.tar -C /tmp #x表示解包，f指定文件，-C指定要存放的位置，不指定则存放在同目录下
+
+#打包并压缩。可以单独使用gzip或bzip2命令进行压缩，但是tar已经集成了它们的功能。gzip压缩速度更快，bzip2压缩比例更小
+tar zcf /tmp/etc-bk.tar.gz /etc #z即使用gzip进行压缩，也可以单后缀.tgz
+tar jcf /tmp/etc-bk.tar.bz2 /etc #j即使用bzip2进行压缩，也可以但后缀.tbz2
+
+#解压缩并解包，即zxf或jxf
+tar x
+</code></pre>
+<h3 id="文本编辑">文本编辑</h3>
+<h6 id="vi">vi</h6>
+<ul>
+<li>vi是多模式文本编辑器</li>
+<li>多模式产生的原因</li>
+<li>四种模式，通过模式的切换，就可以无需鼠标仅使用键盘进行各种各样的文本操作
+<ul>
+<li>正常模式(Normal-mode)：进入编辑器界面时的初始模式，显示文本内容，有光标，光标可以移动。该模式下所有键盘输入的按键都是对编辑器所下的命令。</li>
+<li>插入模式(Insert-mode)：
+<ul>
+<li>Normal模式下，使用快捷键 i 进入insert模式，可以输入文本内容</li>
+<li></li>
+</ul>
+</li>
+<li>命令模式(Command-mode)</li>
+<li>可视模式(Visual-mode)</li>
+</ul>
+</li>
+<li><code>vi</code>：进入编辑器，默认进入的是vim的版本，是原始vi编辑器的扩展，是一个同vi向上兼容的文本编辑器</li>
+<li><code>vim</code>：进入vim编辑器，或者<code>vim &lt;filename&gt;</code>以vim编辑器打开某个文件
+<ul>
+<li>esc回到Normal模式，有光标</li>
+<li>正常模式
+<ul>
+<li>h、j、k、l：左、下、上、右，移动光标。在图形界面或远程终端上，如果有 左、下、上、右（箭头）方向键，效果是一样的，但是如果是字符终端，可能会出现乱码</li>
+<li>复制
+<ul>
+<li>一行：Normal模式下，按yy可以复制一行内容</li>
+<li>多行：Normal模式下，按3yy即可复制当前光标所在行开始的3行</li>
+<li>光标到行尾：y$</li>
+</ul>
+</li>
+<li>剪切：dd、d$，与y类似</li>
+<li>粘贴：按p键，可以在光标所在行的下一行粘贴，继续按p键可以粘贴多次</li>
+<li>撤销：u键</li>
+<li>重做：把撤销的内容恢复，ctrl+R</li>
+<li>删除单个字符：x</li>
+<li>替换单个字符：按r键，在输入新的字符</li>
+<li>显示行数：<code>:set nu</code></li>
+<li>移动到指定行：5G移动到第5行，g移动到第一行，G移动到最后一行</li>
+<li>^，或者说shift+6：移动光标到一行开头</li>
+<li>$，或者或shift+4：移动光标到一行末尾</li>
+</ul>
+</li>
+<li>insert
+<ul>
+<li>Normal模式下，使用快捷键 i 进入insert模式，光标位置不变</li>
+<li>大写的<code>I</code>，进入插入模式，光标将从，光标将移动到光标所在行的开头</li>
+<li>小写a：光标右移一位，</li>
+<li>大写A：光标行最右</li>
+<li>o：光标到下一行，并且是新开空行</li>
+<li>O：光标到上一行，并且是新开空行</li>
+</ul>
+</li>
+<li>命令模式：
+<ul>
+<li><code>:</code>：进入命令模式，窗口末尾显示<code>:</code>时即表示处于命令模式了，可以键入命令
+<ul>
+<li>按esc退出命令模式</li>
+<li><code>w &lt;filename&gt;</code>：保存文件到目标，如<code>w /tmp/a.txt</code>，如果是通过文件名打开的vim编辑器，只需要<code>w</code>命令即可保存修改</li>
+<li><code>q</code>：退出vim编辑器</li>
+<li><code>wq</code>、<code>wq &lt;filename&gt;</code>：连用，即保存并退出</li>
+<li><code>q!</code>：不保存并退出</li>
+<li><code>!&lt;命令&gt;</code>：如果想要临时执行一些系统命令，查看系统命令的结果，可以通过该命令来进行，如<code>!ip addr</code>查看ip地址，按<code>回车</code>即可重新回到编辑器界面</li>
+</ul>
+</li>
+<li><code>/字符串</code>：查找指定字符串，按n跳到下一个，shift+n跳到上一个</li>
+<li><code>:s/旧串/新串</code>：替换光标所在的行的匹配的字符</li>
+<li><code>:%s/旧串/新串</code>：替换全文匹配的字符第一个字符</li>
+<li><code>:%s/旧串/新串/g</code>：替换全文匹配的字符所有</li>
+<li><code>:set nu</code>：显示行数。只单次生效，需要修改vim配置以长期生效
+<ul>
+<li><code>vim /etc/vimrc</code>：移动到最后一行插入内容<code>set nu</code>，保存退出即可</li>
+</ul>
+</li>
+<li><code>:set nonu</code>：不显示行数</li>
+</ul>
+</li>
+<li>Visual：可视模式
+<ul>
+<li>v：字符可视模式</li>
+<li>V：行可视模式</li>
+<li>ctrl+v：块可视模式（类似于列模式）
+<ul>
+<li><code>d</code>：删除选中块</li>
+<li><code>ctrl+i</code>：进入插入模式，输入要插入的内容，按2次esc，可以批量给选中的每一行前面添加相同内容</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="用户-1">用户</h2>
+<pre><code class="language-shell">useradd user1 #添加新用户
+#创建用户后会在/home中创建用户对应的目录，目录名与用户名一致
+ls -a /home/yuanya #会有一些隐藏文件
+tail -10 /etc/passwd #会有用户相关内容
+tail -10 /etc/shaow #会有用户相关内容，密码相关
+
+id #查看当前用户
+id root #查看指定用户。可以借此验证是否存在指定用户
+#用户会有唯一id，系统是通过id识别不同用户的。root用户uid=0，如果把普通用户的uid改为0，则也会被系统当作root用户对待
+#用户有用户组，创建时不指定用户组则属于其同名组，即用户组名与用户名一致，只有该用户一人
+groupadd group1 #新建用户组
+groupdel group1 #删除用户组
+useradd user2 group1 #添加新用户并指定用户组
+
+passwd #为当前用户自己设置密码
+passwd yuanya #为指定用户设置密码
+
+userdel yuanya#删除用户，用户的家目录/home/yuanya会被保留，文件所属用户变为数字，只有root用户可以使用，加-r则不会保留家目录。/etc/passwd、/etc/shaow中相关用户信息都将被删除
+
+man usermod #usermod用于修改用户属性
+usermod /home/yuanya yuanyatianchi #修改家目录/home/yuanya的名字为yuanyatianchi，相当于搬家
+usernod -g group1 yuanya #将指定用户分配到指定用户组
+
+man chage #更改用户密码过期信息
+
+#root用户切换普通用户无需密码，普通用户切换其它用户需要密码
+su - user1 #切换用户，&quot;-&quot;表示用户及用户运行环境的完全切换，这里运行环境切换指自动进入到user1的家目录/home/user1，root的家目录是/root
+su user1 #不完全切换，仍在之前用户的家目录中，但是已经没有ls读取权限了，需要手动切换user1自己的家目录
+</code></pre>
+<h2 id="网络配置">网络配置</h2>
+<h5 id="网卡">网卡</h5>
+<p>查看</p>
+<pre><code class="language-shell">ip addr #查看网卡及相关信息。简写，等价于ip addr ls、ip addr show
+ip addr ls ens33 #查看指定网卡。不能省略ls或show
+ip addr add 10.0.0.1/24 dev ens33 #设置ip
+
+ip link #查看网卡物理连接情况。ip link ls、ip link show等都是一样的
+ip link ens33 #查看指定网卡
+ip link set dev ens33 up #网卡启动
+ip link set dev ens33 down #网卡停止
+</code></pre>
+<p>修改</p>
+<ul>
+<li>网卡接口命名修改：默认为<code>ens33</code>或<code>enp0s3</code>之类的。没有特殊需求默认即可
+<ul>
+<li><code>vim /etc/default/grub</code>编辑grub，在<code>GRUB_CMDLINE_LINUX</code>参数内容的末尾<code>rhgb quiet</code>的后面添加<code> biosdevname=0 net.ifnames=0</code>两项，网卡命名受这两个参数影响（如下表）</li>
+<li><code>grub2-mkconfig -o /boot/grub2/grub.cfg</code>更新到真正的启动配置文件</li>
+<li><code>reboot</code>重启</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>biosdevname</th>
+<th>net.ifnames</th>
+<th>网卡名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>默认</td>
+<td>0</td>
+<td>1</td>
+<td>ens33或enp0s3&hellip;</td>
+</tr>
+<tr>
+<td>组合1</td>
+<td>1</td>
+<td>0</td>
+<td>em1</td>
+</tr>
+<tr>
+<td>组合2</td>
+<td>0</td>
+<td>0</td>
+<td>eth0</td>
+</tr>
+</tbody>
+</table>
+<h5 id="网关">网关</h5>
+<pre><code class="language-shell">ip route #查看网关信息。ip route ls、ip route show等都是一样的
+ip route | column -t #格式化一下
+
+#设置路由
+ip route add default gw &lt;网关ip&gt; #设置默认路由
+ip route add -host&lt;指定ip&gt; gw&lt;网关ip&gt; #为目的地址设置指定网关
+ip route add -net&lt;指定网段&gt; netmask &lt;子网掩码&gt; gw&lt;网关ip&gt; #为目的网段设置指定网关
+ip route add 192.168.56.0/24 via 192.168.56.2 dev ens33 #设置静态路由
+
+#删除路由
+ip route del 192.168.56.0/24 #删除静态路由
+</code></pre>
+<h5 id="网络故障排除命令">网络故障排除命令</h5>
+<ul>
+<li>从上到下逐步分析，基本能够解决大部分网络问题了</li>
+<li>ping <a href="http://www.baidu.com">www.baidu.com</a>：到目标主机是否畅通</li>
+<li>traceroute <a href="http://www.baidu.com">www.baidu.com</a>：追踪路由。centos7没有原装</li>
+<li>mtr <a href="http://www.baidu.com">www.baidu.com</a>：检查到目标主机之间是否有数据丢失。centos7没有原装</li>
+<li>nslookup <a href="http://www.baidu.com">www.baidu.com</a>：搜索域名的ip。centos7没有原装</li>
+<li>telnet <a href="http://www.baidu.com">www.baidu.com</a>：检查端口连接状态，键入^]然后quit退出telnet。centos7没有原装</li>
+<li>tcpdump -i any -n host 10.0.0.1 and port 80 -w /tmp/filename：更细致的分析数据包，抓包工具，后面详细讲。centos7没有原装。centos7没有原装</li>
+<li>netstat -ntpl：查看本机服务监听地址。n显示ip地址而不是域名，t以tcp截取显示的内容（udp等就不显示了），p显示端口对应的进程，l即listen表示处于监听状态的服务。centos7没有原装，通过ss -ntpl代替</li>
+<li>ss -ntpl：查看本机服务监听地址。n显示ip地址而不是域名，t以tcp截取显示的内容（udp等就不显示了），p显示端口对应的进程，l即listen表示处于监听状态的服务</li>
+</ul>
+<h5 id="网络服务管理">网络服务管理</h5>
+<ul>
+<li>
+<p>前面的很多配置都是临时的，网卡重启后就重置了，通过配置文件修改才能实现持久配置</p>
+</li>
+<li>
+<p>网络服务管理程序分为两种，分别为SysV和systemd（centos7中新的），最好不要同时使用两套网络管理系统，可以选择关闭其一</p>
+<ul>
+<li>
+<p>SysV</p>
+<ul>
+<li>service network start|stop|restart|status：service的操作</li>
+<li>chkconfig -list network：查看SysV服务在不同运行级别中的启用状况</li>
+<li><code>chkconfig --level 2345 network &lt;on|off&gt;</code>：打开或关闭运行级别为2、3、4、5的SysV服务。这样就将网络管理都交给systemd的NetworkManager了</li>
+</ul>
+</li>
+<li>
+<p>systemd的NetworkManager额外功能在于：比如插入网线（或者连接无线）可以识别网卡激活状态自动进行一些网络激活，对个人电脑来说颇有用处，对服务器来说稍显鸡肋。如果都是新写一些脚本，可以使用systemd；如果有一些SysV的脚本需要延用，为了方便可以继续使用SysV</p>
+<ul>
+<li>systemctl list-unit-files NetworkManager.service：查看是否开启</li>
+<li>systemctl start|stop|restart NetworkManger.service：启动、停止、重启NetworkManger</li>
+<li>systemctl enable|disable NetworkManger：启用、禁用NetworkManger</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="网络配置相关文件">网络配置相关文件</h5>
+<ul>
+<li>
+<p>/etc/sysconfig/network-scripts/ifcfg-ens33（根据网卡名有变）</p>
+<ul>
+<li>
+<p>BOOTPROTO=&ldquo;dhcp&rdquo;：遵循dhcp协议的动态ip，可以改为&quot;none&quot;表示静态ip</p>
+</li>
+<li>
+<p>ONBOOT=&ldquo;yes&rdquo;：是否开机启动，&ldquo;no&quot;时则需要手动启动网卡</p>
+</li>
+<li>
+<p>静态内容</p>
+<pre><code class="language-shell">TYPE=Ethernet
+UUID=045d35e8-49bc-4865-b0
+NAME=eth0
+DEVICE=eth0
+ONBOOT=yes
+B0OTPROTO=none #静态
+IPADDR=10.211.55.3 #地址
+NETMASK=255.255.255.0 #子网掩码
+GATEWAY=10.211.55.1 #网关
+DNS1=114.114.114.114 #nds，可以有3个，NDS1、NDS2、NDS3
+</code></pre>
+</li>
+<li>
+<p>service network restart或systemctl restart NetworkManger.service重启网卡即可生效</p>
+</li>
+</ul>
+</li>
+<li>
+<p>主机</p>
+<ul>
+<li>
+<p><code>hostname</code>查看</p>
+</li>
+<li>
+<p><code>hostname 临时主机名</code></p>
+</li>
+<li>
+<p><code>hostname set-hostname 永久主机名</code></p>
+</li>
+<li>
+<p>hosts配置文件：/etc/hosts。因为有些服务绑定的可能是主机名，所以记得在hosts文件的最后面中配置映射。否则可能启动时会卡住某些服务直到超时，会很慢</p>
+<pre><code class="language-shell">127.0.0.1 主机名如yuanya.tianchi
+</code></pre>
+</li>
+<li>
+<p>reboot重启主机以验证</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="软件管理">软件管理</h2>
+<h6 id="rpm">rpm</h6>
+<p>软件包管理器
+rpm包和rpm命令
+yum仓库
+源代码编译安装
+内核升级
+grub配置文件</p>
+<ul>
+<li>包管理器是方便软件安装、卸载，解决软件依赖关系的重要工具
+<ul>
+<li>Centos、RedHat使用yum包管理器，软件安装包格式为rpm（RedhatPackageManager）</li>
+<li>Debian、Ubuntu使用apt包管理器，软件安装包格式为deb（）</li>
+</ul>
+</li>
+<li>rpm包格式
+<ul>
+<li>vim-common-7.4.10-5.el7.x86_64.rpm</li>
+<li>软件名称-软件版本.系统版本.平台.rpm</li>
+</ul>
+</li>
+<li>rpm命令常用参数
+<ul>
+<li>-q查询软件包</li>
+<li>-i安装软件包</li>
+<li>-e卸载软件包</li>
+</ul>
+</li>
+<li>ls -l查看/dev，这里面都是设备文件，发现c和b的文件类型，c表示字符设备，b表示块设备，把光盘加载到虚拟机即加载到/dev/sr0中的，<code>dd if=/dev/sr0 of=/xxx/xxx.iso</code>就可以把真的光盘做成光盘镜像，块设备不能通过cp等命令直接进行操作，需要挂载（类似于windows中插入光盘后会自动挂载弹出新盘符，linux需要自行手动操作），<code>mount /dev/sr0 /mnt </code>，linux下推荐挂载到/mnt目录，-t可以指定挂载类型，默认则会是自动识别。之后可以发现文件是只读的，但是可以拷贝</li>
+<li><code>rmp -qa | more</code>：a是查询所有的意思，可以查询所有系统安装的软件包，软件包很多，通过管道符<code> | more</code>分屏显示，按空格下一页，按q退出</li>
+<li><code>rmp -q vim-common</code>：根据软件名查询软件包名</li>
+<li><code>rmp -e vim-enhanced</code>：卸载软件</li>
+<li><code>rmp -i vim-enhanced-7.4.160-5.el7.x86_64.rpm</code>：安装软件包。vim-enhanced依赖vim-common，如果vim-common没有被安装，将安装失败，所以需要先安装vim-common，如果把两个软件包都放在同一个目录，也可以自动安装依赖</li>
+</ul>
+<h6 id="yum">yum</h6>
+<ul>
+<li>
+<p>rpm问题很明显了，如果是一个庞大的依赖树，将会非常恐怖，难以人工安装，所以就有了yum仓库（包管理器），用于实现rmp安装自动依赖；还有如果版本不符合要求，还需要通过源代码编译安装软件包</p>
+</li>
+<li>
+<p>rpm包的问题：需要自己解决依赖关系，软件包来源不可靠</p>
+</li>
+<li>
+<p>Centos yum源：http://mirror.centos.org/centos/7/</p>
+</li>
+<li>
+<p>国内镜像：https://developer.aliyun.com/mirror/</p>
+</li>
+<li>
+<p>配置yum源</p>
+</li>
+</ul>
+<pre><code class="language-shell">mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bk #备份
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo #下载ailiyun的yum源配置文件，最小安装不原装wget用curl也行
+install epel-release -y #安装epel，用于扩展yum仓库可以安装的软件包，比如最新的linux内核等
+wget http://mirrors.aliyun.com/repo/epel-7.repo -O /etc/yum.repos.d/epel.repo #epel的aliyun镜像配置
+yum clean all &amp;&amp; yum makecache #清空并刷新缓存
+</code></pre>
+<h6 id="apt">apt</h6>
+<p>替换为阿里源：https://blog.csdn.net/wangyijieonline/article/details/105360138</p>
+<pre><code class="language-shell">lsb_release -a #查看代号codename
+</code></pre>
+<p>到阿里源看下对应代号的源是否存在：http://archive.ubuntu.com/ubuntu/dists/ ，存在则可以根据模板进行替换</p>
+<pre><code class="language-shell">#把所有的TODO替换成系统的codename
+deb http://mirrors.aliyun.com/ubuntu/ TODO main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ TODO main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ TODO-security main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ TODO-security main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ TODO-updates main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ TODO-updates main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ TODO-proposed main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ TODO-proposed main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ TODO-backports main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ TODO-backports main restricted universe multiverse
+</code></pre>
+<pre><code class="language-shell">#以codename=focal为例
+deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
+</code></pre>
+<h6 id="wget">wget</h6>
+<pre><code class="language-shell">$ yum install wget -y
+</code></pre>
+<ul>
+<li>yum常用选项：-y：安装、更新过程中选yes
+<ul>
+<li><code>yum install [软件名]</code>：安装软件包</li>
+<li><code>yum remove [软件名]</code>：卸载软件包</li>
+<li><code>yum list</code>查看软件列表，listl grouplist查看软件包</li>
+<li><code>yum update</code>检查yum仓库并更新所有可更新软件包，<code>yum update [软件名]</code>更新指定软件包</li>
+</ul>
+</li>
+<li>如果要使用yum中没有的或者还未更新的包，可以使用使用源代码编译安装的方式安装软件包</li>
+</ul>
+<h6 id="二进制安装">二进制安装</h6>
+<p>即类似与windows上的大部分软件安装方式，安装过程也需要授权各种协议，也非常麻烦</p>
+<h6 id="源代码编译安装">源代码编译安装</h6>
+<ul>
+<li>
+<p>将源代码编译成可以执行程序，copy到指定目录使用即可</p>
+</li>
+<li>
+<p>源代码编译安装</p>
+<ul>
+<li>获取压缩包：wget <a href="https://openresty.org/download/openresty-1.15.8.1.tar.gz">https://openresty.org/download/openresty-1.15.8.1.tar.gz</a></li>
+<li>解压：tar -zxf openresty-VERSION.tar.gz</li>
+<li>进入目录：cd openresty-VERSION/</li>
+<li>./configure &ndash;prefix=/usr/local/openresty：当前的系统环境已经预设在源代码中了，但是没有与真正的系统环境匹配，运行可执行文件configure使其配置（没有的话看看有没有README等指导），&ndash;prefix指定程序目录</li>
+<li>make -j2：编译。j2表示用2个逻辑上的cpu进行编译，如果代码之间没有上下文依赖关系则可以提高编译速度</li>
+<li>make install：把编译好的程序安装到&ndash;prefix指定的目录</li>
+</ul>
+</li>
+<li>
+<p>源代码编译安装可能会遇到各种错误，比如依赖问题，需要根据提示逐一解决，非常麻烦，不到迫不得已还是yum吧</p>
+</li>
+<li>
+<p>linux内核升级</p>
+<ul>
+<li>rpm格式内核
+<ul>
+<li>uname -r：查看内核版本</li>
+<li>yum install kernel-3.10.0：升级指定内核版本</li>
+<li>yum update：升级已安装的软件包（包括linux内核）和补丁</li>
+</ul>
+</li>
+<li>源代码编译安装内核
+<ul>
+<li>yum install gcc gcc-C++ make ncurses-devel openssl-develeurutls-Deu-uevet：安装依赖包，可以看到有这么多依赖包，如果提前不知道，直接安装的话就需要逐个查看报错并安装解决</li>
+<li>下载并解压缩内核并解压：https://www.kernel.org ，生成环境一定要用稳定stable或者长期支持langterm版本，tar xvf linux-5.1..10.tar.xz -C /usr/src/kernels解压（tar已经直接支持xz格式了）</li>
+<li>配置内核编译参数
+<ul>
+<li>cd /usr/src/kernels/linux-5.1.10/</li>
+<li>make menuconfig | allyesconfig | allnoconfig。选择menuconfig弹出会出来界面菜单自行配置，allyesconfig则全部配置yes，allnoconfig则全部配置no（甚至可能无法启动）
+<ul>
+<li>menuconfig配置支持NTFS文件系统：找到Filesytems，找到NTFS file system support，空格进行选择，默认为空<input disabled="" type="checkbox"> 表示no，变为[M]表示作为内核的模块，将编译进内核使用模块的方式加载，模块意味着可以移除，以减小内核体积，[*]表示固化到内核中，不能被移除。选中NTFS后还出现了子选项，比如NTFS write support表示写入支持，子选项的[*]表示固化到父选项，而不是内核。</li>
+<li>其实这个未安装的内核，其所有配置都在内核目录下的.config文件中，启用的项等于m或者y，未启用的则被#注释掉了，非常熟悉的话甚至可以直接修改配置文件</li>
+<li>当前使用中的内核的配置文件，在/boot目录下，如果想要沿用当前系统内核配置，拷贝配置文件即可：cp /boot/config-kernelversion.platform /usr/src/kernels/linux-5.1.10/.config</li>
+<li>当然仍然可以再make menuconfig进入菜单进行更多修改</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>编译：make -j2 all，通过lscpu查看CPU信息</li>
+<li>安装内核：注意保证磁盘空间充足，df -h可以查看磁盘分区信息
+<ul>
+<li>先安装内核所支持的模块：make modules_install</li>
+<li>再安装内核：make install</li>
+</ul>
+</li>
+<li>reboot重启进入系统引导界面，可以发现新安装的内核可以选择了</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="grub配置">grub配置</h2>
+<ul>
+<li>
+<p>grub：centos7使用的是grub2，此前是grub1，grub1中所有的配置文件需要手动去编辑，要像网卡配置文件一样记住每个项是什么功能，grub2则可以用命令即可进行修改</p>
+</li>
+<li>
+<p>grub配置文件：/boot/grub2/grub.cfg，一般不要直接编辑该文件，而是修改/etc/default/grub文件（一些基本配置），如果还有更详细的配置，可以修改/etc/grub.d/下的文件</p>
+<ul>
+<li>
+<p>grub2-mkconfig -o /boot/grub2/grub.cfg：产生新的grub配置文件</p>
+</li>
+<li>
+<p>/etc/default/grub</p>
+<ul>
+<li>
+<p>GRUB_DEFAULT=saved。表示系统默认引导的版本内核。通过命令grub2-editenv list查看默认引导的版本内核</p>
+<ul>
+<li>grep ^menu /boot/grub2/grub.cfg：找到文本文件当中包含关键字的一行，^表示以什么开头，这里即在grub配置文件去找到以menu开头的，能够看到内核的列表，按索引以0开始</li>
+<li>grub2-set-default 0：选择第一个内核作为linux启动时的默认引导</li>
+<li>grub2-editenv list：查看当前默认引导内核已经改变了</li>
+</ul>
+</li>
+<li>
+<p>GRUB_CMDLINE_LINUX：确认引导时对linux内核增加什么参数</p>
+<ul>
+<li>
+<p>rhgb：引导时为图形界面</p>
+</li>
+<li>
+<p>quiet：静默模式，引导时只打印必要的消息，启动出现异常时可以去除quiet和rhgb以显示更多信息</p>
+</li>
+<li>
+<p>readhat7重置root密码</p>
+<ul>
+<li>
+<p>引导界面时，选择要引导的内核，按E进入设置信息，找到linux16开头的一段，可以发现刚刚quiet、rhgb等信息，可以直接键盘输入添加更多项，在该行末尾添加rd.break，ctrl+x启动</p>
+</li>
+<li>
+<p>进入后是内存中的虚拟的一个文件系统，而真正的根目录是/sysroot（输入命令mount可以发现根为/sysroot），在这里所做的操作是不会进行保存的，并且是只读方式的挂载，不能写，防止修复时损坏原有文件</p>
+</li>
+<li>
+<p><code>mount -o remount,rw /sysroot</code>，重新挂载到根目录并且是要可读写的，之后mount，发现有了r,w权限</p>
+</li>
+<li>
+<p>chroot /sysroot 选择根，即设置根为/sysroot目录；</p>
+<ul>
+<li>
+<p>echo 123456|passwd &ndash;stdin root 修改root密码为redhat，echo正常情况是打印到终端，这里通过管道符发送给password命令，&ndash;stdin是password命令的参数，正常情况是通过终端输入，这里即表示通过标准输入进行输入，并传递给root用户。或者password 123456；或者输入passwd，交互修改；</p>
+</li>
+<li>
+<p>SELinux安全组件，叫做强制访问控制，会对etc/password和/etc/shadow进行校验，如果这两个文件不是在系统进行标准修改的，会导致无法进入系统。<code>vim /etc/selinux/config</code>中可以通过设置SELINUX=disabled关闭SELinux，即使生产环境也多半会关掉它</p>
+</li>
+<li>
+<p>或者修改/etc/shadow文件，touch /.autorelabel，这句是为了selinux生效</p>
+</li>
+<li>
+<p>注意备份</p>
+</li>
+</ul>
+</li>
+<li>
+<p>exit退出根回到虚拟的root中，然后reboot</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="进程管理">进程管理</h2>
+<ul>
+<li>进程：进行中的程序。运行中的程序，从程序开始运行到终止的整个生命周期是可管理的。C程序的启动是从main函数<code>int main(int agrc, char*argv[])</code>开始的，终止的方式分为正常终止、异常终止，正常终止有从main返回、调用exit等方式，异常终止有调用abort、接收信号等方式。计算机资源不足时等情况进行，进程和权限有着密不可分的关系。</li>
+</ul>
+<h3 id="进程查看">进程查看</h3>
+<h5 id="ps">ps</h5>
+<pre><code class="language-shell">ps -efL
+</code></pre>
+<ul>
+<li>ps：process status，进程状态
+<ul>
+<li>参数</li>
+<li>-e：可以查看更多进程，类似于win中的系统进程
+<ul>
+<li>-f：额外的信息UID、PPID</li>
+<li>-L：Light，表示轻量级，轻量级进程，实际上即线程</li>
+</ul>
+</li>
+<li>内容
+<ul>
+<li>PID：唯一标识进程（不同用户使用同样的程序也是不同的进程）</li>
+<li>TTY：终端的次要装置号码（minor device number of tty）。即表示当前执行程序的终端</li>
+<li>UID：效用户id。表示进程是由哪个用户启动的信息（可修改），默认显示为启动进程的用户</li>
+<li>PPID：进程的父进程id。（linux的 0号进程 和 1 号进程：https://www.cnblogs.com/alantu2018/p/8526970.html ，注意centos7的systemd即以前的init）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>pstree：查看进程的树形结构，父子进程关系清晰，但是是静态查看的，ps是动态刷新的。非默认安装的程序，需要自行下载</li>
+</ul>
+<h5 id="top">top</h5>
+<ul>
+<li>top：系统状态，包括进程状态，是动态更新的
+<ul>
+<li>
+<p>参数</p>
+<ul>
+<li>-p 1：指定pid查看进程</li>
+</ul>
+</li>
+<li>
+<p>内容</p>
+<ul>
+<li>系统状态
+<ul>
+<li>up：运行时长</li>
+<li>users：当前登录用户数量</li>
+<li>load average：平均负载，系统进行采用对不同时间内的系统负载进行的计算，3个数值分别是1、5、15分钟内的负载，1即满负载</li>
+<li>Tasks：任务状态
+<ul>
+<li>total：当前运行的总进程数</li>
+<li>running：运行进程数</li>
+<li>sleeping：睡眠进程数</li>
+<li>stopped：停止进程数</li>
+<li>zombie：僵尸进程数</li>
+</ul>
+</li>
+<li>%Cpu(s)：cpu使用情况（平均值）
+<ul>
+<li>us：用户空间使用cpu占比</li>
+<li>sy：内核空间使用cpu占比</li>
+<li>ni：用户进程空间内改变过优先级的进程使用cpu占比</li>
+<li>id：空闲cpu占比</li>
+<li>wa：等待输入输出的CPU时间百分比</li>
+<li>hi：硬件CPU中断占用百分比</li>
+<li>si：软中断占用百分比</li>
+<li>st：虚拟机占用百分比</li>
+</ul>
+</li>
+<li>KiB Mem：内存状态
+<ul>
+<li>total：物理内存总量</li>
+<li>used：使用内存量</li>
+<li>free：空闲内存量</li>
+<li>buffers：用作内核缓存的内存量</li>
+</ul>
+</li>
+<li>KiB Swap：交换区状态
+<ul>
+<li>total：交换区总量</li>
+<li>used：使用交换区量</li>
+<li>free：空闲交换区量</li>
+<li>buffers：缓冲的交换区量。内存中的内容被换出到交换区，而后又被换入到内存，但使用过的交换区尚未被覆盖，该数值即为这些内容已存在于内存中的交换区的大小，相应的内存再次被换出时可不必再对交换区写入</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>进程状态：
+<ul>
+<li>PID：进程id</li>
+<li>USER：进程所有者的用户名</li>
+<li>PR：优先级</li>
+<li>NI：nice值。负值表示高优先级，正值表示低优先级</li>
+<li>VIRT：进程使用的虚拟内存总量，单位kb。VIRT=SWAP+RES</li>
+<li>RES：进程使用的、未被换出的物理内存大小，单位kb。RES=CODE+DATA</li>
+<li>SHR：共享内存大小，单位kb</li>
+<li>S：进程状态(D=不可中断的睡眠状态,R=运行,S=睡眠,T=跟踪/停止,Z=僵尸进程</li>
+<li>%CPU：上次更新到现在的CPU时间占用百分比</li>
+<li>%MEM：进程使用的物理内存百分比</li>
+<li>TIME+：进程使用的CPU时间总计，单位1/100秒</li>
+<li>COMMAND：命令名/命令行</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>操作</p>
+<ul>
+<li><code>s</code>：按s可以输入数字更改状态刷新间隔（默认3秒/次），回车确认</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="控制命令">控制命令</h3>
+<h4 id="优先级">优先级</h4>
+<h5 id="nice">nice</h5>
+<ul>
+<li>nice：优先级调整。优先级值从-20到19，值越小优先级越高，抢占资源就越多。写一个无限循环的脚本demo.sh，<code>./demo.sh</code>运行
+<ul>
+<li>-n 10 ./demo.sh：设置demo.sh的优先级为10</li>
+</ul>
+</li>
+<li>renice：重新设置优先级
+<ul>
+<li>-n 15：重新设置优先级值为15</li>
+</ul>
+</li>
+</ul>
+<h4 id="作业控制">作业控制</h4>
+<h5 id="jobs">jobs</h5>
+<ul>
+<li><code>jobs</code>：查看后台作业的工作程序
+<ul>
+<li>
+<h2 id="内容">内容</h2>
+</li>
+<li><code>bg 1</code>指定程序序号使其到后台运行</li>
+<li><code>fg 1</code>指定程序序号使其到前台运行，通过CTRL+Z可以再入后台并暂停挂起，可以通过bg或fg再运行</li>
+</ul>
+</li>
+</ul>
+<h5 id="heading">&amp;</h5>
+<ul>
+<li><code>&amp;</code>：使程序后台运行</li>
+</ul>
+<pre><code class="language-shell">./demo.sh &amp;
+</code></pre>
+<h3 id="进程的通信方式信号">进程的通信方式—信号</h3>
+<ul>
+<li>
+<p>信号是进程间通信方式之一，典型用法是:终端用户输入中断命令，通过信号机制停止一个程序的运行。</p>
+</li>
+<li>
+<p>使用信号的常用快捷键和命令</p>
+<ul>
+<li>kill -l：查看所有信号
+<ul>
+<li>SIGINT：2号信号，通知前台进程组终止进程，可以被程序处理，快捷键CTRL+C</li>
+<li>SIGKILL：9号信号，立即强制结束程序，不能被阻塞和处理，kill -9 [pid]</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>nohup：一般与&amp;符号配合运行一个命令</p>
+<ul>
+<li>nohup命令使进程忽略hangup（挂起）信号：比如一个进程正在前台运行，关闭该终端则将发起hangup信号，会使该进程被关掉，如果使用nohup则忽略该信号，即使关闭终端也不会被关闭，但是会变成一个孤儿进程，因为终端关闭了，其父进程没了，但是会被新终端的1号进程作为父进程，nohup启动的进程仍然是用户有关的，会随着用户终端而改变</li>
+</ul>
+</li>
+<li>
+<p>守护（Daemon）进程：随着开机启动，是用户无关的、在用户之前启动的进程，不需要用户终端的，因为没有终端打印日志等信息，所以一般是以文件的形式记录日志信息</p>
+<ul>
+<li>守护进程会将其使用的目录切换为根目录，这是什么意思呢，比如windows下，如果使用一个软件的时候，你要删除这个软件所在的目录，会提示目录被使用无法删除，实际上进程运行是基于所在目录的，而根目录只有在关机或重启时才会被卸载</li>
+</ul>
+</li>
+<li>
+<p>系统日志：/proc，这个目录下所有的内容在硬盘中默认是不存在的，它是操作系统去内存中读取信息以文件的形式进行呈现。比如启动了一个进程，会有与进程号同名的目录，类似于：/proc/27451，进入即可看到关于进程属性的文件</p>
+<ul>
+<li>ps -ef | grep sshd：sshd为例</li>
+<li>ls -l cwd：可以看到该进程使用的目录</li>
+<li>ls -l fd：可以看到标准输入输出及其输入输出的目录，输入一般是/dev/null表示没有，因为因为终端都没有；输出如果是nohup则一般是输出到，如果是Daemon程序一般是通过socket输出给系统日志程序，系统日志程序将打印到默认的/var/log/下进程对应的目录文件下</li>
+</ul>
+</li>
+<li>
+<p>cd /var/log：存放系统日志，由进程通过socket通信给日志系统，写入该目录对应文件。下面是一些常见日志</p>
+<ul>
+<li>tail -f /var/log/message：该文件被写入一些系统常规日志</li>
+<li>tail -f /var/log/dmesg：内核启动日志</li>
+<li>tail -f /var/log/secure：安全日志</li>
+<li>tail -f /var/log/cron：cron周期任务日志信息</li>
+</ul>
+</li>
+<li>
+<p>使用screen命令：因为守护进程就是为了使进程脱离终端，防止进程因终端关闭而关闭，screen工具也可以实现，进入终端操作时先进入screen的环境中，即使终端因为某些原因比如网络中断而断开，screen还是可以继续运行程序，下次连接时也能过screen恢复，</p>
+<ul>
+<li>yum install screen</li>
+<li>screen进入screen环境</li>
+<li>先按ctrl+a，然后按d，即可退出(detached) screen环境</li>
+<li>screen -ls查看screen的会话，会话有sessionid唯一标识</li>
+<li>screen -r sessionid恢复会话</li>
+</ul>
+</li>
+<li>
+<p>服务管理工具systemctl</p>
+<ul>
+<li>service：执行简单，但是启动停止重启的脚本完全由你自己编写，服务控制的好坏全凭编写脚本的人决定
+<ul>
+<li>cd /etc/init.d：该目录存放service启动的各种服务脚本，比如network</li>
+<li>级别：chkconfig &ndash;list，可以发现已经被systemd取代了，https://blog.csdn.net/ctthuangcheng/article/details/51219848
+<ul>
+<li>运行级别0：系统停机状态，系统默认运行级别不能设为0，否则不能正常启动</li>
+<li>运行级别1：单用户工作状态，root权限，用于系统维护，禁止远程登陆</li>
+<li>运行级别2：多用户状态(没有NFS)</li>
+<li>运行级别3：完全的多用户状态(有NFS)，登陆后进入控制台命令行模式</li>
+<li>运行级别4：系统未使用，保留</li>
+<li>运行级别5：X11控制台，登陆后进入图形GUI模式</li>
+<li>运行级别6：系统正常关闭并重启，默认运行级别不能设为6，否则不能正常启动</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>systemctl：
+<ul>
+<li>vi /usr/lib/systemd/system：该目录存放systemctl启动的各种服务脚本，比如sshd.service</li>
+<li>enable：随着开机启动</li>
+<li>级别文件：cd /lib/systemd/system，有很多.service，其中级别相关的是：ls -l runlevel*.target</li>
+<li>查看当前级别：systemctl get-default</li>
+<li>设置默认开机级别：systemctl set-default multi-user.target</li>
+</ul>
+</li>
+</ul>
+</li>
+<li></li>
+<li></li>
+</ul>
+<h3 id="selinux">SELinux</h3>
+<ul>
+<li>安全增强linux。一般是利用用户、文件的权限进行安全控制，即自主访问控制；强制访问控制：给用户、进程、文件打上标签，只要用户、进程、文件的标签能对应一致即可以允许访问和控制，比如之前的通过grub进入救援模式修改etc中的password和shadow，selinux就会拒绝访问linux的密码，就需要在根目录下/.autorelabel</li>
+<li>会降低服务器性能</li>
+<li>MAC（强制访问控制）与DAC（自主访问控制)</li>
+<li>查看SELinux的命令
+<ul>
+<li>getenforce：查看selinux的状态。默认有3种状态，在/etc/selinux/config文件中，持久修改的话需要重启，临时修改可以通过如setenfortce 0设置</li>
+<li>查看标签（label）：ps -Z查看进程标签，id -Z查看用户标签，ls -Z查看文件标签</li>
+<li>/usr/sbin/sestatus</li>
+<li>ps -Z and ls -z and id -z</li>
+</ul>
+</li>
+<li>关闭SELinux
+<ul>
+<li>setenforce 0</li>
+<li>letc/selinux/sysconfig</li>
+</ul>
+</li>
+</ul>
+<h2 id="内存和磁盘管理">内存和磁盘管理</h2>
+<ul>
+<li>内存和磁盘使用率查看
+<ul>
+<li>内存：
+<ul>
+<li>free：默认bit为单位，-m、-g等可以指定单位</li>
+<li>top</li>
+</ul>
+</li>
+<li>磁盘
+<ul>
+<li>fdisk：fdisk -l，fdisk -l /dev/sd?，磁盘在linux中也是文件，以扇区划分，start、end都是指扇区，system指文件系统类型为linux（或其它）类型，比如ntfs就不能被linux文件系统读取，除非格式化为linux文件系统，或者编译内核时设置开启ntfs</li>
+<li>parted -l也可以查看，与fdisk -l展示的信息基本一致</li>
+<li>df：df -h，可以理解为fdisk的补充，可以看到分区挂载的目录等</li>
+<li>du：ls -lh /etc/passwd查看文件占用内存，du /etc/passwd可以查看实际占用空间</li>
+<li>du 与ls的区别：ls是记录文件开头到结尾的空间，du为实际占用空间，不会计算文件空洞，dd if=afile bs=4M count=10 of=bfile创建空洞文件，if表示输入文件，of表示输出文件，bs表示blockSize，即4M作为一个块进行读写，count表示读写次数，当afile足够大时可以创建一个40m的bfile，dd if=/dev/zero bs=4M count=10 of=afile，从/dev/zero可以读取无穷多个0，用以测试dd，ls -lh和du分别查看afile都是40m，dd if=/dev/zero bs=4M count=10 seek=20 of=bfile，seek表示跳过20个块，即有80m不写入，即将成为文件的空洞，ls -lh和du分别查看bfile分别为120、40m。比如给linux创建一个虚拟机的磁盘空间1T，但是实际只存放1m的数据，其它都是空洞</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Linux支持多种文件系统，常见的有
+<ul>
+<li>ext4（centos6默认）</li>
+<li>xfs（centos7默认）</li>
+<li>NTFS （需安装额外软件ntfs-3g，有版权的，windows用）</li>
+</ul>
+</li>
+<li>ext4文件系统
+<ul>
+<li>结构
+<ul>
+<li>超级块：会记录文件数，有副本</li>
+<li>超级块副本：恢复数据用</li>
+<li>i 节点(inode)：记录每一个文件的信息，权限、编号等，文件名与编号不在同一inode，而是记录在其父目录的inode中。ls -i可以查到每一个文件的inode</li>
+<li>数据块(datablock)：存放文件的数据内容，挂在inode上的，如果一个数据块不够就接着往后挂，链式</li>
+</ul>
+</li>
+<li>所以ls查看的是inode中的文件信息，du统计的是数据块的个数用来计算大小等。默认创建的数据块为4k，即使只写了1个字符也是4k，所以存储大量小文件会很费磁盘，所以网络上有一些专门用来存储小文件的文件系统。echo &gt;写入文件只会改变数据块，而vim会改变inode，vim编辑时，会在家目录下复制一份临时文件进行修改，然后保存复制到源目录，并删除原来的文件（应该是）。rm afile4是从父inode删除文件名，所以文件再大都是秒删，ln afile bfile，将bfile只向afile并也加入到父inode，且不会占用额外空间</li>
+<li>软（符号）连接：ln -s afile cfile，ls -li afile cfile查看可以看到，其实cfile就记录了目标文件afile的路径，链接文件的权限修改对其自身是无意义的，对其权限修改将在目标文件上得到反馈。可以跨分区（跨文件系统）</li>
+<li>facl：文件访问控制，getfacl afile查看文件权限，setfacl -m u:user1:r afile：u表示为用户分配权限，g表示用户组，r表示读权限，m改成x即可收回对应用户（组）权限</li>
+</ul>
+</li>
+<li>磁盘配额的使用：给多个用户之间磁盘使用做限制</li>
+</ul>
+<h3 id="分区">分区</h3>
+<ul>
+<li>
+<p>磁盘的分区与挂载：如果是虚拟机，可以直接在vbox上给其添加一块硬盘进行练习（比如叫sdc），可能需要关机才能添加</p>
+<ul>
+<li>
+<p>常用命令</p>
+<ul>
+<li>fdisk：fdisk -l查看，fdisk /dev/sdc2指定磁盘进行分区，会进入交互界面，输入m获取帮助，可以看到n是add a new partition即新建分区</li>
+<li>mkfs：使用分区，输入mkfs.可以看到有很多不同后缀，都是指不同的文件系统，比如mkfd.ext4 /dev/sdc2即可格式化为ext4的文件系统。但是文件操作是文件系统之上的操作，无法直接操作，需要将其挂载到某个目录，对目录进行操作，</li>
+<li>mount：mount -t auto自动检测文件系统，或者直接mount /dev/sdc2 /mnt/sdc2也会自动检测，将/dev/sd2挂载到/mnt/sd2，但是是临时挂载，vim /etc/fstab进行修改，dev/sdc1 /mnt/sdc1 ext4 defaults 0 0，即磁盘目录 挂载目录 文件系统指定 权限(defauls表示可读写) 磁盘配额相关参数1  磁盘配额相关参数2</li>
+<li>parted：如果磁盘大于2T，不要用fdisk进行分区，而是parted，parted /dev/sdd</li>
+</ul>
+</li>
+<li>
+<p>用户磁盘配额：限制用户对磁盘的使用，比如创建文件数量（即限制i节点数）、数据块数量</p>
+<ul>
+<li>
+<p>xfs文件系统的用户磁盘配额quota，修改步骤如下</p>
+<ul>
+<li>
+<p>mkfs.xfs /dev/sdb1：创建分区，如果分区已经存在，为了防止这是一个误操作，会提示使用-f参数强制覆盖，mkfs.xfs -f /dev/sdb1</p>
+</li>
+<li>
+<p>mkdir /mnt/disk1</p>
+</li>
+<li>
+<p>mount -o uquota,gquota /dev/sdb1 /mnt/disk1，-o开启磁盘配额，uquota表示支持用户磁盘配额，gquota表示支持用户组磁盘配额</p>
+</li>
+<li>
+<p>chmod 1777 /mnt/disk1：赋予1777权限</p>
+</li>
+<li>
+<p>xfs_quota -x -c &lsquo;report -ugibh&rsquo;/mnt/disk1：有参数时直接非交互配置，xfs_quota可以直接进入交互模式，但是一般非交互即可，</p>
+<ul>
+<li>-c表示命令，report -ugibh，report表示报告（查看）磁盘配额，-u表示用户磁盘配额，g表示组磁盘配额，i表示节点，b表示块，h可以更人性化显示</li>
+</ul>
+</li>
+<li>
+<p>xfs_quota -x -c &lsquo;limit -u isoft=5 ihard=10 user1&rsquo; /mnt/disk1：root是无限制的，不要对root进行磁盘配额，没意义。这里对user1进行磁盘配额，limit表示限制磁盘配额，限制用户磁盘配额加-u，限制组磁盘配额加-g；isoft软限制i节点，ihard将硬限制，软限制比硬限制的配置的值更小，达到软限制之后，会提示用户在某一个宽限的时间条件内可以用超过软限制的值，硬限制则绝对不能超过限制的值；数据块限制即bsoft、bhard</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>常见配置文件</p>
+<ul>
+<li>letc/fstab</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>交换分区（虚拟内存）的查看与创建</p>
+<ul>
+<li>free查看mem和swap，前面提到过</li>
+<li>增加交换分区的大小，使用硬盘分区扩充swap
+<ul>
+<li>mkswap：如mkswap /dev/sdd1将标记上swap</li>
+<li>swapon：swapon /dev/sdd1打开swap，通过free可以看到swap被扩充了，swapoff /dev/sdd1关闭swap</li>
+</ul>
+</li>
+<li>使用文件制作交换分区：可以直接创建一个比如10G的文件，或者创建带有空洞的文件，使其在swap的使用过程中逐渐扩大也可以
+<ul>
+<li>dd if=/dev/zero bs=4M count=1024 of=/swapfile：创建文件</li>
+<li>mkswap /swapfile：即可为文件打上swap标记使其成为swap的空间</li>
+<li>chmod 600 /swapfile：为了安全起见，一般修改为600权限</li>
+<li>swapon、swapoff</li>
+</ul>
+</li>
+<li>同样swap设置也是临时的，vi /etc/fstab。/swapfile swap swap defaults 0 0，即 swap文件或分区 挂载到swap目录（这是一个虚拟目录，因为swap不需要用文件目录来进行操作，挂载到这个虚拟目录即可） 文件系统格式（也是swap），第一个0表示做dump备份时要不要备份该硬盘（分区），但是现在一般都是tar进行备份，所以设置为0即可，第二个0表示开机的时候进行磁盘的自检的顺序问题，是针对之前的ext2、ext3的文件系统的设置，但是现在已经不需要了，如果发现写入是不完整的自动会对那个分区进行检查，所以也是0即可
+<ul>
+<li>如果写错了东西，发现重启启动不起来了，通过grap进入到单一用户模式，来去修改/etc/fstab</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="raid">raid</h3>
+<ul>
+<li>软件RAID的使用：RAID（磁盘阵列）
+<ul>
+<li>RAID的常见级别及含义
+<ul>
+<li>RAID 0 striping条带方式，提高单盘吞吐率</li>
+<li>RAID 1 mirroring镜像方式，提高可靠性，需要两块磁盘组成，其中有给做镜像备份</li>
+<li>RAID5有奇偶校验，至少需要3块硬盘，2块硬盘写数据，还有1块做奇偶校验（存储2块数据盘的校验数据，该盘损坏，校验数据还是可以通过2块数据盘重新生成），当某一块数据硬盘损坏了，奇偶校验的硬盘就通过奇偶校验来通过未损坏的数据盘来还原数据，但是如果2块数据盘都损坏了，还是没办法了</li>
+<li>RAID 10是RAID 1与RAIDO的结合，共4块，两块硬盘做raid1，两块做raid1和raid0</li>
+</ul>
+</li>
+<li>raid控制器（raid卡）：硬件设备，通过数据读写自动计算校验值，自动计算把数据放在哪块硬盘上的，甚至可以带有缓存功能加速硬盘访问</li>
+<li>软件RAID的使用：对cpu性能消耗较大，一般不实际使用，而是使用raid卡
+<ul>
+<li>需要安装软件包yum install mdadm，练习raid建议划分3个同样大小的空白分区，做软件raid如果分区有大有小默认采用最小的空间，fdisk -l /dev/sd??</li>
+<li>mdadm -C /dev/md0 -a yes -l1 -n2 /dev/sdb1 /dev/sdc1：-C /dev/md0创建raid，-a yes表示全部提示都选择yes，比如有数据、格式化等提示，所以要注意分区会被格式化，-l1指定raid级别为raid1，-n2表示2块硬盘是活动的，/dev/sdb1 /dev/sdc1即指定这两块硬盘，实际上可以简写为通配符形式/dev/sd[b,c]1。</li>
+<li>可能会提示may not suitable as a boot device什么的，因为是软件不支持</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="物理卷">物理卷</h3>
+<h3 id="逻辑卷">逻辑卷</h3>
+<ul>
+<li>逻辑卷管理：在物理卷之上的虚拟卷，linux根目录就是逻辑卷的，可以将一块硬盘拆分为多个逻辑卷，也可以将多个硬盘合并为一个逻辑卷，根据场景对逻辑卷进行缩放容
+<ul>
+<li>新建逻辑卷
+<ul>
+<li>先添加几个磁盘/dev/sdb1、/dev/sdc1、/dev/sdd1：<code>pvcreate /dev/sdb1 /dev/sdc1 /dev/sdd1</code>或者简写<code>pvcreate /dev/sd[b,c,d]1</code>，注意前面做了软件raid的磁盘如果没有停掉raid将失败
+<ul>
+<li>停止raid：<code>mdadm --stop /dev/md0</code>，破坏超级块：<code>dd if=/dev/zero of=/dev/sdb1 bs=1M count=1</code>、<code>dd if=/dev/zero of=/dev/sdc1 bs=1M count=1</code></li>
+<li>重新创建一下：<code>pvcreate /dev/sd[b,c,d]1</code>，<code>pvs</code>查看。信息：lvm即逻辑卷管理器、PSIZE即物理大小、PREE即物理卷的物理空间剩余量</li>
+<li><code>vgcreate vg1 /deb/sdb1 dev/sdc1</code>给物理卷分组，<code>pvs</code>查看可以发现已经被分到vg1这个卷组了</li>
+<li><code>vgs</code>查看卷组</li>
+<li><code>lvcreate -L 100M -n lv1 vg1</code>：从卷组vg1创建名字为lv1大小为100M的逻辑卷，<code>lvs</code>查看逻辑卷</li>
+</ul>
+</li>
+<li>使用逻辑卷：
+<ul>
+<li>格式化：mkdir /mnt/test、mfs.xfs /dev/vg1/lv1</li>
+<li>进行挂载：fdisk /dev/sd?? pv vg1 lv1 xfs mount。命令解释：fdisk命令用来分区，用/dev/sd??磁盘建立一个pv，通过pv创建一个vg1，通过vg1创建lv1，lv1上通过xfs命令创建文件系统，mount将文件系统进行挂载。这个复杂过程相当实现了：pv vg1 lv1实现可动态扩展的功能，xfs使可以以文件形式操作的功能，mount实现内存和管理的映射。所以如果不需要扩展，可以直接fdisk /dev/sd?? xfs mount在sd磁盘设备上使用文件系统即可，如果还需要实现更复杂的功能还可以在其上进行raid功能（但就不能直接在磁盘上搭建逻辑卷了，需要在raid的基础上比如搭建一个/dev/md0，然后再在其上进行逻辑卷实现）</li>
+</ul>
+</li>
+<li>用途：可以用来扩展现有的如root、user、src 等分区</li>
+</ul>
+</li>
+<li>扩充逻辑卷
+<ul>
+<li>vgextend  centos /dev/sdd1，将/dev/sdd1这个pv划分到centos这个vg下</li>
+<li>lvextend -L +50G /dev/centos/root</li>
+<li>df -h查看发现文件系统的容量并没有变大，也需要告知文件系统卷已经扩大了，xfs_growfs /dev/centos/root</li>
+</ul>
+</li>
+<li>缩容</li>
+<li>可以发现，卷管理实际上就是一层一层的，从物理磁盘到逻辑卷到文件系统</li>
+</ul>
+</li>
+</ul>
+<h3 id="系统综合状态">系统综合状态</h3>
+<h5 id="sar">sar</h5>
+<ul>
+<li>
+<p>使用sar命令查看系统综合状态，可以对系统进行全面的体检</p>
+</li>
+<li>
+<p>参数</p>
+<ul>
+<li>sar -u 1 10：-u是cpu信息。1是采样时间间隔，每1秒采样10次</li>
+<li>sar -r 1 10：-r显示内存情况</li>
+<li>sar -b 1 10：-b显示IO信息</li>
+<li>sar -d 1 10：-d磁盘信息</li>
+<li>-q 1 10：进程信息</li>
+</ul>
+</li>
+<li>
+<p>使用第三方命令iftop查看网络流量情况</p>
+<ul>
+<li>yum install epel-release</li>
+<li>yum install iftop</li>
+<li>iftop -P：默认只监听eth0的网络接口</li>
+</ul>
+</li>
+<li>
+<p>更多好用的工具自行到网络上找寻</p>
+</li>
+</ul>
+<h2 id="shell">shell</h2>
+<p>shell：在计算机科学中，Shell俗称壳（用来区别于核），是指&quot;为使用者提供操作界面&quot;的软件-命令解析（解释）器，即用于解释用户对操作系统的操作，bash即shell实现之一，其它还有cat/etc/shells等</p>
+<p>shell会把用户所执行的命令翻译给内核，内核将命令执行的结果反馈给用户。ls为例，当输入ls时，首先由shell接收到用户执行的命令，对命令选项和参数进行分析，ls是查看文件的，将交给文件系统（属于内核层面了），然后内核把ls要查看的文件和目录翻译成硬盘对应的扇区（ssd硬盘是另外结构），硬件会把查询的结果交给内核，内核在返回给shell，最后返回给用户</p>
+<h3 id="linux启动过程">linux启动过程</h3>
+<ul>
+<li>
+<p>BIOS：基本输入输出系统，是主板上的功能，通过bios选择要引导的介质 - 硬盘、或光盘，如果选择了硬盘，就会有一个引导的部分-MBR</p>
+</li>
+<li>
+<p>MBR：硬盘的主引导记录部分，就进入到linux的过程了（以下）</p>
+</li>
+<li>
+<p>BootLoader(grub)：BootLoader指启动和引导内核的工具，现在用的grub2.0，可以引导linux内核（选择哪个内核启动），甚至是windows系统</p>
+</li>
+<li>
+<p>kernel：内核启动</p>
+</li>
+<li>
+<p>systemd（centos7，6中是init）：systemd启动（1号进程）。centos6时，init启动后的所有系统初始化内容都是由shell脚本完成（/etc/rc.d目录下会有大量脚本，比如用于激活软件raid、lvm等系统初始化工作），centos7中则有些内容改变为systemd的配置文件方式（到/etc/systemd/system目录下，根据启动级别来到/user/lib/systemd/system目录下，在这个目录下读取各种各样的配置文件），由应用程序引导。</p>
+</li>
+<li>
+<p>系统初始化（）：比如通过驱动程序加载各种硬件，是由shell脚本完成的</p>
+</li>
+<li>
+<p>shell：shell开始工作</p>
+</li>
+<li>
+<p>bios：系统启动的时候按F2进入界面来选择不同的引导介质，如果选择了硬盘，就会有一个引导的部分-mbr，通过<code>dd</code>命令可以查看MBR（linux中一切皆文件，磁盘也可以当作文件被读取）</p>
+<ul>
+<li><code>dd if=/dev/sda of=mbr.bin bs=446 count=1</code>，if是磁盘，of指定输出文件，bs指定块大小，count指定1个块。因为mbr.bin是没有文件系统的，所以不能通过cat直接查看其中内容，这里使用<code>hexdump -C mbr.bin</code>用16进制的方式去查，-C将能够显示为字符的内容显示为字符</li>
+<li><code>dd if=/dev/sda of=mbr2.bin bs=512 count=1</code>，扩大到512字节，mbr将包括自盘分区表，最后的55 aa即证明引导扇区是正确的</li>
+</ul>
+</li>
+<li>
+<p>BootLoader：cd /boot/grub2</p>
+<ul>
+<li><code>grub2-editenv list</code>：显示默认引导的内核</li>
+<li><code>uname -r</code>：查看当前所使用的内核</li>
+</ul>
+</li>
+</ul>
+<h3 id="base">base</h3>
+<ul>
+<li>
+<p>命令中也大量使用了shell脚本，以/sbin/grub2-mkconfig为例，<code>file /sbin/grub2-mkconfig</code>可以看到文件的描述shell script，vim打开可以发现也就是一个shell脚本</p>
+</li>
+<li>
+<p>shell脚本区别于py、php等脚本，无需掌握那些语言函数，完全由命令构成</p>
+</li>
+<li>
+<p>UNIX的哲学：一条命令只做一件事</p>
+</li>
+<li>
+<p>为了组合命令和多次执行，使用脚本文件来保存需要执行的命令</p>
+</li>
+<li>
+<p>如果是二进制可执行文件，赋予可执行（-x）权限即可，但是如果是shell脚本文件想要执行，还需要额外赋予该文件可读（-r）权限(<code>chmod u+rx filename</code>)</p>
+</li>
+</ul>
+<pre><code class="language-sh">#比如某个目录经常反复cd进入并ls查看
+cd /var ; ls ; pwd ; du -sh ; du -sh *
+</code></pre>
+<p>可以保存为sh文件，比如叫tmp.sh</p>
+<pre><code class="language-sh">#一般shell脚本头部上会加这样一个申明，这个申明叫做&quot;Sha-Bang&quot;
+#!/bin/bash
+cd /var ; ls ; pwd ; du -sh ; du -sh *
+</code></pre>
+<pre><code class="language-sh">#赋予权限
+chmod u+rx tmp.sh
+#可以通过bash执行，在bash中&quot;#!/bin/bash&quot;将被当作注释
+bash ./tmp.sh
+#直接运行，当前系统是什么shell就将用什么shell解释，&quot;#!/bin/bash&quot;将是非注释的，它将告诉系统使用/bin/bash来解释执行
+./tmp.sh
+</code></pre>
+<ul>
+<li>执行命令的方式
+<ul>
+<li><code>bash ./filename.sh</code>：会在当前终端下fork一个叫做bash的子进程，通过子进程去运行脚本，所以执行脚本后当前终端线程并没有真正进入到/var目录，因为是子进程进到目录的。注意：通过bash执行脚本是不用赋予执行权限的，因为是通过bash的</li>
+<li><code>./filename.sh</code>：也是产生子进程然后运行，不同的是通过Sha-Bang去解释运行脚本的。直接运行脚本文件，必须有可执行权限，</li>
+<li><code>source ./filename.sh</code>：在当前进程运行，所以当前终端进入到了/var目录</li>
+<li><code>. ./filename.sh</code>：开头的<code>.</code>即source的缩写</li>
+</ul>
+</li>
+<li>内建命令和外部命令的区别
+<ul>
+<li>内建命令：内建命令不需要创建子进程，将对当前Shell 生效，如cd、pwd、source等</li>
+<li>外部命令：需要创建子进程，不会对当前shell生效，如bash</li>
+</ul>
+</li>
+</ul>
+<h3 id="管道">管道</h3>
+<h2 id="待整理">待整理</h2>
+<ul>
+<li></li>
+<li>
+<p>快捷键：</p>
+<ul>
+<li>TAB快捷键补全文件（目录）名</li>
+<li>CTRL+L清屏</li>
+<li>CTRL+C终止（命令）程序</li>
+</ul>
+</li>
+<li>
+<p>添加执行权限：chmod a+x 文件名，a表示所有，x表示执行</p>
+</li>
+</ul>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/YuanyaTianchi" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/8338344" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/blog/">blog</a>
+            </span>
+            
+            <span>
+                <a href="/tags/db/">db</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/mysql/">mysql</a>
+            </span>
+            
+            <span>
+                <a href="/tags/redis/">redis</a>
+            </span>
+            
+            <span>
+                <a href="/tags/sys/">sys</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#hello">hello</a>
+      <ul>
+        <li><a href="#环境">环境</a></li>
+        <li><a href="#目录">目录</a></li>
+      </ul>
+    </li>
+    <li><a href="#命令行">命令行</a>
+      <ul>
+        <li><a href="#语法">语法</a></li>
+        <li><a href="#简写">简写</a></li>
+        <li><a href="#用户">用户</a></li>
+        <li><a href="#帮助命令">帮助命令</a></li>
+        <li><a href="#文件">文件</a></li>
+        <li><a href="#文本">文本</a></li>
+        <li><a href="#打包和压缩">打包和压缩</a></li>
+        <li><a href="#文本编辑">文本编辑</a></li>
+      </ul>
+    </li>
+    <li><a href="#用户-1">用户</a></li>
+    <li><a href="#网络配置">网络配置</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#软件管理">软件管理</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#grub配置">grub配置</a></li>
+    <li><a href="#进程管理">进程管理</a>
+      <ul>
+        <li><a href="#进程查看">进程查看</a></li>
+        <li><a href="#控制命令">控制命令</a></li>
+      </ul>
+    </li>
+    <li><a href="#内容">内容</a>
+      <ul>
+        <li></li>
+        <li><a href="#进程的通信方式信号">进程的通信方式—信号</a></li>
+        <li><a href="#selinux">SELinux</a></li>
+      </ul>
+    </li>
+    <li><a href="#内存和磁盘管理">内存和磁盘管理</a>
+      <ul>
+        <li><a href="#分区">分区</a></li>
+        <li><a href="#raid">raid</a></li>
+        <li><a href="#物理卷">物理卷</a></li>
+        <li><a href="#逻辑卷">逻辑卷</a></li>
+        <li><a href="#系统综合状态">系统综合状态</a></li>
+      </ul>
+    </li>
+    <li><a href="#shell">shell</a>
+      <ul>
+        <li><a href="#linux启动过程">linux启动过程</a></li>
+        <li><a href="#base">base</a></li>
+        <li><a href="#管道">管道</a></li>
+      </ul>
+    </li>
+    <li><a href="#待整理">待整理</a></li>
+  </ul>
+</nav>
+    </div>
+    
+    
+</aside>
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/YuanyaTianchi" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/8338344" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/blog/">blog</a>
+            </span>
+            
+            <span>
+                <a href="/tags/db/">db</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/mysql/">mysql</a>
+            </span>
+            
+            <span>
+                <a href="/tags/redis/">redis</a>
+            </span>
+            
+            <span>
+                <a href="/tags/sys/">sys</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#hello">hello</a>
+      <ul>
+        <li><a href="#环境">环境</a></li>
+        <li><a href="#目录">目录</a></li>
+      </ul>
+    </li>
+    <li><a href="#命令行">命令行</a>
+      <ul>
+        <li><a href="#语法">语法</a></li>
+        <li><a href="#简写">简写</a></li>
+        <li><a href="#用户">用户</a></li>
+        <li><a href="#帮助命令">帮助命令</a></li>
+        <li><a href="#文件">文件</a></li>
+        <li><a href="#文本">文本</a></li>
+        <li><a href="#打包和压缩">打包和压缩</a></li>
+        <li><a href="#文本编辑">文本编辑</a></li>
+      </ul>
+    </li>
+    <li><a href="#用户-1">用户</a></li>
+    <li><a href="#网络配置">网络配置</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#软件管理">软件管理</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#grub配置">grub配置</a></li>
+    <li><a href="#进程管理">进程管理</a>
+      <ul>
+        <li><a href="#进程查看">进程查看</a></li>
+        <li><a href="#控制命令">控制命令</a></li>
+      </ul>
+    </li>
+    <li><a href="#内容">内容</a>
+      <ul>
+        <li></li>
+        <li><a href="#进程的通信方式信号">进程的通信方式—信号</a></li>
+        <li><a href="#selinux">SELinux</a></li>
+      </ul>
+    </li>
+    <li><a href="#内存和磁盘管理">内存和磁盘管理</a>
+      <ul>
+        <li><a href="#分区">分区</a></li>
+        <li><a href="#raid">raid</a></li>
+        <li><a href="#物理卷">物理卷</a></li>
+        <li><a href="#逻辑卷">逻辑卷</a></li>
+        <li><a href="#系统综合状态">系统综合状态</a></li>
+      </ul>
+    </li>
+    <li><a href="#shell">shell</a>
+      <ul>
+        <li><a href="#linux启动过程">linux启动过程</a></li>
+        <li><a href="#base">base</a></li>
+        <li><a href="#管道">管道</a></li>
+      </ul>
+    </li>
+    <li><a href="#待整理">待整理</a></li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2020
+                <a href="https://yuanyatianchi.github.io">DSRKafuU</a>
+                 | <a href="https://github.com/itsme/my_blog">Source code</a> 
+                | Powered by <a href="https://github.com/amzrk2/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/combine/npm/medium-zoom@1.0.6,npm/lazysizes@5.2.2"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+</body>
+
+</html>

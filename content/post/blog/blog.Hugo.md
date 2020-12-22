@@ -2,7 +2,7 @@
 
 +++
 
-title = "hugo"
+title = "Hugo"
 date = "2020-11-11"
 description = "hugo building"
 tags = ["blog"]

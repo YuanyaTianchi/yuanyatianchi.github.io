@@ -2,7 +2,7 @@
 
 +++
 
-title = "redis"
+title = "Redis"
 date = "2020-11-11"
 description = "redis"
 tags = ["db", "redis"]
