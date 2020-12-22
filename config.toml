@@ -1,5 +1,5 @@
 baseURL = "https://yuanyatianchi.github.io"
-title = "Hugo Theme Fuji"
+title = "鸢雅"
 
 theme = "fuji"
 hasCJKLanguage = true

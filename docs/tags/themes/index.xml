@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>themes on Hugo Theme Fuji</title>
+    <title>themes on 鸢雅</title>
     <link>https://yuanyatianchi.github.io/tags/themes/</link>
-    <description>Recent content in themes on Hugo Theme Fuji</description>
+    <description>Recent content in themes on 鸢雅</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 11 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://yuanyatianchi.github.io/tags/themes/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>hugo</title>
-      <link>https://yuanyatianchi.github.io/post/hugo/</link>
-      <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://yuanyatianchi.github.io/post/hugo/</guid>
-      <description>hugo git、go环境 下载解压并配置环境变量：https://github.com/gohugoio/hugo/releases/download/v0.78.0/hugo_0.78.0_Windows-</description>
-    </item>
-    
+    <lastBuildDate>Mon, 11 May 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://yuanyatianchi.github.io/tags/themes/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Markdown Syntax</title>
       <link>https://yuanyatianchi.github.io/post/markdown-syntax/</link>

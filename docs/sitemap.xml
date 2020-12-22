@@ -3,32 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://yuanyatianchi.github.io/tags/css/</loc>
-    <lastmod>2020-11-11T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://yuanyatianchi.github.io/tags/db/</loc>
-    <lastmod>2020-11-11T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://yuanyatianchi.github.io/tags/html/</loc>
-    <lastmod>2020-11-11T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://yuanyatianchi.github.io/post/hugo/</loc>
-    <lastmod>2020-11-11T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://yuanyatianchi.github.io/</loc>
-    <lastmod>2020-11-11T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://yuanyatianchi.github.io/tags/markdown/</loc>
     <lastmod>2020-11-11T00:00:00+00:00</lastmod>
   </url>
   
@@ -48,12 +23,32 @@
   </url>
   
   <url>
-    <loc>https://yuanyatianchi.github.io/tags/themes/</loc>
+    <loc>https://yuanyatianchi.github.io/</loc>
     <lastmod>2020-11-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
+    <loc>https://yuanyatianchi.github.io/tags/css/</loc>
+    <lastmod>2020-05-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://yuanyatianchi.github.io/tags/html/</loc>
+    <lastmod>2020-05-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://yuanyatianchi.github.io/tags/markdown/</loc>
+    <lastmod>2020-05-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://yuanyatianchi.github.io/post/markdown-syntax/</loc>
+    <lastmod>2020-05-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://yuanyatianchi.github.io/tags/themes/</loc>
     <lastmod>2020-05-11T00:00:00+00:00</lastmod>
   </url>
   
@@ -114,6 +109,14 @@
   
   <url>
     <loc>https://yuanyatianchi.github.io/archives/</loc>
+  </url>
+  
+  <url>
+    <loc>https://yuanyatianchi.github.io/tags/blog/</loc>
+  </url>
+  
+  <url>
+    <loc>https://yuanyatianchi.github.io/post/hugo/</loc>
   </url>
   
   <url>

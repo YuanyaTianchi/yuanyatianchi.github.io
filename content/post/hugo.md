@@ -3,9 +3,8 @@
 +++
 
 title = "hugo"
-date = "2020-11-11"
 description = "hugo building"
-tags = ["markdown", "css", "html", "themes"]
+tags = ["blog"]
 
 +++
 
