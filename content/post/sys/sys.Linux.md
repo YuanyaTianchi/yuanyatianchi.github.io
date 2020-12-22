@@ -11,17 +11,7 @@ tags = ["sys", "linux"]
 
 # linux
 
-- 内容综述
-  - Linux背景介绍
-  - 系统操作
-  - 服务管理
-  - Shell脚本
-  - 文本操作
-  - 常用服务搭建
-
-
-
-- Linux：两种含义
+- Linux
   - Linus Benedict Torvalds（Linux之父）编写的开源操作系统的内核
   - 广义上的基于 Linux内核 的 Linux操作系统
 - 内核版本：https://www.kernel.org/
@@ -61,8 +51,6 @@ tags = ["sys", "linux"]
 
 - CentOS 修改`/etc/sysconfig/network-scripts/ifcfg-ens33`中`NOBOOT=yes`，表示系统启动时激活网卡
 
-
-
 ### 目录
 
 - 目录
@@ -92,9 +80,13 @@ tags = ["sys", "linux"]
   - 分号**;**：分割多个命令，命令将按顺序执行
 - 注意：命令行语法（包括在 UNIX 和 Linux 平台中使用的用户名、密码和文件名）是区分大小写的，如commandline、CommandLine、COMMANDLINE 是不一样的
 
-
-
 ### 简写
+
+- 多命令：命令之间`;`分隔，顺序执行
+
+```sh
+cd / ; ls
+```
 
 - 多参数简写
 
@@ -117,8 +109,6 @@ cat ./config.yml
 cat config.yml #简写
 ```
 
-
-
 ### 用户
 
 ```shell
@@ -127,8 +117,6 @@ su - root #切换到root用户
 exit      #退出当前系统用户
 init 0    #关机
 ```
-
-
 
 ### 帮助命令
 
@@ -164,7 +152,7 @@ man -a ls #查看所有名为ls的文件的手册
 
 
 
-### 文件
+### 文件操作
 
 - 一切皆文件
 - TAB快捷键补全文件（目录）名
@@ -173,15 +161,15 @@ man -a ls #查看所有名为ls的文件的手册
   - ./
   - ../
 
-#### 查看
 
-###### pwd
+
+##### pwd
 
 ```shell
 pwd #显示当前的目录名称
 ```
 
-###### cd
+##### cd
 
 - 更改当前的操作目录
   - `cd /path/to/...`：绝对路径
@@ -197,38 +185,33 @@ cd ..  #简写
 cd - #回到上一次使用的目录。即可以实现两个目录来回切换的效果
 ```
 
-###### ls
+##### ls
 
 - `ls [option]... [path]...`：查看指定目录下的文件：ls / /root，可以同时显示/和/root下的目录
 - 参数（常用）
-  - -l：ls -l，等于ls -l .，等于ls -l ./，.和./表示当前目录，省略而已。默认根据文件名顺序显示
+  - `-l`：
     - 长格式显示文件：文件类型和权限，文件个数，创建用户，创建用户所属用户组，文件大小，最后修改时间，文件名
     - 文件类型：文件为-，目录为d
-  - -a：显示隐藏文件。文件名以"."开头即隐藏文件
-  - -r：逆序显示（根据文件名）
-  - -h：文件大小将使用单位m、g、t等（根据文件大小自判定的）
-  - -t：按照时间顺序显示
-  - -R：递归显示所有文件
+  - `-a`：显示隐藏文件。文件名以"."开头即隐藏文件
+  - `-r`：逆序显示（根据文件名）
+  - `-h`：文件大小将使用单位m、g、t等（根据文件大小自判定的），一般配合`-l`使用
+  - `-t`：按照时间顺序显示
+  - `-R`：递归显示所有文件
 
 ```shell
 ls -lrt / /root #列出 / 和 /root 下的所有文件
+ls -lh
 ```
 
 
 
-#### 新建
-
-###### touch
+##### touch
 
 - `touch <路径文件名>`：新建文件
 
-```shell
-
-```
 
 
-
-###### mkdir
+##### mkdir
 
 - `mkdir [option]... [dirName]...`：新建文件夹
 
@@ -240,9 +223,7 @@ mkdir -p /a/b/c/d/e #-p忽略报错，已存在的不会提示报错，路径上
 
 
 
-#### 删除
-
-###### rm
+##### rm
 
 ```shell
 rmdir /a #只能删除空的目录
@@ -251,9 +232,9 @@ rm -r -f /a #参数f使删除时不进行递归提示询问
 rm -rf / a  #参数f风险很大，一定要检查好参数，如果像这样/和a之间多了个空格，即删除整个根目录和当前目录下的a目录中的所有文件，gg
 ```
 
-#### 修改
 
-###### cp
+
+##### cp
 
 - `cp <源文件名> <目标文件名>`：复制文件
 - `-r`：可以复制目录
@@ -265,7 +246,7 @@ rm -rf / a  #参数f风险很大，一定要检查好参数，如果像这样/�
 cp /a/
 ```
 
-###### mv
+##### mv
 
 - `mv <源> <目标>`：移动。在同一个目录内移动即实现改名
 
@@ -289,6 +270,47 @@ mv file* ./a #*匹配1或多个字符，所有对应的文件都可以被移动
 - 
   - *：匹配一或多个字符
   - ?：匹配一个字符
+
+
+
+##### dd
+
+> 文件空洞：文件从开头到结尾的扇区所占用的磁盘空间中，未存储任何数据的部分被称为空洞。比如给linux创建一个虚拟机的磁盘空间1T，但是实际只存放1M的数据，其它都是空洞，用`du`查看将是1M，`ls -lh`查看将是1T
+
+- `dd`：复制文件，可以制造文件空洞。`cp`则不能制造文件空洞
+- 参数
+  - `if`：输入文件
+  - `of`：输出文件
+  - `bs`：块大小，即指定多少空间作为一个块进行读写
+  - `count`：读写次数（以块为单位的）
+  - `seek`：跳过块数
+
+```sh
+# 从/dev/zero可以读取无穷多个0，用以测试dd。跳过5个块，即有10M不写入数据，将成为文件的空洞
+dd if=/dev/zero of=testfile bs=2M count=10 seek=5
+```
+
+
+
+##### du
+
+- `du`：查看文件实际占用磁盘空间，不计算文件空洞，默认单位byte。`ls -lh`中显示的文件大小有些不同，是记录文件开头到结尾的磁盘空间，包括范围内的文件空洞
+
+```sh
+# 查看：ls -lh和du分别查看afile都是20m
+dd if=/dev/zero bs=2M count=10 of=afile
+ls -lh afile
+du afile
+
+# 查看：ls -lh和du分别查看bfile分别为30、20M
+dd if=/dev/zero bs=2M count=10 seek=5 of=bfile
+ls -lh bfile
+du bfile
+```
+
+
+
+
 
 ### 文本
 
@@ -563,7 +585,10 @@ ip route del 192.168.56.0/24 #删除静态路由
 
 ## 软件管理
 
-###### rpm
+> 包管理器是方便软件安装、卸载，解决软件依赖关系的重要工具
+
+- Centos、RedHat使用yum包管理器，软件安装包格式为rpm（RedhatPackageManager）
+- Debian、Ubuntu使用apt包管理器，软件安装包格式为deb（）
 
 软件包管理器
 rpm包和rpm命令
@@ -572,16 +597,15 @@ yum仓库
 内核升级
 grub配置文件
 
-- 包管理器是方便软件安装、卸载，解决软件依赖关系的重要工具
-  - Centos、RedHat使用yum包管理器，软件安装包格式为rpm（RedhatPackageManager）
-  - Debian、Ubuntu使用apt包管理器，软件安装包格式为deb（）
+###### rpm
+
 - rpm包格式
   - vim-common-7.4.10-5.el7.x86_64.rpm
   - 软件名称-软件版本.系统版本.平台.rpm
-- rpm命令常用参数
-  - -q查询软件包
-  - -i安装软件包
-  - -e卸载软件包
+- 参数
+  - `-q`：查询软件包
+  - `-i`：安装软件包
+  - `-e`：卸载软件包
 - ls -l查看/dev，这里面都是设备文件，发现c和b的文件类型，c表示字符设备，b表示块设备，把光盘加载到虚拟机即加载到/dev/sr0中的，`dd if=/dev/sr0 of=/xxx/xxx.iso`就可以把真的光盘做成光盘镜像，块设备不能通过cp等命令直接进行操作，需要挂载（类似于windows中插入光盘后会自动挂载弹出新盘符，linux需要自行手动操作），`mount /dev/sr0 /mnt `，linux下推荐挂载到/mnt目录，-t可以指定挂载类型，默认则会是自动识别。之后可以发现文件是只读的，但是可以拷贝
 - `rmp -qa | more`：a是查询所有的意思，可以查询所有系统安装的软件包，软件包很多，通过管道符` | more`分屏显示，按空格下一页，按q退出
 - `rmp -q vim-common`：根据软件名查询软件包名
@@ -598,11 +622,16 @@ grub配置文件
 - 配置yum源
 
 ```shell
-mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bk #备份
-wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo #下载ailiyun的yum源配置文件，最小安装不原装wget用curl也行
-install epel-release -y #安装epel，用于扩展yum仓库可以安装的软件包，比如最新的linux内核等
-wget http://mirrors.aliyun.com/repo/epel-7.repo -O /etc/yum.repos.d/epel.repo #epel的aliyun镜像配置
-yum clean all && yum makecache #清空并刷新缓存
+#备份
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bk
+#下载ailiyun的yum源配置文件，无wget用curl亦可
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+#安装epel，用于扩展yum仓库可以安装的软件包，比如最新的linux内核等
+install epel-release -y
+#epel的aliyun镜像配置
+wget http://mirrors.aliyun.com/repo/epel-7.repo -O /etc/yum.repos.d/epel.repo
+#清空并刷新缓存
+yum clean all && yum makecache
 ```
 
 ###### apt
@@ -615,7 +644,7 @@ lsb_release -a #查看代号codename
 
 到阿里源看下对应代号的源是否存在：http://archive.ubuntu.com/ubuntu/dists/ ，存在则可以根据模板进行替换
 
-```shell
+```sh
 #把所有的TODO替换成系统的codename
 deb http://mirrors.aliyun.com/ubuntu/ TODO main restricted universe multiverse
 deb-src http://mirrors.aliyun.com/ubuntu/ TODO main restricted universe multiverse
@@ -633,7 +662,7 @@ deb http://mirrors.aliyun.com/ubuntu/ TODO-backports main restricted universe mu
 deb-src http://mirrors.aliyun.com/ubuntu/ TODO-backports main restricted universe multiverse
 ```
 
-```shell
+```sh
 #以codename=focal为例
 deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
 deb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
@@ -656,7 +685,7 @@ deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted univer
 ###### wget
 
 ```shell
-$ yum install wget -y
+yum install wget -y
 ```
 
 - yum常用选项：-y：安装、更新过程中选yes
@@ -932,31 +961,93 @@ ps -efL
 
 
 
-## 内存和磁盘管理
+## 内存&磁盘管理
 
-- 内存和磁盘使用率查看
-  - 内存：
-    - free：默认bit为单位，-m、-g等可以指定单位
-    - top
-  - 磁盘
-    - fdisk：fdisk -l，fdisk -l /dev/sd?，磁盘在linux中也是文件，以扇区划分，start、end都是指扇区，system指文件系统类型为linux（或其它）类型，比如ntfs就不能被linux文件系统读取，除非格式化为linux文件系统，或者编译内核时设置开启ntfs
-    - parted -l也可以查看，与fdisk -l展示的信息基本一致
-    - df：df -h，可以理解为fdisk的补充，可以看到分区挂载的目录等
-    - du：ls -lh /etc/passwd查看文件占用内存，du /etc/passwd可以查看实际占用空间
-    - du 与ls的区别：ls是记录文件开头到结尾的空间，du为实际占用空间，不会计算文件空洞，dd if=afile bs=4M count=10 of=bfile创建空洞文件，if表示输入文件，of表示输出文件，bs表示blockSize，即4M作为一个块进行读写，count表示读写次数，当afile足够大时可以创建一个40m的bfile，dd if=/dev/zero bs=4M count=10 of=afile，从/dev/zero可以读取无穷多个0，用以测试dd，ls -lh和du分别查看afile都是40m，dd if=/dev/zero bs=4M count=10 seek=20 of=bfile，seek表示跳过20个块，即有80m不写入，即将成为文件的空洞，ls -lh和du分别查看bfile分别为120、40m。比如给linux创建一个虚拟机的磁盘空间1T，但是实际只存放1m的数据，其它都是空洞
+### 状态查看
+
+##### top
+
+- `top`：可以查看内存和交换
+
+
+
+##### free
+
+- `free`：查看内存和交换，默认单位bit，`-m`、`-g`等参数指定单位
+
+```sh
+free
+```
+
+
+
+##### fdisk
+
+- `fdisk`：磁盘在linux中也是作为文件，如`/dev/sd?`，以扇区划分
+  - start：起点扇区
+  - end：止点扇区
+  - system：文件系统类型，一般为linux（或其它）类型，比如ntfs就不能被linux文件系统读取，除非格式化为linux文件系统，或者编译内核时设置开启ntfs
+
+```sh
+# 查看磁盘情况
+fdisk -l
+```
+
+- 操作
+
+```sh
+# 操作指定磁盘/dev/sda，将进入交互模式
+fdisk -l /dev/sda
+```
+
+
+
+##### parted
+
+- `parted`
+
+```sh
+# 与`fdisk -l`展示的信息基本一致
+parted -l
+```
+
+
+
+##### df
+
+- `df`：可以理解为`fdisk`的补充，可以看到分区挂载的目录等
+
+```sh
+df -h
+```
+
+
+
+
+
+### 文件系统
+
 - Linux支持多种文件系统，常见的有
   - ext4（centos6默认）
   - xfs（centos7默认）
   - NTFS （需安装额外软件ntfs-3g，有版权的，windows用）
-- ext4文件系统
-  - 结构
-    - 超级块：会记录文件数，有副本
-    - 超级块副本：恢复数据用
-    - i 节点(inode)：记录每一个文件的信息，权限、编号等，文件名与编号不在同一inode，而是记录在其父目录的inode中。ls -i可以查到每一个文件的inode
-    - 数据块(datablock)：存放文件的数据内容，挂在inode上的，如果一个数据块不够就接着往后挂，链式
-  - 所以ls查看的是inode中的文件信息，du统计的是数据块的个数用来计算大小等。默认创建的数据块为4k，即使只写了1个字符也是4k，所以存储大量小文件会很费磁盘，所以网络上有一些专门用来存储小文件的文件系统。echo >写入文件只会改变数据块，而vim会改变inode，vim编辑时，会在家目录下复制一份临时文件进行修改，然后保存复制到源目录，并删除原来的文件（应该是）。rm afile4是从父inode删除文件名，所以文件再大都是秒删，ln afile bfile，将bfile只向afile并也加入到父inode，且不会占用额外空间
-  - 软（符号）连接：ln -s afile cfile，ls -li afile cfile查看可以看到，其实cfile就记录了目标文件afile的路径，链接文件的权限修改对其自身是无意义的，对其权限修改将在目标文件上得到反馈。可以跨分区（跨文件系统）
+
+##### ext4
+
+- 结构
+  - **超级块**：会记录文件数，有副本
+  - **超级块副本**：恢复数据用
+  - **inode**：i 节点，记录每一个文件的信息，权限、编号等。文件名与编号不在同一inode，而是记录在其父目录的inode中
+    - `ls`查看的是inode中的文件信息，`ls -i`可以查到每一个文件的inode
+    - vim写文件会改变inode，vim编辑时，会在家目录下复制一份临时文件进行修改，然后保存复制到源目录，并删除原来的文件（应该是）
+    - `rm testfile`是从父inode删除文件名，所以文件再大都是秒删
+    - `ln afile bfile`将bfile指向afile并也加入到父inode，且不会占用额外空间
+  - **datablock**：数据块，存放文件的数据内容，挂在inode上的，如果一个数据块不够就接着往后挂，链式。默认创建的数据块为4k，即使只写了1个字符也是4k，所以存储大量小文件会很费磁盘，所以网络上有一些专门用来存储小文件的文件系统
+    - `du`统计的是数据块的个数用来计算大小
+    - `echo >`写入文件只会改变数据块
+  - **软连接**：亦称符号链接，ln -s afile cfile，ls -li afile cfile查看可以看到，其实cfile就记录了目标文件afile的路径，链接文件的权限修改对其自身是无意义的，对其权限修改将在目标文件上得到反馈。可以跨分区（跨文件系统）
   - facl：文件访问控制，getfacl afile查看文件权限，setfacl -m u:user1:r afile：u表示为用户分配权限，g表示用户组，r表示读权限，m改成x即可收回对应用户（组）权限
+
 - 磁盘配额的使用：给多个用户之间磁盘使用做限制
 
 ### 分区
@@ -1019,23 +1110,33 @@ ps -efL
 ### 逻辑卷
 
 - 逻辑卷管理：在物理卷之上的虚拟卷，linux根目录就是逻辑卷的，可以将一块硬盘拆分为多个逻辑卷，也可以将多个硬盘合并为一个逻辑卷，根据场景对逻辑卷进行缩放容
-  - 新建逻辑卷
-    - 先添加几个磁盘/dev/sdb1、/dev/sdc1、/dev/sdd1：`pvcreate /dev/sdb1 /dev/sdc1 /dev/sdd1`或者简写`pvcreate /dev/sd[b,c,d]1`，注意前面做了软件raid的磁盘如果没有停掉raid将失败
-      - 停止raid：`mdadm --stop /dev/md0`，破坏超级块：`dd if=/dev/zero of=/dev/sdb1 bs=1M count=1`、`dd if=/dev/zero of=/dev/sdc1 bs=1M count=1`
-      - 重新创建一下：`pvcreate /dev/sd[b,c,d]1`，`pvs`查看。信息：lvm即逻辑卷管理器、PSIZE即物理大小、PREE即物理卷的物理空间剩余量
-      - `vgcreate vg1 /deb/sdb1 dev/sdc1`给物理卷分组，`pvs`查看可以发现已经被分到vg1这个卷组了
-      - `vgs`查看卷组
-      - `lvcreate -L 100M -n lv1 vg1`：从卷组vg1创建名字为lv1大小为100M的逻辑卷，`lvs`查看逻辑卷
-    - 使用逻辑卷：
-      - 格式化：mkdir /mnt/test、mfs.xfs /dev/vg1/lv1
-      - 进行挂载：fdisk /dev/sd?? pv vg1 lv1 xfs mount。命令解释：fdisk命令用来分区，用/dev/sd??磁盘建立一个pv，通过pv创建一个vg1，通过vg1创建lv1，lv1上通过xfs命令创建文件系统，mount将文件系统进行挂载。这个复杂过程相当实现了：pv vg1 lv1实现可动态扩展的功能，xfs使可以以文件形式操作的功能，mount实现内存和管理的映射。所以如果不需要扩展，可以直接fdisk /dev/sd?? xfs mount在sd磁盘设备上使用文件系统即可，如果还需要实现更复杂的功能还可以在其上进行raid功能（但就不能直接在磁盘上搭建逻辑卷了，需要在raid的基础上比如搭建一个/dev/md0，然后再在其上进行逻辑卷实现）
-    - 用途：可以用来扩展现有的如root、user、src 等分区
-  - 扩充逻辑卷
-    - vgextend  centos /dev/sdd1，将/dev/sdd1这个pv划分到centos这个vg下
-    - lvextend -L +50G /dev/centos/root
-    - df -h查看发现文件系统的容量并没有变大，也需要告知文件系统卷已经扩大了，xfs_growfs /dev/centos/root
-  - 缩容
-  - 可以发现，卷管理实际上就是一层一层的，从物理磁盘到逻辑卷到文件系统
+
+###### pvcreate
+
+- 新建逻辑卷
+  - 先添加几个磁盘/dev/sdb1、/dev/sdc1、/dev/sdd1：`pvcreate /dev/sdb1 /dev/sdc1 /dev/sdd1`或者简写`pvcreate /dev/sd[b,c,d]1`，注意前面做了软件raid的磁盘如果没有停掉raid将失败
+    - 停止raid：`mdadm --stop /dev/md0`，破坏超级块：`dd if=/dev/zero of=/dev/sdb1 bs=1M count=1`、`dd if=/dev/zero of=/dev/sdc1 bs=1M count=1`
+    - 重新创建一下：`pvcreate /dev/sd[b,c,d]1`，`pvs`查看。信息：lvm即逻辑卷管理器、PSIZE即物理大小、PREE即物理卷的物理空间剩余量
+    - `vgcreate vg1 /deb/sdb1 dev/sdc1`给物理卷分组，`pvs`查看可以发现已经被分到vg1这个卷组了
+    - `vgs`查看卷组
+    - `lvcreate -L 100M -n lv1 vg1`：从卷组vg1创建名字为lv1大小为100M的逻辑卷，`lvs`查看逻辑卷
+
+```sh
+
+```
+
+
+
+- 使用逻辑卷：
+  - 格式化：mkdir /mnt/test、mfs.xfs /dev/vg1/lv1
+  - 进行挂载：fdisk /dev/sd?? pv vg1 lv1 xfs mount。命令解释：fdisk命令用来分区，用/dev/sd??磁盘建立一个pv，通过pv创建一个vg1，通过vg1创建lv1，lv1上通过xfs命令创建文件系统，mount将文件系统进行挂载。这个复杂过程相当实现了：pv vg1 lv1实现可动态扩展的功能，xfs使可以以文件形式操作的功能，mount实现内存和管理的映射。所以如果不需要扩展，可以直接fdisk /dev/sd?? xfs mount在sd磁盘设备上使用文件系统即可，如果还需要实现更复杂的功能还可以在其上进行raid功能（但就不能直接在磁盘上搭建逻辑卷了，需要在raid的基础上比如搭建一个/dev/md0，然后再在其上进行逻辑卷实现）
+- 用途：可以用来扩展现有的如root、user、src 等分区
+- 扩充逻辑卷
+  - vgextend  centos /dev/sdd1，将/dev/sdd1这个pv划分到centos这个vg下
+  - lvextend -L +50G /dev/centos/root
+  - df -h查看发现文件系统的容量并没有变大，也需要告知文件系统卷已经扩大了，xfs_growfs /dev/centos/root
+- 缩容
+- 可以发现，卷管理实际上就是一层一层的，从物理磁盘到逻辑卷到文件系统
 
 ### 系统综合状态
 
@@ -1057,13 +1158,17 @@ ps -efL
 
 ## shell
 
-shell：在计算机科学中，Shell俗称壳（用来区别于核），是指"为使用者提供操作界面"的软件-命令解析（解释）器，即用于解释用户对操作系统的操作，bash即shell实现之一，其它还有cat/etc/shells等
+> shell：在计算机科学中，Shell俗称壳（用来区别于核），是指"为使用者提供操作界面"的软件-命令解析（解释）器，即用于解释用户对操作系统的操作，bash即shell实现之一，其它还有cat/etc/shells等
 
 shell会把用户所执行的命令翻译给内核，内核将命令执行的结果反馈给用户。ls为例，当输入ls时，首先由shell接收到用户执行的命令，对命令选项和参数进行分析，ls是查看文件的，将交给文件系统（属于内核层面了），然后内核把ls要查看的文件和目录翻译成硬盘对应的扇区（ssd硬盘是另外结构），硬件会把查询的结果交给内核，内核在返回给shell，最后返回给用户
 
+
+
+
+
 ### linux启动过程
 
-- BIOS：基本输入输出系统，是主板上的功能，通过bios选择要引导的介质 - 硬盘、或光盘，如果选择了硬盘，就会有一个引导的部分-MBR
+- BIOS：基本输入输出系统。是主板上的功能，通过bios选择要引导的介质 - 硬盘、或光盘，如果选择了硬盘，就会有一个引导的部分-MBR
 - MBR：硬盘的主引导记录部分，就进入到linux的过程了（以下）
 - BootLoader(grub)：BootLoader指启动和引导内核的工具，现在用的grub2.0，可以引导linux内核（选择哪个内核启动），甚至是windows系统
 - kernel：内核启动
