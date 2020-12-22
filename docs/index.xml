@@ -8,6 +8,15 @@
     <language>en</language>
     <lastBuildDate>Wed, 11 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://yuanyatianchi.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>hugo</title>
+      <link>https://yuanyatianchi.github.io/post/hugo/</link>
+      <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/hugo/</guid>
+      <description>hugo git、go环境 下载解压并配置环境变量：https://github.com/gohugoio/hugo/releases/download/v0.78.0/hugo_0.78.0_Windows-</description>
+    </item>
+    
+    <item>
       <title>redis</title>
       <link>https://yuanyatianchi.github.io/post/kv.redis/</link>
       <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
@@ -104,15 +113,6 @@ lumine cognoscere flos nubis! Fronde ipsamque patulos Dryopen deorum.&lt;/p&gt;<
       <guid>https://yuanyatianchi.github.io/defualtmd/wtf-article/</guid>
       <description>&lt;p&gt;本文内容无实际意义，由狗屁不通文章生成器自动生成，不代表作者本人观点。&lt;/p&gt;
 &lt;p&gt;可是，即使是这样，一段代码写一天的出现仍然代表了一定的意义。一段代码写一天，到底应该如何实现。马克思在不经意间这样说过，一切节省，归根到底都归结为时间的节省。这不禁令我深思。马克思曾经说过，一切节省，归根到底都归结为时间的节省。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>hugo</title>
-      <link>https://yuanyatianchi.github.io/post/hugo/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://yuanyatianchi.github.io/post/hugo/</guid>
-      <description>hugo git、go环境 下载解压并配置环境变量：https://github.com/gohugoio/hugo/releases/download/v0.78.0/hugo_0.78.0_Windows-</description>
     </item>
     
   </channel>

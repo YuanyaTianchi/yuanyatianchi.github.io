@@ -8,21 +8,21 @@
     <language>en</language>
     <lastBuildDate>Wed, 11 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://yuanyatianchi.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>hugo</title>
+      <link>https://yuanyatianchi.github.io/post/hugo/</link>
+      <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/hugo/</guid>
+      <description>hugo git、go环境 下载解压并配置环境变量：https://github.com/gohugoio/hugo/releases/download/v0.78.0/hugo_0.78.0_Windows-</description>
+    </item>
+    
+    <item>
       <title>redis</title>
       <link>https://yuanyatianchi.github.io/post/kv.redis/</link>
       <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>https://yuanyatianchi.github.io/post/kv.redis/</guid>
       <description>redis https://redis.io/，http://www.redis.cn/ Redis的特性 速度快 数据存在内存（主要原因） c语言编写（50000line，单机的核心代码只有23000line） 单线程</description>
-    </item>
-    
-    <item>
-      <title>hugo</title>
-      <link>https://yuanyatianchi.github.io/post/hugo/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://yuanyatianchi.github.io/post/hugo/</guid>
-      <description>hugo git、go环境 下载解压并配置环境变量：https://github.com/gohugoio/hugo/releases/download/v0.78.0/hugo_0.78.0_Windows-</description>
     </item>
     
   </channel>
