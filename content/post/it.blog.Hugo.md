@@ -50,4 +50,4 @@ git commit -a -m "yuanyatianchi's blog"
 git push
 ```
 
-远程库注意设置gitpage，设置到docs作为源
+远程库注意设置pages，设置到docs作为源
