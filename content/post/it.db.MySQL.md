@@ -1,4 +1,13 @@
-sql.mysql
+
++++
+
+title = "MySQL"
+description = "MySQL"
+tags = ["it", "db"]
+
++++
+
+
 
 # mysql
 

@@ -1,9 +1,8 @@
 +++
 
 title = "Linux"
-date = "2020-11-11"
-description = "linux"
-tags = ["sys", "linux"]
+description = "Linux"
+tags = ["it", "sys"]
 
 +++
 

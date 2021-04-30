@@ -6,13 +6,16 @@
     <description>Recent content in sys on 鸢雅</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 11 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://yuanyatianchi.github.io/tags/sys/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="https://yuanyatianchi.github.io/tags/sys/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Linux</title>
-      <link>https://yuanyatianchi.github.io/post/sys.linux/</link>
-      <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
+      <link>https://yuanyatianchi.github.io/post/it.sys.linux/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://yuanyatianchi.github.io/post/sys.linux/</guid>
+      <guid>https://yuanyatianchi.github.io/post/it.sys.linux/</guid>
       <description>linux Linux Linus Benedict Torvalds（Linux之父）编写的开源操作系统的内核 广义上的基于 Linux内核 的 Linux操作系统 内核版本：https://www.kernel.org/ 内核版本分为三个部分：主版本号、</description>
     </item>
     

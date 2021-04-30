@@ -1,3 +1,14 @@
+
++++
+
+title = "Redis"
+description = "Redis"
+tags = ["it", "db"]
+
++++
+
+
+
 # redis
 
 https://redis.io/，http://www.redis.cn/

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.74.3" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/amzrk2/cdn-stcapi@1/favicons/favicon.ico" />
+
+
+<title>CodeRebuild - 鸢雅</title>
+
+
+<meta name="author" content="DSRKafuU" />
+
+
+<meta name="description" content="CodeRebuild" />
+
+
+<meta name="keywords" content="it, CodeRebuild" />
+
+<meta property="og:title" content="CodeRebuild" />
+<meta property="og:description" content="CodeRebuild" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yuanyatianchi.github.io/post/it.coderebuild/" />
+<meta property="og:image" content="https://yuanyatianchi.github.io/img/og.png"/>
+
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://yuanyatianchi.github.io/img/og.png"/>
+
+<meta name="twitter:title" content="CodeRebuild"/>
+<meta name="twitter:description" content="CodeRebuild"/>
+
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+<link rel="stylesheet" href="https://yuanyatianchi.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+</head>
+
+<body data-theme="auto">
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://yuanyatianchi.github.io">鸢雅</a>
+            
+            <span class="title-sub">A minimal Hugo theme.</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://yuanyatianchi.github.io/post/it.coderebuild/">CodeRebuild</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;852 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/coderebuild">CodeRebuild</a>&nbsp;</span>
+
+    </div>
+    
+    
+    <div class="post-content markdown-body">
+        <h1 id="重构笔记">重构笔记</h1>
+<p>一个例子</p>
+<pre><code class="language-go">// 影片类型
+type MovieType int
+
+var (
+	CHILD_RENTS MovieType = 2 // 儿童租用的
+	REGULAR     MovieType = 0 // 普通的
+	NEW_RELEASE MovieType = 1 // 新发布的
+)
+
+// 影片
+type Movie struct {
+	Title     string
+	PriceCode MovieType
+}
+</code></pre>
+<pre><code class="language-go">// 租借记录
+type Rental struct {
+	Movie      *Movie
+	DaysRented int // 租借天数
+}
+</code></pre>
+<pre><code class="language-go">// 顾客
+type Customer struct {
+	Name    string
+	Rentals []*Rental
+}
+
+// 添加租借记录
+func (cus *Customer) AddRental(rental *Rental) {
+	cus.Rentals = append(cus.Rentals, rental)
+}
+
+// 生成详单
+func (cus *Customer) Statement() string {
+	var (
+		totalAmount          float64 = 0                                      // 总价
+		frequentRenterPoints         = 0                                      // 常客积分点
+		result                       = &quot;Rental Record for &quot; + cus.Name + &quot;\n&quot; // 详单结果，页头内容
+	)
+
+	// 根据
+	for _, item := range cus.Rentals {
+		var thisAmount float64 = 0
+
+		switch item.Movie.PriceCode {
+		case REGULAR:
+			thisAmount += 2
+			if item.DaysRented &gt; 2 {
+				thisAmount += float64(item.DaysRented-2) * 1.5
+			}
+			break
+		case NEW_RELEASE:
+			thisAmount += float64(item.DaysRented) * 3
+			break
+		case CHILD_RENTS:
+			thisAmount += 1.5
+			if item.DaysRented &gt; 3 {
+				thisAmount += float64(item.DaysRented-3) * 1.5
+			}
+			break
+		}
+
+		frequentRenterPoints++
+		// 新书租借超过两天额外增加积分
+		if item.Movie.PriceCode == NEW_RELEASE &amp;&amp; item.DaysRented &gt; 1 {
+			frequentRenterPoints++
+		}
+		totalAmount += thisAmount
+		result += &quot;\t&quot; + item.Movie.Title + &quot;\t&quot; + strconv.Itoa(int(thisAmount)) // TODO: float64 转 string
+	}
+
+	// 详单结果，页脚内容
+	result += &quot;Amount owed is&quot; + strconv.Itoa(int(totalAmount)) + &quot;\n&quot;
+	result += &quot;Your earned &quot; + strconv.Itoa(frequentRenterPoints) + &quot; frequent renter points&quot; + &quot;\n&quot;
+	return result
+}
+</code></pre>
+<p>快速而随性的设计一个简单的程序并没有错，但如果这是复杂系统中具有代表性的一段，那对这个程序的信心就要动摇了。Customer 中长长的 Statement 做的事情太多，做了很多原本应该由其它结构体完成的事情</p>
+<p>在这个例子里，希望以html格式输出详单（而不是字符串）</p>
+<p>函数应该是可复用的，功能尽量单一的，且需要根据其使用的数据判定它应该属于哪个文件或者对象</p>
+<p>第一步必须是为即将修改的代码构建一组可靠的测试环境，好的测试是重构的根本</p>
+<p>提炼函数内的一块代码时，先找出这块代码所使用的局部变量和参数。任何不会被修改的变量都可以直接作为提炼函数的参数传入，被修改的变量可以作为提炼函数的返回值。</p>
+<p>提炼函数中的变量因为上下文改变，需要的话可以考虑调整变量命名，使其更符合新的上下文语意</p>
+<p>goland可以选中一块代码，通过 <code>右键-Refactor-Extract Method</code> 直接提取成单独方法</p>
+<p>重构技术是以微小的步伐修改程序，这样即使犯下错误，也可以很容易测试发现，而不必花大量时间调试</p>
+<p>可以选择减少或去除临时变量，它们可能会被到处传递并引用，会助长冗长而复杂的代码，去除它们的代价是也许会产生更多次的计算而牺牲一些性能，这需要根据临时变量的可维护性和计算临时变量的性能之间权衡。有些计算结果的过程中用到的临时变量，可以直接将该结果获取变为方法，就可以有效去除临时变量</p>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/YuanyaTianchi" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/8338344" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algorithm/">Algorithm</a>
+            </span>
+            
+            <span>
+                <a href="/tags/base/">base</a>
+            </span>
+            
+            <span>
+                <a href="/tags/blog/">blog</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cloudnative/">cloudnative</a>
+            </span>
+            
+            <span>
+                <a href="/tags/coderebuild/">CodeRebuild</a>
+            </span>
+            
+            <span>
+                <a href="/tags/db/">db</a>
+            </span>
+            
+            <span>
+                <a href="/tags/go.project/">go.project</a>
+            </span>
+            
+            <span>
+                <a href="/tags/it/">it</a>
+            </span>
+            
+            <span>
+                <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/sys/">sys</a>
+            </span>
+            
+            <span>
+                <a href="/tags/tool/">tool</a>
+            </span>
+            
+            <span>
+                <a href="/tags/versioncontrol/">versioncontrol</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3>
+        <nav id="TableOfContents"></nav>
+    </div>
+    
+    
+</aside>
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/YuanyaTianchi" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/8338344" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algorithm/">Algorithm</a>
+            </span>
+            
+            <span>
+                <a href="/tags/base/">base</a>
+            </span>
+            
+            <span>
+                <a href="/tags/blog/">blog</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cloudnative/">cloudnative</a>
+            </span>
+            
+            <span>
+                <a href="/tags/coderebuild/">CodeRebuild</a>
+            </span>
+            
+            <span>
+                <a href="/tags/db/">db</a>
+            </span>
+            
+            <span>
+                <a href="/tags/go.project/">go.project</a>
+            </span>
+            
+            <span>
+                <a href="/tags/it/">it</a>
+            </span>
+            
+            <span>
+                <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/sys/">sys</a>
+            </span>
+            
+            <span>
+                <a href="/tags/tool/">tool</a>
+            </span>
+            
+            <span>
+                <a href="/tags/versioncontrol/">versioncontrol</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3>
+        <nav id="TableOfContents"></nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2021
+                <a href="https://yuanyatianchi.github.io">DSRKafuU</a>
+                 | <a href="https://github.com/itsme/my_blog">Source code</a> 
+                | Powered by <a href="https://github.com/amzrk2/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/combine/npm/medium-zoom@1.0.6,npm/lazysizes@5.2.2"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+</body>
+
+</html>

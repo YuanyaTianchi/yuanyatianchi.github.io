@@ -1,3 +1,14 @@
+
++++
+
+title = "MQ"
+description = "MQ"
+tags = ["it", "mq"]
+
++++
+
+
+
 # 消息队列
 
 ![knowledge.png](./img/img-knowledge.png)

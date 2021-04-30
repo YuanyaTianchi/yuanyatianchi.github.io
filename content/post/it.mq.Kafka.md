@@ -1,3 +1,14 @@
+
++++
+
+title = "Kafka"
+description = "Kafka"
+tags = ["it", "mq"]
+
++++
+
+
+
 # Kafka
 
 http://kafka.apache.org/

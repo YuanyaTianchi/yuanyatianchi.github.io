@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>go.project on 鸢雅</title>
+    <link>https://yuanyatianchi.github.io/tags/go.project/</link>
+    <description>Recent content in go.project on 鸢雅</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    
+	<atom:link href="https://yuanyatianchi.github.io/tags/go.project/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>YuanyaDocker</title>
+      <link>https://yuanyatianchi.github.io/post/it.go.project.yuanyadocker/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.go.project.yuanyadocker/</guid>
+      <description>MyDocker Docker 是一个使用了 Linux Namespace Cgroups 的虚拟化工具。 Linux Namespace Linux Namespace 是 Kernel 的一个功能，它可以隔离一系列的系统资源，比如 PIO ( Process ID ）、User ID、Network 等。可能会想到 chroot 命令，就像 chroot 允许把当前目录变成根目录一样（被隔离开来</description>
+    </item>
+    
+  </channel>
+</rss>

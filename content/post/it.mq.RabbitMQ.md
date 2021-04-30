@@ -1,3 +1,14 @@
+
++++
+
+title = "RabbitMQ"
+description = "RabbitMQ"
+tags = ["it", "mq"]
+
++++
+
+
+
 # RabbitMQ
 
 https://www.rabbitmq.com/

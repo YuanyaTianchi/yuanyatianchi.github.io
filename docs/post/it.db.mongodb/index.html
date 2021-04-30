@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.74.3" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/amzrk2/cdn-stcapi@1/favicons/favicon.ico" />
+
+
+<title>MongoDB - 鸢雅</title>
+
+
+<meta name="author" content="DSRKafuU" />
+
+
+<meta name="description" content="MongoDB" />
+
+
+<meta name="keywords" content="it, db" />
+
+<meta property="og:title" content="MongoDB" />
+<meta property="og:description" content="MongoDB" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yuanyatianchi.github.io/post/it.db.mongodb/" />
+<meta property="og:image" content="https://yuanyatianchi.github.io/img/og.png"/>
+
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://yuanyatianchi.github.io/img/og.png"/>
+
+<meta name="twitter:title" content="MongoDB"/>
+<meta name="twitter:description" content="MongoDB"/>
+
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+<link rel="stylesheet" href="https://yuanyatianchi.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+</head>
+
+<body data-theme="auto">
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://yuanyatianchi.github.io">鸢雅</a>
+            
+            <span class="title-sub">A minimal Hugo theme.</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://yuanyatianchi.github.io/post/it.db.mongodb/">MongoDB</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;7948 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/db">db</a>&nbsp;</span>
+
+    </div>
+    
+    
+    <div class="post-content markdown-body">
+        <h1 id="mongodb">MongoDB</h1>
+<ul>
+<li>文档数据库(schema free)，基于二进制JSON存储文档（BSON）。无需定义类型，field:value形式</li>
+<li>高性能、高可用、直接加机器即可以解决扩展性问题</li>
+<li>支持丰富的CRUD操作，例如:聚合统计、全文检索、坐标检索</li>
+</ul>
+<h1 id="client">client</h1>
+<h3 id="go">go</h3>
+<p><a href="https://github.com/mongodb/mongo-go-driver">https://github.com/mongodb/mongo-go-driver</a></p>
+<pre><code class="language-shell">$ go get go.mongodb.org/mongo-driver/mongo
+</code></pre>
+<h6 id="go-1">.go</h6>
+<pre><code class="language-go">func main() {
+   var (
+      err error
+
+      client     *mongo.Client
+      database   *mongo.Database
+      collection *mongo.Collection
+
+      insertOneResult *mongo.InsertOneResult
+      record          *LogRecord
+      docId           primitive.ObjectID
+
+      findCond *FindByJobName
+      cursor   *mongo.Cursor
+
+      delCond   *DeleteCond
+      delResult *mongo.DeleteResult
+   )
+
+   /*建立连接*/
+   if client, err = mongo.Connect(context.TODO(),
+      options.Client().ApplyURI(&quot;mongodb://127.0.0.1:27017&quot;),
+      options.Client().SetConnectTimeout(5*time.Second),
+   ); err != nil {
+      fmt.Println(err)
+      return
+   }
+   database = client.Database(&quot;cron&quot;)      //数据库
+   collection = database.Collection(&quot;log&quot;) //表
+
+   /*insert：如果没有写入_id字段，则将自动生成全局唯一ID，为ObjectID类型，是一个12字节的二进制*/
+   record = &amp;LogRecord{ //数据
+      JobName:   &quot;job10&quot;,
+      Command:   &quot;echo hello&quot;,
+      Err:       &quot;&quot;,
+      Content:   &quot;hello&quot;,
+      TimePoint: TimePoint{StartTime: time.Now().Unix(), EndTime: time.Now().Unix() + 10},
+   }
+   if insertOneResult, err = collection.InsertOne(context.TODO(), record); err != nil { //执行
+      fmt.Println(err)
+      return
+   }
+   docId = insertOneResult.InsertedID.(primitive.ObjectID) //转ObjectID
+   fmt.Println(&quot;自增id：&quot;, docId.Hex())                       //转string
+
+   /*find：通过options添加操作*/
+   findCond = &amp;FindByJobName{JobName: &quot;job10&quot;} //过滤条件：{&quot;jobName&quot;: &quot;job10&quot;}
+   if cursor, err = collection.Find(           //执行查询，返回游标，游标通过Next函数遍历
+      context.TODO(),
+      findCond,                   //过滤条件
+      options.Find().SetSkip(0),  //偏移量0，等于limit 0 2
+      options.Find().SetLimit(2), //2个
+   ); err != nil {
+      fmt.Println(err)
+      return
+   }
+   defer cursor.Close(context.TODO()) //defer释放资源
+   for cursor.Next(context.TODO()) {  //可以用context控制超时时间等
+      record = &amp;LogRecord{}
+      if err = cursor.Decode(record); err != nil { //解码，反序列化
+         fmt.Println(err)
+         return
+      }
+      fmt.Println(*record)
+   }
+
+   /*delete
+   删除开始时间早于当前时间的所有日志：delete({&quot;timePoint.startTime&quot;: {&quot;$lt&quot;: 当前时间}})。$lt表示小于，less than
+   这里为了简便通过结构体来组织bson，也可以通过bson包的方法来设置，但是比较麻烦*/
+   delCond = &amp;DeleteCond{
+      beforeCond: TimeBeforeCond{ //beforeCond被映射成timePoint.startTime
+         Before: time.Now().Unix(), //Before被映射成$lt
+      },
+   }
+
+   /*执行删除*/
+   if delResult, err = collection.DeleteMany(context.TODO(), delCond); err != nil {
+      fmt.Println(err)
+      return
+   }
+   fmt.Println(&quot;删除的行数:&quot;, delResult.DeletedCount)
+}
+
+/*日志结构体*/
+type LogRecord struct {
+   JobName   string    `bson:&quot;jobName&quot;`   // 任务名
+   Command   string    `bson:&quot;command&quot;`   // shell命令
+   Err       string    `bson:&quot;err&quot;`       // 脚本错误
+   Content   string    `bson:&quot;content&quot;`   // 脚本输出
+   TimePoint TimePoint `bson:&quot;timePoint&quot;` // 执行时间点
+}
+
+type TimePoint struct {
+   StartTime int64 `bson:&quot;startTime&quot;`
+   EndTime   int64 `bson:&quot;endTime&quot;`
+}
+
+// jobName过滤条件
+type FindByJobName struct {
+   JobName string `bson:&quot;jobName&quot;` // JobName赋值为job10
+}
+
+/*{&quot;timePoint.startTime&quot;: {&quot;$lt&quot;: timestamp} }*/
+type DeleteCond struct {
+   beforeCond TimeBeforeCond `bson:&quot;timePoint.startTime&quot;`
+}
+
+// startTime小于某时间：{&quot;$lt&quot;: timestamp}
+type TimeBeforeCond struct {
+   Before int64 `bson:&quot;$lt&quot;`
+}
+</code></pre>
+<p>应用场景</p>
+<p>传统的关系型数据库(如MySQL)， 在数据操作的&quot;三高 ’需求以及应对Web2.0的网站需求面前，显得力不从心。
+解释: &ldquo;三高”需求:
+●High performance -对数据库高并发读写的需求。
+●Huge Storage -对海量数据的高效率存储和访问的需求。
+●High Scalability &amp;&amp; High Availability-对数据库的高可扩展性和高可用性的需求。
+而MongoDB可应对“三高&quot;需求。</p>
+<p>具体的应用场景如:</p>
+<ul>
+<li>社交场景，使用MongoDB存储存储用户信息,以及用户发表的朋友圈信息，通过地理位置索引实现附近的
+人、地点等功能。</li>
+<li>游戏场景，高效率存储和访问。使用MongoDB存储游戏用户信息，用户的装备、积分等直接以内嵌文档的形式存储，方便查询</li>
+<li>物流场景，使用MongoDB存储订单信息，订单状态在运送过程中会不断更新，以MongoDB内嵌数组的形式
+来存储，一次查询就能将订单所有的变更读取出来。</li>
+<li>物联网场景，使用MongoDB存储所有接入的智能设备信息，以及设备汇报的日志信息，并对这些信息进行多
+维度的分析。</li>
+<li>视频直播,使用MongoDB存储用户信息、点赞互动信息等。</li>
+</ul>
+<p>这些应用场景中，数据操作方面的共同特点是:
+(1) 数据量大
+(2)写入操作频繁(读写都很频繁)
+(3)价值较低的数据，对事务性要求不高
+对于这样的数据，我们更适合使用MongoDB来实现数据的存储。</p>
+<p>什么时候选择MongoDB ?
+在架构选型上，除了上述的三个特点外，如果你还犹豫是否要选择它?可以考虑以下的一些问题:
+应用不需要事务及复杂join支持
+新应用，需求会变,数据模型无法确定,想快速迭代开发
+应用需要2000-3000以上的读写QPS (更高也可以)
+应用需要TB甚至PB级别数据存储
+应用发展迅速，需要能快速水平扩展.
+应用要求存储的数据不丢失
+应用需要99.999%高可用
+应用需要大量的地理位置查询、文本查询
+如果上述有1个符合，可以考虑MongoDB, 2个及以上的符合，选择MongoDB绝不会后悔。</p>
+<p>MongoDB简介
+MongoDB是一个开源、 高性能、无模式的文档型数据库，当初的设计就是用于简化开发和方便扩展,是NoSQL数
+据库产品中的一种。是最像关系型数据库I(MySQL)的非关系型数据库。
+它支持的数据结构非常松散,是一种类似于JSON的格式叫BSON(二进制存储的json),所以它既可以存储比较复杂的数据类型，又相
+当的灵活。
+MongoDB中的记录是一个文档, 它是一个由字段和值对 (field:value) 组成的数据结构。MongoDB文档类似于
+JSON对象，即一个文档认为就是一个对象。 字段的数据类型是字符型，它的值除了使用基本的一些类型外,还可
+以包括其他文档、普通数组和文档数组。</p>
+<table>
+<thead>
+<tr>
+<th>MongoDB术语/概念</th>
+<th>SQL术语/概念</th>
+<th>解释/说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>database</td>
+<td>database</td>
+<td>数据库</td>
+</tr>
+<tr>
+<td>collection</td>
+<td>table</td>
+<td>数据库表/集合</td>
+</tr>
+<tr>
+<td>document(bson格式)</td>
+<td>row</td>
+<td>数据记录行/文档</td>
+</tr>
+<tr>
+<td>field</td>
+<td>column</td>
+<td>数据字段/域</td>
+</tr>
+<tr>
+<td>index</td>
+<td>index</td>
+<td>索引</td>
+</tr>
+<tr>
+<td>嵌入文档 $lookup</td>
+<td>table joins</td>
+<td>跨表。MongoDB通过嵌入式文档来实现。mysql通过表连接实现</td>
+</tr>
+<tr>
+<td>_id</td>
+<td>primary key</td>
+<td>主键。主键MongoDB自动将id字段设置为主键</td>
+</tr>
+<tr>
+<td>aggregation pipeline</td>
+<td>group by</td>
+<td>聚合</td>
+</tr>
+</tbody>
+</table>
+<p>BSON数据类型参考列表，基本和JSON一致</p>
+<table>
+<thead>
+<tr>
+<th>数据类型</th>
+<th>描述</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>字符串</td>
+<td>UTF-8字符串都可表示为字符串类型的数据</td>
+<td>{&ldquo;x&rdquo; : &ldquo;foobar&rdquo;}</td>
+</tr>
+<tr>
+<td>对象id</td>
+<td>对象id是文档的12字节的唯一ID</td>
+<td>{&ldquo;X&rdquo; :objectld() }</td>
+</tr>
+<tr>
+<td>布尔值</td>
+<td>真或者假: true或者false</td>
+<td>{&ldquo;x&rdquo;:true}+</td>
+</tr>
+<tr>
+<td>数组</td>
+<td>值的集合或者列表可以表示成数组</td>
+<td>{&ldquo;x”: [&ldquo;a&rdquo;, &ldquo;b&rdquo;,&ldquo;c&rdquo;]}</td>
+</tr>
+<tr>
+<td>32位整数</td>
+<td>类型不可用。JavaScript仅支持64位浮点数， 所以32位整数会被自动转换。</td>
+<td>shell是不支持该类型的，shell中默认会转换成64位浮点数</td>
+</tr>
+<tr>
+<td>64位整数</td>
+<td>不支持这个类型。shell会使用一 个特殊的内嵌文档来显示64位整数</td>
+<td>shell是不支持该类型的，shell中默认会转换成64位浮点数</td>
+</tr>
+<tr>
+<td>64位浮点</td>
+<td>shell中的数字就是这一种类型</td>
+<td>{&ldquo;x&rdquo;: 3.14159, &ldquo;y&rdquo;: 3}</td>
+</tr>
+<tr>
+<td>null</td>
+<td>表示空值或者未定义的对象</td>
+<td>{&ldquo;x&quot;null}</td>
+</tr>
+<tr>
+<td>undefined</td>
+<td>文档中也可以使用未定义类型</td>
+<td>{&ldquo;x&rdquo;:undefined}</td>
+</tr>
+<tr>
+<td>符号</td>
+<td>shell不支持，shell会将数据库中的符号类型的数据自动转换成字符串</td>
+<td></td>
+</tr>
+<tr>
+<td>正则表达</td>
+<td>文档中可以包含正则表达式，采用JavaScript的正则表达式语法</td>
+<td>{&ldquo;x&rdquo; : /foobar/}</td>
+</tr>
+<tr>
+<td>代码</td>
+<td>文档中还可以包含JavaScript代码</td>
+<td>{&ldquo;x&rdquo; : function0{/* &hellip; */}}</td>
+</tr>
+<tr>
+<td>二进制数据</td>
+<td>二进制数据可以由任意字节的串组成,不过shell中无法使用</td>
+<td></td>
+</tr>
+<tr>
+<td>最大值/最小值</td>
+<td>BSON包括一个特殊类型，表示可能的最大值。shell中没有这个类型。</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>提示:
+shell默认使用64位浮点型数值。{&ldquo;x&rdquo;: 3.14}或{&ldquo;x&rdquo;: 3}。对于整型值，可以使用NumberInt (4字节符号整数)或
+NumberLong (8字节符号整数) , {&ldquo;X&rdquo;:Number1It*&ldquo;3&rdquo;}{&ldquo;x&rdquo;:NumberLngl&rdquo;}</p>
+<p>MongoDB的特点
+MongoDB主要有如下特点:
+(1)高性能:
+MongoDB提供高性能的数据持久性。特别是，对嵌入式数据模型的支持减少了数据库系统上的I/O活动。
+索引支持更快的查询，并粗可以包含来自嵌入式文档和数组的键。(文本索弓 |解决搜索的需求、TTL索引解决历史
+数据自动过期的需求、地理位置索引可用于构建各种020应用)
+mmapv1、wiredtiger. mongorocks (rocksdb) 、in-memory 等多引擎支持满足各种场景需求。
+Gridfs解决文件存储的需求。
+(2)高可用性:
+MongoDB的复制工具称为副本集(replicaset) ，它可提供自动故障转移和数据冗余。
+(3)高扩展性:
+MongoDB提供了水平可扩展性作为其核心功能的一-部分。
+分片将数据分布在一组集群的机器上。 (海 量数据存储，服务能力水平扩展)
+从3.4开始，MongoDB支持基于片键创建数据区域。在-个平衡的集群中，MongoDB将一个区域所覆 盖的读写只
+定向到该区域内的那些片。
+(4)丰富的查询支持: 
+MongoDB支持丰高的查询语言，支持读和写操作(CRUD),比如数据聚合、文本搜索和地理空间查询等。
+(5)其他特点:如无模式(动态模式)、灵活的文档模型、</p>
+<h2 id="安装">安装</h2>
+<h3 id="windows">windows</h3>
+<ul>
+<li>
+<p>下载并解压：https://www.mongodb.com/download-center/community</p>
+</li>
+<li>
+<p>数据存储目录：手动创建目录，如data/db，</p>
+</li>
+<li>
+<p>启动MongoDB：mongod命令。启动过后该cmd窗口不能关，否则服务就关闭了</p>
+<ul>
+<li>
+<p>指定参数启动</p>
+<ul>
+<li>&ndash;dbpath：指定数据存储目录</li>
+<li>&ndash;port：指定端口，缺省27017</li>
+</ul>
+<pre><code class="language-cmd">mongod --dbpath=../data
+</code></pre>
+</li>
+<li>
+<p>指定配置文件启动：启动时可以指定配置文件，config目录下新建.conf文件如mongod.conf</p>
+<pre><code class="language-cmd">mongod -f ../config/mongod.conf
+#或者
+mongod --config ../config/mongod.conf
+</code></pre>
+<p>配置文件内容参考</p>
+<p>详细配置项内容可以参考官方文档: <a href="https://ocs.mongodb.com/manual/reference/configuration-options/">https://ocs.mongodb.com/manual/reference/configuration-options/</a>
+[注意]
+1)配置文件中如果使用双引号，比如路径地址，自动会将双引号的内容转义。如果不转义,则会报错:
+error -parsing-yam1-config-file-yaml-cpp-error -at-1ine-3-column-15-unknown-escape-character-d
+解决:
+a.把 \ 换成 / 或 \<br>
+b.如果路径中没有空格,则无需加引号。</p>
+<pre><code class="language-conf">#配置文件，遵循yaml文件的格式
+storage:
+  dbPath: E:\it\database\mongodb\data
+</code></pre>
+</li>
+<li>
+<p>链接数据库：</p>
+<ul>
+<li>mongo命令</li>
+</ul>
+<pre><code class="language-cmd">mongo #连接
+mongo --host=127.0.0.1 --port=27017 #连接with参数。这里均为缺省值
+&gt;show databases #显示数据库，databases可简写为dbs
+&gt;exit #退出
+</code></pre>
+<ul>
+<li>MongoDBCompass：图形化界面
+<ul>
+<li>下载并解压：https://www.mongodb.com/download-center/compass</li>
+<li>找到MongoDBCompass.exe即可打开</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="linux">Linux</h3>
+<p>(2) - 上传压缩包到Linux中,解压到当前目录:
+tar -xvf mongodb-1inux-x86_ 64-4.0.10.tgz
+(3)移动解压后的文件夹到指定的目录中:
+mv mongodb-1inux-x86_ 64-4.0.10 /usr /loca1/mongodb
+(4)新建几个目录,分别用来存储数据和日志:
+擞数据存储目录
+mkdir -p /mongodb/sing1e/data/db
+#日志存储目录
+mkdir -p /mongodb/sing1e/log
+(5)新建并修改配置文件
+vi /mongodb/s ing1e/mongod. conf</p>
+<p>启动</p>
+<pre><code class="language-shell">bin/mogond --dbpath=./data #监听到所有网络上，一般当然不能这么做
+</code></pre>
+<pre><code class="language-cmd">/usr/yuanya/it/database/mongodb/bin/mongod -f /mongodb/single/mongod.conf #启动with配置文件
+ps -ef | grep mongod #检测是否启动
+kill -2 27017 #关闭服务，数据可能出错
+#标准关闭方法，数据不容易出错
+mongo --port 27017
+use admin
+db.shutdownServer()
+</code></pre>
+<h2 id="配置">配置</h2>
+<pre><code class="language-conf">systemLog:
+  destination: file #MongoDB发送所有日志输出的目标指定为文件
+  path: &quot;/mongodb/sing1e/log/mongod.log&quot; #mongod或imongos应向其发送所有诊断日志记录信息的日志文件的路径
+  logAppend: true #当mongos或mongod实例重新启动时，mongos或mongod会将新条目附加到现有日志文件的末尾。
+storage:
+  dbPath: &quot;/mongodb/sing1e/data/db' #mongod实例存储其数据的目录。storage.dbPath设置仅适用于mongod
+  journal:
+    enabled: true #启用或禁用持久性日志以确保数据文件保持有效和可恢复。缺省为true
+processManagement:
+  fork: true #启用在后台运行mongos或imongod进程的守护进程模式。启用后即可关闭控制台
+net:
+  bindIp: 192.168.0.2 #服务实例绑定的IP，默认只监听localhost，默认其它机器无法访问
+  port: 27017 #绑定端口，默认是27017
+</code></pre>
+<h2 id="命令">命令</h2>
+<ul>
+<li>
+<p>db.help()：帮助</p>
+</li>
+<li>
+<p>基本库</p>
+<ul>
+<li>admin：类似于mysql的root库，有关mongodb的用户和权限等</li>
+<li>local：部署集群时库之间数据会相互复制，但是local中的数据不会复制，可以用来存储限于本地单台服务器的任意集合</li>
+<li>config：当mongo用于分片设置时，cofig数据库在内部使用，用于保存分片的相关信息</li>
+</ul>
+</li>
+<li>
+<p>database：库操作</p>
+<ul>
+<li>
+<p>show databases：显示库</p>
+</li>
+<li>
+<p>use 数据库名称：有则进入库，无则创建并进入库。在内存中创建库，当库非空时才会持久化到磁盘</p>
+</li>
+<li>
+<p>db：显示当前数据库</p>
+</li>
+<li>
+<p>db.dropDatabase()：删除当前库。其实是js代码</p>
+</li>
+</ul>
+</li>
+<li>
+<p>collection：集合操作</p>
+<ul>
+<li>show collections：显示当前库的集合</li>
+<li>db.createCollection(&ldquo;集合名&rdquo;)：显式创建集合。隐式创建只创建文档时如果没有指定的集合则将顺便创建集合</li>
+<li>db.集合名.drop()：删</li>
+</ul>
+</li>
+<li>
+<p>document：文档操作</p>
+<ul>
+<li>
+<p>db.collection.insert(文档, {写关心, 排序})：插入文档。参数1为文档数据，参数2为可选</p>
+<p>如db.collection.insert({&ldquo;username&rdquo;: &ldquo;username1&rdquo;, &ldquo;password&rdquo;: &ldquo;password1&rdquo;})插入单个文档</p>
+<p>如db.collection.insert( [{&ldquo;username&rdquo;: &ldquo;username1&rdquo;}, {&ldquo;username&rdquo;:&ldquo;username2&rdquo;}] )插入多个文档</p>
+<ul>
+<li>参数列表
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>document</td>
+<td>document or array</td>
+<td>要插入到集合中的文档或文档数组。数据格式为bson(基本与json一致)</td>
+</tr>
+<tr>
+<td>writeConcern</td>
+<td>document</td>
+<td>Optional. A document expressing the write concern. Omit to use the default write concern. See Write Concern.Do not explicitly set the write concern for the operation if run in a transaction. To use write concern with transactions, see Transactions and Write Concern. <br />翻译：可选。表示写关心的文档。忽略使用默认的写关注点。看到写问题。如果在事务中运行，不要显式地设置操作的写关注点。要在事务中使用写关注，请参阅事务并写关注。<br />简单理解为：插入时选择的性能和可靠性的级别。</td>
+</tr>
+<tr>
+<td>ordered</td>
+<td>boolean</td>
+<td>可选。如果为真,则按顺序插入数组中的文档，如果其中一个文档出现错误，MongoDB将返回而不处理数组中的其余文档。如果为假，则执行无序插入，如果其中一个文档出现错误，则继续处理数组中的主文档。在版本2.6+中默认为true</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li>
+<p>db.集合名.find()：查询指定集合所有文档</p>
+<p>db.集合名.find({&ldquo;username&rdquo;: &ldquo;username1&rdquo;})：条件查询</p>
+<p>db.集合名.findOne({&ldquo;username&rdquo;: &ldquo;username1&rdquo;})：返回查询到的数据中的第一个，类似于limit 0,1</p>
+<p>db.集合名.findOne({&ldquo;username&rdquo;: &ldquo;username1&rdquo;}, {username:1})：投影查询，只显示指定字段，这里将只显示username字段和_id字段，_id字段是mongodb中自动添加的主键，在不指定排除的情况下都会显示</p>
+<p>db.集合名.findOne({username,password:1,_id:0})：显示username和password字段(可以分开写)，排除_id字段</p>
+</li>
+<li></li>
+</ul>
+</li>
+<li></li>
+</ul>
+<h1 id="mongodb-1">MongoDB</h1>
+<h2 id="功能">功能</h2>
+<ul>
+<li>
+<p>增：db.my_collection.insertOne({uid: 10000, name: &ldquo;xiaoming &ldquo;, likes: [&ldquo;football&rdquo;, &ldquo;game&rdquo;]})：插入一条json</p>
+<ul>
+<li>任意嵌套层级的BSON (二 进制的JSON)</li>
+<li>文档ID是自动生成的，通常无需自己指定</li>
+</ul>
+</li>
+<li>
+<p>查：db,my_collection.find( { likes: &lsquo;football&rsquo;; name: {$in: [ &lsquo;xiaoming&rsquo;, &lsquo;libai&rsquo; ] } } ).sort({uid: 1})：$in表示只要在满足是一组名字 [ &lsquo;xiaoming&rsquo;, &lsquo;libai&rsquo; ] 中的一个即可，.sort({uid: 1}) 表示按uid升序排列，正数即表示升序。</p>
+<ul>
+<li>可以基于任意BSON层级过滤</li>
+<li>支持的功能与MYSQL相当</li>
+</ul>
+</li>
+<li>
+<p>改：db.my_collection.updateMany( { likes: &lsquo;football&rsquo; }, { $set: { name: &lsquo;libai&rsquo; } } )：更新喜欢足球的所有文档，设置其name为libai</p>
+<ul>
+<li>第一个参数是过滤条件</li>
+<li>第二个参数是更新操作</li>
+</ul>
+</li>
+<li>
+<p>删：db.my_ collection.deleteMany({name: &lsquo;xiaoming&rsquo;})：删除name为xiaoming的文档</p>
+</li>
+<li>
+<p>参数是过滤条件</p>
+</li>
+<li>
+<p>创建索引：db.my collection.createlndex({uid: 1, name: -1})：uid和name都创建索引，联合索引，</p>
+<ul>
+<li>可以指定建立索引时的正反顺序，正数表示正序，负数表示反序，非常灵活，这将影响到排序的性能，mysql指定索引不能指定正反顺序，</li>
+</ul>
+</li>
+<li>
+<p>聚合操作：db.my_collection.aggregate( [ { $unwind: &lsquo;$likes&rsquo; }, { $group: { id: { likes: &lsquo;$likes&rsquo; } }, { $project: { id: 0, like: &ldquo;$_ id.likes&rdquo;, total: { $sum:1 } } } )。pipeline流水线模式，将前一个阶段的输出，作为后一个阶段的输入，<input disabled="" type="checkbox"> 内即pipeline</p>
+<ul>
+<li>{ $unwind: &lsquo;$likes&rsquo; }：unwind，解开，会把 likes: [&ldquo;football&rdquo;, &ldquo;game&rdquo;] 的内容拆分开，拆成 喜欢football 是一行，喜欢game 是另一行，将两行输入给下一阶段{ $group: { id: { likes: &lsquo;$likes&rsquo; } }</li>
+<li>{ $group: { id: { likes: &lsquo;$likes&rsquo; } }：聚合（即分组），将把 喜欢 football 的聚合在一起，喜欢game 的聚合在一起，然后进入下一阶段</li>
+<li>{ $project: { id: 0, like: &ldquo;$_id.likes&rdquo;, total: { $sum:1 } } }：project操作符可以取出每一个桶类，按group去分桶，每个桶类是相同喜好的文档，like: &ldquo;$_id.likes&quot;将把对应的likes提取出来</li>
+<li>输出：{&ldquo;Iike&rdquo;: &ldquo;game&rdquo;, &ldquo;total&rdquo;: 1} {&ldquo;Ilike&rdquo;: &ldquo;football&rdquo;, &ldquo;total&rdquo;: 1}。pipeline流式计算，功能复杂，使用时多查手册</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>MongoDB</th>
+<th>MYSQL</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$match</td>
+<td>where</td>
+<td></td>
+</tr>
+<tr>
+<td>$group</td>
+<td>group by</td>
+<td></td>
+</tr>
+<tr>
+<td>$match</td>
+<td>having</td>
+<td></td>
+</tr>
+<tr>
+<td>$project</td>
+<td>select</td>
+<td></td>
+</tr>
+<tr>
+<td>$sort</td>
+<td>order by</td>
+<td></td>
+</tr>
+<tr>
+<td>$limit</td>
+<td>limit</td>
+<td></td>
+</tr>
+<tr>
+<td>$sum</td>
+<td>sum</td>
+<td></td>
+</tr>
+<tr>
+<td>$count</td>
+<td>count</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h2 id="原理">原理</h2>
+<ul>
+<li>整体存储架构：类似于单机-&gt;主从-&gt;多主从的分布式
+<ul>
+<li>Mongod：单机版数据库。没错就是叫&quot;Mongod&quot;不是&quot;MongoDB&rdquo;</li>
+<li>Replica Set：复制集，由多个Mongod组成的高可用存储单元。
+<ul>
+<li>有主从关系，数据写入主节点，异步复制数据到从节点。</li>
+<li>客户端默认读取主节点，可以要求客户端取读从节点，但从节点读取的数据可能存在延迟</li>
+<li>主节点宕机，复制集内会重新选举</li>
+<li>至少3个节点组成，其中1个可以只充当arbiter</li>
+<li>主从基于oplog复制同步(类比mysql binlog)</li>
+</ul>
+</li>
+<li>Sharding：分布式集群，由多 个Replica Set组成的可扩展集群
+<ul>
+<li>每个Replica Set称为一个shard（分片），对外提供服务时通过一个或多个router（程序叫mongos）来代理转发客户端请求到正确的分片上</li>
+<li>存在一个ConfigServers，它也是一个Replica Set，专门用来存储数据元信息，即存放分片与数据的对应信息，记录哪些key存放在那个分片上的</li>
+<li>Collection分片：Collection自动分裂成多个chunk，每个chunk被自动负载均衡到不同的shard，每个shard可以保证其上的chunk高可用。通俗点说就是一个表的数据是被分为多份（比如8份），均匀的分摊在多个分片（比如2个分片，每个分片上有4份该Collection的数据）上的
+<ul>
+<li>按range拆分chunk：与mysql分库分表是类似的，假如表有一个x字段，按x拆分，该字段为shard key。假设x的取键是 负无穷~正无穷，可能就按 负无穷~-25、-75~25、25~175、175~正无穷 区分为4个chunk。具体按什么拆分，要根据数据特征来定，假如x是时间，可能过了175这个时间以后，所有数据都写到一个chunk里面，造成写入热点。
+<ul>
+<li>Shard key可以是单索引|字段或者联合索引字段：即必须要上索引</li>
+<li>超过16MB的chunk被一分为二</li>
+<li>一个collection的所有chunk首尾相连，构成整个表</li>
+</ul>
+</li>
+<li>按hash拆分chunk
+<ul>
+<li>Shard key必须是哈希索引字段：mongodb支持一种hash索引，会先把这个字段hash成一个整型，用这个整型来建立索引。因为可能出现hash碰撞，无法保证key的唯一性，hash索引的字段是不能建立唯一键的</li>
+<li>Shard key经过hash函数打散，避免写热点</li>
+<li>支持预分配chunk，提前分配较多chunk，可以避免运行时分裂影响写入</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>shard用法示例
+<ul>
+<li>为DB激活特性：sh.enableSharding( &lsquo;my_db&rsquo; )</li>
+<li>配置hash分片: sh.shardCollection(&rdquo; my_db.my_collection&rdquo;, { _id: &ldquo;hashed&rdquo; }, false, { numInitialChunks: 10240} )。让my_db的表my_collection根据_id做hash分片，预分配10240个chunk</li>
+</ul>
+</li>
+<li>注意：如果按非shard key查询，比如如果我们按x字段分片，即x是shard key，但是查询的时候我们通过uid查询，请求将被<strong>扇出</strong>给所有shard，性能会差很多</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Mongod架构：默认采用WiredTiger高性能存储引擎，
+<ul>
+<li>架构
+<ul>
+<li>Client：客户端。客户端发送请求到查询层</li>
+<li>MongoDB Query Language：查询解释层，解析请求</li>
+<li>MongoDB Data Model：存储层的抽象，支持多种底层的存储引擎
+<ul>
+<li>WiredTiger：默认的，非常高性能</li>
+<li>MMAPv1：早期使用的引擎</li>
+<li>In Memory</li>
+<li>Encrypted</li>
+<li>3rd Party Engine</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>基于journaling log宕机恢复(类比mysql的redo log)：写入东西的时候先去写log，将 &ldquo;操作内容&rdquo; 顺序追加成log文件，而数据会暂时修改到内存里面，它将定期把内存中的数据写入到磁盘，如果写入磁盘之前宕机了，就会通过log把数据恢复出来</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/YuanyaTianchi" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/8338344" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algorithm/">Algorithm</a>
+            </span>
+            
+            <span>
+                <a href="/tags/base/">base</a>
+            </span>
+            
+            <span>
+                <a href="/tags/blog/">blog</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cloudnative/">cloudnative</a>
+            </span>
+            
+            <span>
+                <a href="/tags/coderebuild/">CodeRebuild</a>
+            </span>
+            
+            <span>
+                <a href="/tags/db/">db</a>
+            </span>
+            
+            <span>
+                <a href="/tags/go.project/">go.project</a>
+            </span>
+            
+            <span>
+                <a href="/tags/it/">it</a>
+            </span>
+            
+            <span>
+                <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/sys/">sys</a>
+            </span>
+            
+            <span>
+                <a href="/tags/tool/">tool</a>
+            </span>
+            
+            <span>
+                <a href="/tags/versioncontrol/">versioncontrol</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#go">go</a></li>
+      </ul>
+    </li>
+    <li><a href="#安装">安装</a>
+      <ul>
+        <li><a href="#windows">windows</a></li>
+        <li><a href="#linux">Linux</a></li>
+      </ul>
+    </li>
+    <li><a href="#配置">配置</a></li>
+    <li><a href="#命令">命令</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#功能">功能</a></li>
+    <li><a href="#原理">原理</a></li>
+  </ul>
+</nav>
+    </div>
+    
+    
+</aside>
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/YuanyaTianchi" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/8338344" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algorithm/">Algorithm</a>
+            </span>
+            
+            <span>
+                <a href="/tags/base/">base</a>
+            </span>
+            
+            <span>
+                <a href="/tags/blog/">blog</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cloudnative/">cloudnative</a>
+            </span>
+            
+            <span>
+                <a href="/tags/coderebuild/">CodeRebuild</a>
+            </span>
+            
+            <span>
+                <a href="/tags/db/">db</a>
+            </span>
+            
+            <span>
+                <a href="/tags/go.project/">go.project</a>
+            </span>
+            
+            <span>
+                <a href="/tags/it/">it</a>
+            </span>
+            
+            <span>
+                <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/sys/">sys</a>
+            </span>
+            
+            <span>
+                <a href="/tags/tool/">tool</a>
+            </span>
+            
+            <span>
+                <a href="/tags/versioncontrol/">versioncontrol</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#go">go</a></li>
+      </ul>
+    </li>
+    <li><a href="#安装">安装</a>
+      <ul>
+        <li><a href="#windows">windows</a></li>
+        <li><a href="#linux">Linux</a></li>
+      </ul>
+    </li>
+    <li><a href="#配置">配置</a></li>
+    <li><a href="#命令">命令</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#功能">功能</a></li>
+    <li><a href="#原理">原理</a></li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2021
+                <a href="https://yuanyatianchi.github.io">DSRKafuU</a>
+                 | <a href="https://github.com/itsme/my_blog">Source code</a> 
+                | Powered by <a href="https://github.com/amzrk2/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/combine/npm/medium-zoom@1.0.6,npm/lazysizes@5.2.2"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+</body>
+
+</html>

@@ -1,9 +1,8 @@
 +++
 
 title = "git"
-date = "2020-11-11"
 description = "git"
-tags = ["it", "version control", "git"]
+tags = ["it", "versioncontrol"]
 
 +++
 

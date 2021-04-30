@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.74.3" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/amzrk2/cdn-stcapi@1/favicons/favicon.ico" />
+
+
+<title>WinEnv - 鸢雅</title>
+
+
+<meta name="author" content="DSRKafuU" />
+
+
+<meta name="description" content="WinEnv" />
+
+
+<meta name="keywords" content="it, base" />
+
+<meta property="og:title" content="WinEnv" />
+<meta property="og:description" content="WinEnv" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yuanyatianchi.github.io/post/it.base.winenv/" />
+<meta property="og:image" content="https://yuanyatianchi.github.io/img/og.png"/>
+
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://yuanyatianchi.github.io/img/og.png"/>
+
+<meta name="twitter:title" content="WinEnv"/>
+<meta name="twitter:description" content="WinEnv"/>
+
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+<link rel="stylesheet" href="https://yuanyatianchi.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+</head>
+
+<body data-theme="auto">
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://yuanyatianchi.github.io">鸢雅</a>
+            
+            <span class="title-sub">A minimal Hugo theme.</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://yuanyatianchi.github.io/post/it.base.winenv/">WinEnv</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;758 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/base">base</a>&nbsp;</span>
+
+    </div>
+    
+    
+    <div class="post-content markdown-body">
+        <h1 id="windows环境">Windows环境</h1>
+<h2 id="database">database</h2>
+<h3 id="mysql">mysql</h3>
+<p><a href="https://dev.mysql.com/downloads/">https://dev.mysql.com/downloads/</a></p>
+<ol>
+<li>
+<p>下载并解压：https://dev.mysql.com/downloads/mysql/ ，c++ 2019可再发行软件包(运行库)：https://aka.ms/vs/16/release/vc_redist.x64.exe</p>
+</li>
+<li>
+<p>创建my.ini：E:\it\database\mysql\Mysql，不要自己创建data目录！</p>
+<pre><code class="language-properties">[mysql]
+#设置mysql客户端默认字符集
+default-character-set=utf8
+[mysqld]
+#设置端口
+port = 3306
+#设置安装目录
+basedir=E:\it\database\mysql\Mysql
+#设置数据的存放目录
+datadir=E:\it\database\mysql\Mysql\data
+#设置最大连接数
+max_connections=200
+#设置mysql服务端使用的字符集默
+character-set-server=utf8
+#设置创建新表时使用的默认存储引擎
+default-storage-engine=INNODB
+</code></pre>
+</li>
+<li>
+<p>配置，以管理员身份进入cmd</p>
+<pre><code class="language-cmd">E:
+cd it\database\mysql\Mysql\bin #进入到mysql的bin目录
+mysqld install #安装mysql服务
+mysqld  --initialize-insecure #不安全(无root密码)初始化，并自动生成了data目录
+net start mysql #启动服务
+mysql -u root -p #登录mysql，无密码，回车直接登入
+   
+use mysql; #进到mysql这个database
+ALTER USER `root`@`localhost` IDENTIFIED BY '新密码'; #设置密码
+exit #退出
+</code></pre>
+</li>
+</ol>
+<h2 id="front-end">front-end</h2>
+<h3 id="node">Node</h3>
+<ol>
+<li>
+<p>下载并解压：https://nodejs.org/zh-cn/download/releases/</p>
+</li>
+<li>
+<p>环境变量：node.exe所在目录，如E:\it\front-end\Node</p>
+</li>
+<li>
+<p>创建文件夹并配置：node_global、node_cache</p>
+<pre><code class="language-cmd">node -v # 检查node
+npm -v # 检查npm
+npm config set cache &quot;E:\it\front-end\Node\node_cache&quot; # 配置缓存目录路径
+npm config set prefix &quot;E:\it\front-end\Node\node_global&quot; # 配置全局目录路径
+npm config set registry &quot;https://registry.npm.taobao.org&quot; # 淘宝镜像
+npm config -g ls # 检查config
+npm install -g windows-build-tools # 安装winows构建工具，python2.7，c++相关等
+</code></pre>
+</li>
+</ol>
+<h2 id="version-control">version-control</h2>
+<h3 id="git">Git</h3>
+<ol>
+<li>下载并安装：https://git-scm.com/download/win，叉掉GUI，叉掉创建开始菜单，然后全部Next</li>
+</ol>
+<h2 id="环境变量">环境变量</h2>
+<h3 id="增变量">增变量</h3>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>path</td>
+<td>E:\it\front-end\Node<br/>E:\it\go\Go\bin<br/>E:\it\java\Java\jdk1.8.0_231\bin<br/>E:\it\java\Java\jdk1.8.0_231\jre\bin<br/>E:\it\python\Python27<br/>E:\it\version-control\Git\cmd</td>
+</tr>
+<tr>
+<td>GOPATH</td>
+<td>E:\it\go\GoProjects</td>
+</tr>
+</tbody>
+</table>
+<h3 id="原变量">原变量</h3>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ComSpec</td>
+<td>%SystemRoot%\system32\cmd.exe</td>
+</tr>
+<tr>
+<td>DriverData</td>
+<td>C:\Windows\System32\Drivers\DriverData</td>
+</tr>
+<tr>
+<td>NUMBER OF_ PROCESSORS</td>
+<td>16</td>
+</tr>
+<tr>
+<td>OS</td>
+<td>Windows_ NT</td>
+</tr>
+<tr>
+<td>path</td>
+<td>%SystemRoot%<br/>%SystemRoot%\system32<br/>%SystemRoot%\System32\Wbem<br/>%SYSTEMROOT%\System32\WindowsPowerShell\v1.0<br/>%SYSTEMROOT%\System32\OpenSSH</td>
+</tr>
+<tr>
+<td>PATHEXT</td>
+<td>.COM;.EXE,;,BAT;,CMD;,VBS;VBE;JS;JSE;:WSF;WSH;MSC</td>
+</tr>
+<tr>
+<td>PROCESSOR_ARCHITECTURE</td>
+<td>AMD64</td>
+</tr>
+<tr>
+<td>PROCESSOR_ IDENTIFIER</td>
+<td>AMD64 Family 23 Model 113 Stepping 0, AuthenticAMD</td>
+</tr>
+<tr>
+<td>PROCESSOR_ LEVEL</td>
+<td>23</td>
+</tr>
+<tr>
+<td>PROCESSOR_ REVISION</td>
+<td>7100</td>
+</tr>
+<tr>
+<td>PSModulePath</td>
+<td>%ProgramFiles%\WindowsPowerShell\Modules<br/>%SystemRoot%\system32\WindowsPowerShell\v1.0\Modules</td>
+</tr>
+<tr>
+<td>TEMP</td>
+<td>%SystemRoot%\TEMP</td>
+</tr>
+<tr>
+<td>TMP</td>
+<td>%SystemRoot%\TEMP</td>
+</tr>
+<tr>
+<td>USERNAME</td>
+<td>SYSTEM</td>
+</tr>
+<tr>
+<td>windir</td>
+<td>%SystemRoot%</td>
+</tr>
+</tbody>
+</table>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/YuanyaTianchi" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/8338344" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algorithm/">Algorithm</a>
+            </span>
+            
+            <span>
+                <a href="/tags/base/">base</a>
+            </span>
+            
+            <span>
+                <a href="/tags/blog/">blog</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cloudnative/">cloudnative</a>
+            </span>
+            
+            <span>
+                <a href="/tags/coderebuild/">CodeRebuild</a>
+            </span>
+            
+            <span>
+                <a href="/tags/db/">db</a>
+            </span>
+            
+            <span>
+                <a href="/tags/go.project/">go.project</a>
+            </span>
+            
+            <span>
+                <a href="/tags/it/">it</a>
+            </span>
+            
+            <span>
+                <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/sys/">sys</a>
+            </span>
+            
+            <span>
+                <a href="/tags/tool/">tool</a>
+            </span>
+            
+            <span>
+                <a href="/tags/versioncontrol/">versioncontrol</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#database">database</a>
+      <ul>
+        <li><a href="#mysql">mysql</a></li>
+      </ul>
+    </li>
+    <li><a href="#front-end">front-end</a>
+      <ul>
+        <li><a href="#node">Node</a></li>
+      </ul>
+    </li>
+    <li><a href="#version-control">version-control</a>
+      <ul>
+        <li><a href="#git">Git</a></li>
+      </ul>
+    </li>
+    <li><a href="#环境变量">环境变量</a>
+      <ul>
+        <li><a href="#增变量">增变量</a></li>
+        <li><a href="#原变量">原变量</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+    
+    
+</aside>
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/YuanyaTianchi" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/8338344" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algorithm/">Algorithm</a>
+            </span>
+            
+            <span>
+                <a href="/tags/base/">base</a>
+            </span>
+            
+            <span>
+                <a href="/tags/blog/">blog</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cloudnative/">cloudnative</a>
+            </span>
+            
+            <span>
+                <a href="/tags/coderebuild/">CodeRebuild</a>
+            </span>
+            
+            <span>
+                <a href="/tags/db/">db</a>
+            </span>
+            
+            <span>
+                <a href="/tags/go.project/">go.project</a>
+            </span>
+            
+            <span>
+                <a href="/tags/it/">it</a>
+            </span>
+            
+            <span>
+                <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/sys/">sys</a>
+            </span>
+            
+            <span>
+                <a href="/tags/tool/">tool</a>
+            </span>
+            
+            <span>
+                <a href="/tags/versioncontrol/">versioncontrol</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#database">database</a>
+      <ul>
+        <li><a href="#mysql">mysql</a></li>
+      </ul>
+    </li>
+    <li><a href="#front-end">front-end</a>
+      <ul>
+        <li><a href="#node">Node</a></li>
+      </ul>
+    </li>
+    <li><a href="#version-control">version-control</a>
+      <ul>
+        <li><a href="#git">Git</a></li>
+      </ul>
+    </li>
+    <li><a href="#环境变量">环境变量</a>
+      <ul>
+        <li><a href="#增变量">增变量</a></li>
+        <li><a href="#原变量">原变量</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2021
+                <a href="https://yuanyatianchi.github.io">DSRKafuU</a>
+                 | <a href="https://github.com/itsme/my_blog">Source code</a> 
+                | Powered by <a href="https://github.com/amzrk2/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/combine/npm/medium-zoom@1.0.6,npm/lazysizes@5.2.2"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+</body>
+
+</html>

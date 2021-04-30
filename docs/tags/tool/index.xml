@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>tool on 鸢雅</title>
+    <link>https://yuanyatianchi.github.io/tags/tool/</link>
+    <description>Recent content in tool on 鸢雅</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    
+	<atom:link href="https://yuanyatianchi.github.io/tags/tool/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Typora</title>
+      <link>https://yuanyatianchi.github.io/post/tool.typora/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/tool.typora/</guid>
+      <description>所有操作都只在 行首 起效，所有操作的 空格 不可缺省。 基本 标题 &amp;lsquo;### 标题内容&amp;rsquo;：有几个 &amp;lsquo;#&amp;rsquo; 即是几级标题，同时也是几号字体。 有序列表 &amp;lsquo;1. &#39; 无序列表 &amp;lsquo;- &#39; 或 &amp;lsquo;+ &#39; 插入 代码块 &amp;lsquo;```语言名&amp;rsquo</description>
+    </item>
+    
+    <item>
+      <title>时序图</title>
+      <link>https://yuanyatianchi.github.io/post/tool.%E6%97%B6%E5%BA%8F%E5%9B%BE/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/tool.%E6%97%B6%E5%BA%8F%E5%9B%BE/</guid>
+      <description>什么是时序图 时序图(Sequence Diagram)，又名序列图、循序图，是一种UML交互图。它通过描述对象之间发送消息的时间顺序显示多个对象之间的动态协作。 使用场景 时序图的使用场景非常广泛，几乎各行</description>
+    </item>
+    
+  </channel>
+</rss>

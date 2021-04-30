@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.74.3" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/amzrk2/cdn-stcapi@1/favicons/favicon.ico" />
+
+
+<title>面试大纲 - 鸢雅</title>
+
+
+<meta name="author" content="DSRKafuU" />
+
+
+<meta name="description" content="面试大纲" />
+
+
+<meta name="keywords" content="it, base" />
+
+<meta property="og:title" content="面试大纲" />
+<meta property="og:description" content="面试大纲" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yuanyatianchi.github.io/post/it.base.%E9%9D%A2%E8%AF%95%E5%A4%A7%E7%BA%B2/" />
+<meta property="og:image" content="https://yuanyatianchi.github.io/img/og.png"/>
+
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://yuanyatianchi.github.io/img/og.png"/>
+
+<meta name="twitter:title" content="面试大纲"/>
+<meta name="twitter:description" content="面试大纲"/>
+
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+<link rel="stylesheet" href="https://yuanyatianchi.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+</head>
+
+<body data-theme="auto">
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://yuanyatianchi.github.io">鸢雅</a>
+            
+            <span class="title-sub">A minimal Hugo theme.</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://yuanyatianchi.github.io/post/it.base.%E9%9D%A2%E8%AF%95%E5%A4%A7%E7%BA%B2/">面试大纲</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1916 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/base">base</a>&nbsp;</span>
+
+    </div>
+    
+    
+    <div class="post-content markdown-body">
+        <h1 id="面试大纲">面试大纲</h1>
+<ul>
+<li>
+<p>算法</p>
+<ul>
+<li>ascii：A-65、a-97</li>
+<li>dp：base case、状态、选择、dp定义</li>
+<li>dfs：backtrack(路径, 选择列表)、结束条件-决策树底层</li>
+<li>bfs：要扩散的节点、已扩散的节点</li>
+<li>math：平方根Sqrt、Pow   方、Abs绝对值Ceil向上取整、Floor向下取整</li>
+<li>string：Trim去掉两端、子序列位置In-dex、Contains匹配子序列、Replace替换n次，Split拆分</li>
+</ul>
+</li>
+<li>
+<p>设计模式</p>
+</li>
+<li>
+<p>网络</p>
+<ul>
+<li>tcp：可靠，字节流，3次握手、4次挥手。udp：不可靠，报文流，直接发送</li>
+<li>rpc：远程过程调用，轻量，协议无关、序列化无关，消息头保存</li>
+<li>http基于文本解析，http/2基于二进制解析，socket是对tcp等实现提供网络编程的方法</li>
+<li>coocie保存再浏览器端，session保存在服务器端</li>
+</ul>
+</li>
+<li>
+<p>go</p>
+<ul>
+<li>类型：string(SRODATA)、array、slice(追加扩容growslice、对齐)、map(扩容)，结构、类型、初始化、访问、</li>
+<li>函数调用栈：一个函数调用另一个函数，编译器就会生成一个call指令，call指令做两件事，一是将下一条指令的地址入栈，就是返回地址，被调用函数结束后跳回到这里，二是跳转到被调用函数入口处执行</li>
+<li>闭包：带捕获变量的funcval，是否修改，参数、返回值作捕获变量</li>
+<li>方法、defer、panic和recover、类型系统、接口、断言、reflect、闭包（带捕获变量的funcval）</li>
+<li>GPM：工作窃取、让出（sleep、channel（context）、io事件）、抢占（stackPreempt标识、信号、系统调用），gopark、goready ，监控线程</li>
+<li>GC：标记清除、主体并发增量式回收、插入与删除的混合写屏障</li>
+</ul>
+</li>
+<li>
+<p>​     mysql</p>
+<ul>
+<li>存储引擎：innodb、myisam、memory 的 存储、索引、锁、表空间、事务、缓存</li>
+<li>锁：表锁（读共享、写独占）、行锁（读共享、写排他、意向共享、意向排他）、锁算法（Record Lock、Gap Lock、Next-Key Lock）、乐观锁（cas、mvcc）、悲观锁（mutex）</li>
+<li>事务：ACID（原子一致隔离持久），脏读、不可重复读、幻读，READ UNCOMMITED、READ COMMITED、REPEATABLE READ、SERIALIZABLE</li>
+<li>三大范式：列的原子性（最小属性不可再分化）、行的唯一性（非主键列完全依赖主键列，不是部分依赖关键字）、非主键列直接依赖主键列</li>
+<li>慢查询：配置slow_query_log=1、mysqldumpslow工具</li>
+<li>索引：普通索引、唯一索引、复合索引、聚集索引、聚簇索引，执行计划 Explain（select_type、key、keylen、ref、Extra(temporary、index、where、join buffer)）</li>
+<li>sql优化：全值匹配（联合索引中更多的列被使用）、最左前缀、范围条件最后、索引覆盖、慎用不等于，主要是避免索引失效变成全表扫，临时表</li>
+</ul>
+</li>
+<li>
+<p>redis</p>
+<ul>
+<li>
+<p>API：string、hash、list、set、zset、slowlog、pipeline、pubsub、bitmap、HyperLogLog、GEO</p>
+</li>
+<li>
+<p>持久化：RDB（触发机制：save、bgsave、配置bgsave、全量复制）、AOF（刷新策略：severysec、always、everysecno，AOF重写）</p>
+</li>
+<li>
+<p>缓存更新策略：最大内存+LRU、过期时间超时剔除、业务上主动随数据库一起更新，高低一致性）</p>
+</li>
+<li>
+<p>缓存穿透：key对应的数据在缓存和数据源都不存在。缓存有过期时间的空对象；布隆过滤器拦截</p>
+</li>
+<li>
+<p>缓存击穿：key对应的数据存在，但在redis中过期。分布式锁防止并发访问db</p>
+</li>
+<li>
+<p>缓存雪崩：大量缓存集中失效。加锁；请求队列；设计时就要将缓存失效时间分散开尽量不要使大量数据的过期时间在同一个时间段</p>
+</li>
+<li>
+<p>无底洞：集群会使如mget这样的批操作非原子化，使更多的机器!=更高的性能。不要盲目加机器；多考虑命令优化、网络通信优化</p>
+</li>
+<li>
+<p>布隆过滤器：二进制向量01数组、多hash、多元素，本地、远程</p>
+</li>
+<li>
+<p>主从：全量复制、部分复制、偏移量、自动故障转移、读写分离。全量复制：需要尽量规避。第一次不可避免，</p>
+</li>
+</ul>
+</li>
+<li>
+<p>etcd：KV（op）、Lease（KeepAlive）、Watcher（revition）、txn，key有序，内置grpc，raft</p>
+</li>
+<li>
+<p>mongo：bson，database、collection、document、field</p>
+</li>
+<li>
+<p>kafka：topic、partition。消息模型、事务、丢失（三端）、重复（前置、唯一 幂等）、积压（两端   ），异步系统、异步网络io、序列化、协议、磁盘io、数据压缩，批处理，zookeeper</p>
+</li>
+</ul>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/YuanyaTianchi" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/8338344" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algorithm/">Algorithm</a>
+            </span>
+            
+            <span>
+                <a href="/tags/base/">base</a>
+            </span>
+            
+            <span>
+                <a href="/tags/blog/">blog</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cloudnative/">cloudnative</a>
+            </span>
+            
+            <span>
+                <a href="/tags/coderebuild/">CodeRebuild</a>
+            </span>
+            
+            <span>
+                <a href="/tags/db/">db</a>
+            </span>
+            
+            <span>
+                <a href="/tags/go.project/">go.project</a>
+            </span>
+            
+            <span>
+                <a href="/tags/it/">it</a>
+            </span>
+            
+            <span>
+                <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/sys/">sys</a>
+            </span>
+            
+            <span>
+                <a href="/tags/tool/">tool</a>
+            </span>
+            
+            <span>
+                <a href="/tags/versioncontrol/">versioncontrol</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3>
+        <nav id="TableOfContents"></nav>
+    </div>
+    
+    
+</aside>
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/YuanyaTianchi" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/8338344" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algorithm/">Algorithm</a>
+            </span>
+            
+            <span>
+                <a href="/tags/base/">base</a>
+            </span>
+            
+            <span>
+                <a href="/tags/blog/">blog</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cloudnative/">cloudnative</a>
+            </span>
+            
+            <span>
+                <a href="/tags/coderebuild/">CodeRebuild</a>
+            </span>
+            
+            <span>
+                <a href="/tags/db/">db</a>
+            </span>
+            
+            <span>
+                <a href="/tags/go.project/">go.project</a>
+            </span>
+            
+            <span>
+                <a href="/tags/it/">it</a>
+            </span>
+            
+            <span>
+                <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/sys/">sys</a>
+            </span>
+            
+            <span>
+                <a href="/tags/tool/">tool</a>
+            </span>
+            
+            <span>
+                <a href="/tags/versioncontrol/">versioncontrol</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3>
+        <nav id="TableOfContents"></nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2021
+                <a href="https://yuanyatianchi.github.io">DSRKafuU</a>
+                 | <a href="https://github.com/itsme/my_blog">Source code</a> 
+                | Powered by <a href="https://github.com/amzrk2/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/combine/npm/medium-zoom@1.0.6,npm/lazysizes@5.2.2"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+</body>
+
+</html>

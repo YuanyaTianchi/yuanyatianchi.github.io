@@ -1,3 +1,14 @@
+
++++
+
+title = "MongoDB"
+description = "MongoDB"
+tags = ["it", "db"]
+
++++
+
+
+
 # MongoDB
 
 - 文档数据库(schema free)，基于二进制JSON存储文档（BSON）。无需定义类型，field:value形式
