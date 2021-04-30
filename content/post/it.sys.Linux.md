@@ -22,6 +22,10 @@ tags = ["sys", "linux"]
 
 
 
+## 概论
+
+
+
 ## hello
 
 - 镜像
@@ -33,16 +37,49 @@ tags = ["sys", "linux"]
 #### VirtualBox
 
 1. 新建
+
 2. 名称：centos7 → 文件夹：D:\it\virtual_machine\VirtualBoxVM → 类型：Linux → 版本：Red Hat (64-bit)
+
 3. 内存大小：2048mb
+
 4. 现在创建虚拟硬盘 → VDI (VirtualBox 磁盘映像) → 动态分配 → 硬盘大小：20G
-5. 设置 → 存储 → 右侧光盘图标选择虚拟盘 → OK
+
+5. 设置 → 存储 → 控制器: IDE → 右侧光盘图标选择虚拟盘 → OK
+
 6. 启动 → Install CentOS Linux 7 → English
+
 7. DATE & TIME → Asia Shanghai
-8. SOFTWARE SELECTION → Minimal Install
+
+8. SOFTWARE SELECTION → Minimal Install （按需选择）
+
 9. INSTALL ATION DESTINATION → 直接点done即可
+
 10. NETWORK & HOST NAME → Ethernet (enp0s3)：ON
-11. 开始安装 → 设置ROOT PASSWORD → 安装成功后reboot
+
+11. 开始安装 → 设置 ROOT PASSWORD → 安装成功后 reboot
+
+12. 虚拟机与宿主机 共享粘贴板、拖拽文件
+
+    1. 设置 - 常规 - 高级 - 共享粘贴板 双向 & 拖放 双向
+
+    2. 设置 - 存储 - 控制器：SATA - √ 使用主机输入输出（I/O）缓存
+
+    3. 设置 - 存储 - 控制器：SATA - .vdi - √ 固态驱动器(s)
+
+    4. kernel-devel
+
+       ```sh
+       # 安装 kernel-devel 和 gcc
+       yum install -y kernel-devel gcc
+       # 更新 kernel 和 kernel-devel 到最新版本
+       yum upgrade kernel kernel-devel -y
+       # 重启
+       reboot
+       ```
+
+    5. 虚拟机窗口上方菜单栏 - 设备 - 安装增强功能（会挂载一个光盘，重新安装要先弹出iso，否则报"未能加载虚拟光盘"）
+
+
 
 #### VMware
 
@@ -61,6 +98,10 @@ tags = ["sys", "linux"]
   - /bin：命令目录
   - /sbin：管理命令目录
   - /usr/bin、/usr/sbin：系统预装的其他命令
+
+
+
+
 
 ## 命令行
 
@@ -426,6 +467,43 @@ tar x
       - `d`：删除选中块
       - `ctrl+i`：进入插入模式，输入要插入的内容，按2次esc，可以批量给选中的每一行前面添加相同内容
 
+### 环境变量
+
+- PATH：指定命令的搜索路径
+  - PATH=$PAHT:<PATH 1>:<PATH 2>:--------:< PATH n >
+  - export PATH
+- 
+
+临时：仅对当前 shell(bash) 或其子 shell(bash) 生效
+
+```sh
+export PATH=$PATH:/usr/local/go/bin
+```
+
+用户
+
+```sh
+# 编辑文件 ~/.bash_profile
+vim ~/.bash_profile
+# 写入环境变量
+export PATH=$PATH:/usr/local/go/bin
+# 刷新环境变量使生效
+source ~/.bash_profile
+```
+
+全局
+
+```sh
+# 编辑文件 /etc/profile
+vim /etc/profile
+# 写入环境变量
+export PATH=$PATH:/usr/local/go/bin
+# 刷新环境变量使生效
+source /etc/profile
+```
+
+
+
 ## 用户
 
 
@@ -632,6 +710,9 @@ install epel-release -y
 wget http://mirrors.aliyun.com/repo/epel-7.repo -O /etc/yum.repos.d/epel.repo
 #清空并刷新缓存
 yum clean all && yum makecache
+
+# 查看当前源上可下载的指定软件所有版本
+yum list docker-ce --showduplicates|sort -r
 ```
 
 ###### apt
@@ -785,71 +866,79 @@ yum install wget -y
 
 ##### ps
 
-```shell
+- `ps`：process status，进程状态
+- 参数
+  - `-e`：可以查看更多进程，类似于win中的系统进程
+  - `-f`：额外的信息UID、PPID
+  - `-L`：Light，表示轻量级，轻量级进程，实际上即线程
+
+```sh
 ps -efL
 ```
 
-- ps：process status，进程状态
-  - 参数
-  - -e：可以查看更多进程，类似于win中的系统进程
-    - -f：额外的信息UID、PPID
-    - -L：Light，表示轻量级，轻量级进程，实际上即线程
-  - 内容
-    - PID：唯一标识进程（不同用户使用同样的程序也是不同的进程）
-    - TTY：终端的次要装置号码（minor device number of tty）。即表示当前执行程序的终端
-    - UID：效用户id。表示进程是由哪个用户启动的信息（可修改），默认显示为启动进程的用户
-    - PPID：进程的父进程id。（linux的 0号进程 和 1 号进程：https://www.cnblogs.com/alantu2018/p/8526970.html ，注意centos7的systemd即以前的init）
-- pstree：查看进程的树形结构，父子进程关系清晰，但是是静态查看的，ps是动态刷新的。非默认安装的程序，需要自行下载
+- 内容
+  - PID：唯一标识进程（不同用户使用同样的程序也是不同的进程）
+  - TTY：终端的次要装置号码（minor device number of tty）。即表示当前执行程序的终端
+  - UID：效用户id。表示进程是由哪个用户启动的信息（可修改），默认显示为启动进程的用户
+  - PPID：进程的父进程id。（linux的 0号进程 和 1 号进程：https://www.cnblogs.com/alantu2018/p/8526970.html ，注意centos7的systemd即以前的init）
+
+- `pstree`：查看进程的树形结构，父子进程关系清晰，但是是静态查看的，ps是动态刷新的。非默认安装的程序，需要自行下载
 
 ##### top
 
-- top：系统状态，包括进程状态，是动态更新的
-  - 参数
-    - -p 1：指定pid查看进程
-  - 内容
+- `top`：系统状态，包括进程状态，是动态更新的
+- 参数
+  - `-p 1`：指定pid查看进程
 
-    - 系统状态
-      - up：运行时长
-      - users：当前登录用户数量
-      - load average：平均负载，系统进行采用对不同时间内的系统负载进行的计算，3个数值分别是1、5、15分钟内的负载，1即满负载
-      - Tasks：任务状态
-        - total：当前运行的总进程数
-        - running：运行进程数
-        - sleeping：睡眠进程数
-        - stopped：停止进程数
-        - zombie：僵尸进程数
-      - %Cpu(s)：cpu使用情况（平均值）
-        - us：用户空间使用cpu占比
-        - sy：内核空间使用cpu占比
-        - ni：用户进程空间内改变过优先级的进程使用cpu占比
-        - id：空闲cpu占比
-        - wa：等待输入输出的CPU时间百分比
-        - hi：硬件CPU中断占用百分比
-        - si：软中断占用百分比
-        - st：虚拟机占用百分比
-      - KiB Mem：内存状态
-        - total：物理内存总量
-        - used：使用内存量
-        - free：空闲内存量
-        - buffers：用作内核缓存的内存量
-      - KiB Swap：交换区状态
-        - total：交换区总量
-        - used：使用交换区量
-        - free：空闲交换区量
-        - buffers：缓冲的交换区量。内存中的内容被换出到交换区，而后又被换入到内存，但使用过的交换区尚未被覆盖，该数值即为这些内容已存在于内存中的交换区的大小，相应的内存再次被换出时可不必再对交换区写入
-    - 进程状态：
-      - PID：进程id
-      - USER：进程所有者的用户名
-      - PR：优先级
-      - NI：nice值。负值表示高优先级，正值表示低优先级
-      - VIRT：进程使用的虚拟内存总量，单位kb。VIRT=SWAP+RES
-      - RES：进程使用的、未被换出的物理内存大小，单位kb。RES=CODE+DATA
-      - SHR：共享内存大小，单位kb
-      - S：进程状态(D=不可中断的睡眠状态,R=运行,S=睡眠,T=跟踪/停止,Z=僵尸进程
-      - %CPU：上次更新到现在的CPU时间占用百分比
-      - %MEM：进程使用的物理内存百分比
-      - TIME+：进程使用的CPU时间总计，单位1/100秒
-      - COMMAND：命令名/命令行
+```sh
+top
+```
+
+- 内容
+
+  - 系统状态
+    - up：运行时长
+    - users：当前登录用户数量
+    - load average：平均负载，系统进行采用对不同时间内的系统负载进行的计算，3个数值分别是1、5、15分钟内的负载，1即满负载
+    - Tasks：任务状态
+      - total：当前运行的总进程数
+      - running：运行进程数
+      - sleeping：睡眠进程数
+      - stopped：停止进程数
+      - zombie：僵尸进程数
+    - %Cpu(s)：cpu使用情况（平均值）
+      - us：用户空间使用cpu占比
+      - sy：内核空间使用cpu占比
+      - ni：用户进程空间内改变过优先级的进程使用cpu占比
+      - id：空闲cpu占比
+      - wa：等待输入输出的CPU时间百分比
+      - hi：硬件CPU中断占用百分比
+      - si：软中断占用百分比
+      - st：虚拟机占用百分比
+    - KiB Mem：内存状态
+      - total：物理内存总量
+      - used：使用内存量
+      - free：空闲内存量
+      - buffers：用作内核缓存的内存量
+    - KiB Swap：交换区状态
+      - total：交换区总量
+      - used：使用交换区量
+      - free：空闲交换区量
+      - buffers：缓冲的交换区量。内存中的内容被换出到交换区，而后又被换入到内存，但使用过的交换区尚未被覆盖，该数值即为这些内容已存在于内存中的交换区的大小，相应的内存再次被换出时可不必再对交换区写入
+  - 进程状态：
+    - PID：进程id
+    - USER：进程所有者的用户名
+    - PR：优先级
+    - NI：nice值。负值表示高优先级，正值表示低优先级
+    - VIRT：进程使用的虚拟内存总量，单位kb。VIRT=SWAP+RES
+    - RES：进程使用的、未被换出的物理内存大小，单位kb。RES=CODE+DATA
+    - SHR：共享内存大小，单位kb
+    - S：进程状态(D=不可中断的睡眠状态,R=运行,S=睡眠,T=跟踪/停止,Z=僵尸进程
+    - %CPU：上次更新到现在的CPU时间占用百分比
+    - %MEM：进程使用的物理内存百分比
+    - TIME+：进程使用的CPU时间总计，单位1/100秒
+    - COMMAND：命令名/命令行
+
   - 操作
     - `s`：按s可以输入数字更改状态刷新间隔（默认3秒/次），回车确认
 
@@ -861,10 +950,10 @@ ps -efL
 
 ##### nice
 
-- nice：优先级调整。优先级值从-20到19，值越小优先级越高，抢占资源就越多。写一个无限循环的脚本demo.sh，`./demo.sh`运行
-  - -n 10 ./demo.sh：设置demo.sh的优先级为10
-- renice：重新设置优先级
-  -  -n 15：重新设置优先级值为15
+- `nice`：优先级调整。优先级值从-20到19，值越小优先级越高，抢占资源就越多。
+  - `-n 10 ./demo.sh`：设置demo.sh的优先级为10。写一个无限循环的脚本demo.sh并运行
+- `renice`：重新设置优先级
+  -  `-n 15`：重新设置优先级值为15
 
 #### 作业控制
 
@@ -888,40 +977,38 @@ ps -efL
 
 ### 进程的通信方式—信号
 
-- 信号是进程间通信方式之一，典型用法是:终端用户输入中断命令，通过信号机制停止一个程序的运行。
-- 使用信号的常用快捷键和命令
-  - kill -l：查看所有信号
-    - SIGINT：2号信号，通知前台进程组终止进程，可以被程序处理，快捷键CTRL+C
-    - SIGKILL：9号信号，立即强制结束程序，不能被阻塞和处理，kill -9 [pid]
+> 信号是进程间通信方式之一，典型用法是：终端用户输入中断命令，通过信号机制停止一个程序的运行。
 
+##### kill
+
+- `kill`
+- 参数
+  - `-l`：查看所有信号
+  - SIGINT：2号信号，通知前台进程组终止进程，可以被程序处理，快捷键CTRL+C
+  - SIGKILL：9号信号，立即强制结束程序，不能被阻塞和处理，kill -9 [pid]
 - nohup：一般与&符号配合运行一个命令
 
   - nohup命令使进程忽略hangup（挂起）信号：比如一个进程正在前台运行，关闭该终端则将发起hangup信号，会使该进程被关掉，如果使用nohup则忽略该信号，即使关闭终端也不会被关闭，但是会变成一个孤儿进程，因为终端关闭了，其父进程没了，但是会被新终端的1号进程作为父进程，nohup启动的进程仍然是用户有关的，会随着用户终端而改变
-
 - 守护（Daemon）进程：随着开机启动，是用户无关的、在用户之前启动的进程，不需要用户终端的，因为没有终端打印日志等信息，所以一般是以文件的形式记录日志信息
 
   - 守护进程会将其使用的目录切换为根目录，这是什么意思呢，比如windows下，如果使用一个软件的时候，你要删除这个软件所在的目录，会提示目录被使用无法删除，实际上进程运行是基于所在目录的，而根目录只有在关机或重启时才会被卸载
-
 - 系统日志：/proc，这个目录下所有的内容在硬盘中默认是不存在的，它是操作系统去内存中读取信息以文件的形式进行呈现。比如启动了一个进程，会有与进程号同名的目录，类似于：/proc/27451，进入即可看到关于进程属性的文件
 
   - ps -ef | grep sshd：sshd为例
   - ls -l cwd：可以看到该进程使用的目录
   - ls -l fd：可以看到标准输入输出及其输入输出的目录，输入一般是/dev/null表示没有，因为因为终端都没有；输出如果是nohup则一般是输出到，如果是Daemon程序一般是通过socket输出给系统日志程序，系统日志程序将打印到默认的/var/log/下进程对应的目录文件下
-
 - cd /var/log：存放系统日志，由进程通过socket通信给日志系统，写入该目录对应文件。下面是一些常见日志
 
   - tail -f /var/log/message：该文件被写入一些系统常规日志
   - tail -f /var/log/dmesg：内核启动日志
   - tail -f /var/log/secure：安全日志
   - tail -f /var/log/cron：cron周期任务日志信息
-
 - 使用screen命令：因为守护进程就是为了使进程脱离终端，防止进程因终端关闭而关闭，screen工具也可以实现，进入终端操作时先进入screen的环境中，即使终端因为某些原因比如网络中断而断开，screen还是可以继续运行程序，下次连接时也能过screen恢复，
   - yum install screen
   - screen进入screen环境
   - 先按ctrl+a，然后按d，即可退出(detached) screen环境
   - screen -ls查看screen的会话，会话有sessionid唯一标识
   - screen -r sessionid恢复会话
-
 - 服务管理工具systemctl
 
   - service：执行简单，但是启动停止重启的脚本完全由你自己编写，服务控制的好坏全凭编写脚本的人决定
@@ -940,9 +1027,7 @@ ps -efL
     - 级别文件：cd /lib/systemd/system，有很多.service，其中级别相关的是：ls -l runlevel*.target
     - 查看当前级别：systemctl get-default
     - 设置默认开机级别：systemctl set-default multi-user.target
-
 - 
-
 - 
 
 ### SELinux
@@ -961,7 +1046,7 @@ ps -efL
 
 
 
-## 内存&磁盘管理
+## 内存
 
 ### 状态查看
 
@@ -981,23 +1066,43 @@ free
 
 
 
-##### fdisk
+## 磁盘
 
-- `fdisk`：磁盘在linux中也是作为文件，如`/dev/sd?`，以扇区划分
-  - start：起点扇区
-  - end：止点扇区
-  - system：文件系统类型，一般为linux（或其它）类型，比如ntfs就不能被linux文件系统读取，除非格式化为linux文件系统，或者编译内核时设置开启ntfs
+
+
+
+
+##### lsblk
+
+- `lsblk [-dfimpt] [device]`：list block device，列出存储设备，即磁盘
+  - `-d`：仅列出磁盘本身，并不会列出该磁盘的分区数据 
+  - `-f`：同时列出该磁盘内的文件系统名称
+  - `-i`：使用 ASCII 的线段输出，不要使用复杂的编码 （再某些环境下很有用） 
+  - `-m`：同时输出该设备在 /dev 下面的权限数据 （rwx 的数据） 
+  - `-p`：列出该设备的完整文件名！而不是仅列出最后的名字而已。 
+  - `-t`：列出该磁盘设备的详细数据，包括磁盘伫列机制、预读写的数据量大小等
 
 ```sh
-# 查看磁盘情况
-fdisk -l
+lsblk
+lsblk /dev/sdb
 ```
 
-- 操作
+- 内容
+  - NAME：设备文件名，会省略 /dev 等前导目录
+  - MAJ:MIN：主要：次要设备代码。核心认识的设备都是通过这两个代码来熟悉的
+  - RM：是否为可卸载设备 （removable device），如光盘、USB 磁盘等等 
+  - SIZE：当然就是容量啰！ 
+  - RO：是否为只读设备的意思 
+  - TYPE：是磁盘 （disk）、分区 （partition） 还是只读存储器 （rom） 等输出 
+  - MOUTPOINT：就是前一章谈到的挂载点！ 
+
+##### blkid
+
+- `blkid`：可以列出设备的uuid（全域单一识别码），与`lsblk -f`类似。Linux 会将系统内所有的设备都给予一个独一无二的识别码， 这个识别码就可以拿来作为挂载或者是使用这个设备/文件系统之用了
 
 ```sh
-# 操作指定磁盘/dev/sda，将进入交互模式
-fdisk -l /dev/sda
+blkid
+blkid /dev/sda*
 ```
 
 
@@ -1009,9 +1114,16 @@ fdisk -l /dev/sda
 ```sh
 # 与`fdisk -l`展示的信息基本一致
 parted -l
+
+# 列出 /dev/vda 磁盘的相关数据
+parted /dev/sda print
 ```
 
-
+- 内容
+  - Model：磁盘的模块名称（厂商）
+  - Disk：磁盘的总容量
+  - Sector size（logical/physical）：每个逻辑/物理扇区容量
+  - Partition Table：分区表的格式 （MBR/GPT） 
 
 ##### df
 
@@ -1022,6 +1134,63 @@ df -h
 ```
 
 
+
+### 分区
+
+##### gdisk/fdisk
+
+> gdisk/fdisk操作基本一致
+
+- `gdisk`：
+  
+  - `-l`：查看磁盘列表
+- 内容：
+  - Start：起点扇区。磁盘在linux中也是作为文件，如`/dev/sd?`，以扇区划分
+  - End：止点扇区
+  - Size：是分区的容量
+  - Code：Linux 为 8300，swap 为 8200。不过这个项目只是一个提示而已，不见得真的代表此分区内的文件系统，Linux 大概都是 8200/8300/8e00 等三种格式， Windows 几乎都用 0700 这样，gdisk下按`L`查看。文件系统类型一般为linux（或其它）类型，ntfs就不能被linux文件系统读取，除非格式化为linux文件系统，或者编译内核时设置开启ntfs
+- 注意
+  - 切忌操作使用中的分区
+  
+  - GPT分区表使用gdisk分区，MBR分区表使用fdisk分区，否则将分区失败，甚至干掉分区记录
+  
+  - fdisk 有时会使用柱面 （cylinder） 作为分区的最小单位，与 gdisk 默认使用 sector 不太一 
+  
+    样，另外， MBR 分区是有限制的 （Primary, Extended, Logical…）
+
+```sh
+# 操作指定磁盘/dev/sda，将进入交互模式
+gdisk /dev/sda
+```
+
+- 交互：`m`查看操作，`p`查看当前分区信息，更多操作根据`m`查看的信息进行即可
+
+```sh
+Command (? for help): n
+Partition number (1-128, default 1): 
+First sector (34-4140724, default = 2048) or {+-}size{KMGTP}: 
+Last sector (2048-4140724, default = 4140724) or {+-}size{KMGTP}: +1g
+Current type is 'Linux filesystem'
+Hex code or GUID (L to show codes, Enter = 8300): 
+Changed type of partition to 'Linux filesystem'
+```
+
+```sh
+# 查看分区表
+cat /proc/partitions
+# 如果操作分区更新的是linux正在使用的磁盘，分区表不会更新，可以通过重启linux或者partprobe更新
+partprobe -s
+```
+
+##### partprobe
+
+- `partprobe`：更新 Linux 的分区表信息（重启linux亦可），
+  - `-s`：将打印信息
+
+```sh
+partprobe
+partprobe -s
+```
 
 
 
@@ -1045,18 +1214,66 @@ df -h
   - **datablock**：数据块，存放文件的数据内容，挂在inode上的，如果一个数据块不够就接着往后挂，链式。默认创建的数据块为4k，即使只写了1个字符也是4k，所以存储大量小文件会很费磁盘，所以网络上有一些专门用来存储小文件的文件系统
     - `du`统计的是数据块的个数用来计算大小
     - `echo >`写入文件只会改变数据块
-  - **软连接**：亦称符号链接，ln -s afile cfile，ls -li afile cfile查看可以看到，其实cfile就记录了目标文件afile的路径，链接文件的权限修改对其自身是无意义的，对其权限修改将在目标文件上得到反馈。可以跨分区（跨文件系统）
+  - **软连接**：亦称符号链接，类似快捷方式。`ln -s afile cfile`链接两个文件，`ls -li afile cfile`查看两个文件链接信息，其实cfile就记录了目标文件afile的路径，链接文件的权限修改对其自身是无意义的，对其权限修改将在目标文件上得到反馈。可以跨分区（跨文件系统）
   - facl：文件访问控制，getfacl afile查看文件权限，setfacl -m u:user1:r afile：u表示为用户分配权限，g表示用户组，r表示读权限，m改成x即可收回对应用户（组）权限
 
 - 磁盘配额的使用：给多个用户之间磁盘使用做限制
 
-### 分区
+##### mkfs
 
-- 磁盘的分区与挂载：如果是虚拟机，可以直接在vbox上给其添加一块硬盘进行练习（比如叫sdc），可能需要关机才能添加
+- `mkfs`：make filesystem，创建文件系统。实际上是一个综合的指令，它会去调用正确的文件系统格式化工具软件。常说的“格式化”其实就是“make filesystem”，创建的其实是 xfs 文件系统， 因此使用的是 mkfs.xfs 这个指令
+
+- `mkfs.xfs [-b bsize] [-d parms] [-i parms] [-l parms] [-L label] [-f] \ [-r parms]`：加单位则为是Bytes值，可以用 k,m,g,t,p （小写）等来解释，s指的是 sector 个数
+  - `-b`：block 容量，可由 512 到 64k，不过最大容量限制为 Linux 的 4k 
+  - `-d`：data section 的相关参数值
+    - `agcount=数值`：设置需要几个储存群组的意思（AG），通常与 CPU 有关
+    - `agsize=数值`：每个 AG 设置为多少容量的意思，通常 agcount/agsize 只选一个设置即可
+    - `file`：指的是“格式化的设备是个文件而不是个设备”的意思！（例如虚拟磁盘）
+    - `size=数值`：data section 的容量，亦即你可以不将全部的设备容量用完的意思
+    - `su=数值`：当有 RAID 时，那个 stripe 数值的意思，与下面的 sw 搭配使用
+    - `sw=数值`：当有 RAID 时，用于储存数据的磁盘数量（须扣除备份碟与备用碟）
+    - `sunit=数值`：与 su 相当，不过单位使用的是“几个 sector（512Bytes大小）”的意思
+    - `swidth=数值`：就是 su*sw 的数值，但是以“几个 sector（512Bytes大小）”来设置
+  - `-f`：如果设备内已经有文件系统，则需要使用这个 -f 来强制格式化才行
+  - `-i`：与 inode 有较相关的设置，主要的设置值有
+    - `size=数值`：最小256Bytes，最大2k，一般保留 256 就足够使用了
+    - `internal=[0&#124;1]`：log 设备是否为内置？默认为 1 内置，如果要用外部设备，使用下面设置
+    - `logdev=device`：log 设备为后面接的那个设备上头的意思，需设置 internal=0 才可
+    - `size=数值`：指定这块登录区的容量，通常最小得要有 512 个 block，大约 2M 以上才行
+  - `-L`：后面接这个文件系统的标头名称 Label name 的意思
+- `-r`：指定 realtime section 的相关设置值，常见的有： 
+    - `extsize=数值`：就是那个重要的 extent 数值，一般不须设置，但有 RAID 时，最好设置与 swidth的数值相同较佳！最小为 4K 最大为 1G 。
+
+```sh
+# 不带参数将使用默认值
+mkfs.xfs /dev/sdb3
+blkid /dev/sdb*
+```
+
+因为 xfs 可以使用多个数据流来读写系统，以增加速度，因此那个 agcount 可以跟 CPU 的核心数来做搭配！举例来说，如果我的服务器仅有一颗 4 核心，但是有启动 Intel 超线程功能，则系统会仿真 出 8 颗 CPU 时，那个 agcount 就可以设置为 8 喔
+
+```sh
+# 找出系统的 CPU 数，并据以设置 agcount 数值
+grep 'processor' /proc/cpuinfo
+mkfs.xfs -f -d agcount=2 /dev/sdb4
+```
+
+
+
+#### 分区
+
+如果是虚拟机，可以直接在virtualbox上给其添加一块硬盘进行练习（比如叫sdc），可能需要关机才能添加
+
+#### 挂载
+
+如果是虚拟机，可以直接在virtualbox上给其添加一块硬盘进行练习（比如叫sdc），可能需要关机才能添加
+
+- 磁盘的分区与挂载：
   - 常用命令
-    - fdisk：fdisk -l查看，fdisk /dev/sdc2指定磁盘进行分区，会进入交互界面，输入m获取帮助，可以看到n是add a new partition即新建分区
     - mkfs：使用分区，输入mkfs.可以看到有很多不同后缀，都是指不同的文件系统，比如mkfd.ext4 /dev/sdc2即可格式化为ext4的文件系统。但是文件操作是文件系统之上的操作，无法直接操作，需要将其挂载到某个目录，对目录进行操作，
-    - mount：mount -t auto自动检测文件系统，或者直接mount /dev/sdc2 /mnt/sdc2也会自动检测，将/dev/sd2挂载到/mnt/sd2，但是是临时挂载，vim /etc/fstab进行修改，dev/sdc1 /mnt/sdc1 ext4 defaults 0 0，即磁盘目录 挂载目录 文件系统指定 权限(defauls表示可读写) 磁盘配额相关参数1  磁盘配额相关参数2
+    - `mount`：mount -t auto自动检测文件系统，或者直接mount /dev/sdc2 /mnt/sdc2也会自动检测，将/dev/sd2挂载到/mnt/sd2，但是是临时挂载，vim /etc/fstab进行修改，dev/sdc1 /mnt/sdc1 ext4 defaults 0 0，即磁盘目录 挂载目录 文件系统指定 权限(defauls表示可读写) 磁盘配额相关参数1  磁盘配额相关参数2
+      - `-t`：指定档案系统的型态，通常不必指定，`mount` 会自动选择正确的型态，或者 `mount -t auto` 也会自动检测文件系统类型。
+    - `mount -t proc proc /proc`：把proc这个虚拟文件系统挂载到/proc目录，mount的标准用法是 `mount -t type device dir `，但是内核代码中，proc filesystem根本没有处理 dev_name这个参数，所以传什么都没有影响，只是影响mount命令的输出内容，好的实践应该将设备名定义为 nodev、none 等，或者就叫 proc 亦可。
     - parted：如果磁盘大于2T，不要用fdisk进行分区，而是parted，parted /dev/sdd
     
   - 用户磁盘配额：限制用户对磁盘的使用，比如创建文件数量（即限制i节点数）、数据块数量
@@ -1231,10 +1448,92 @@ bash ./tmp.sh
 
 ## 待整理
 
-- 
 - 快捷键：
   - TAB快捷键补全文件（目录）名
   - CTRL+L清屏
   - CTRL+C终止（命令）程序
-
 - 添加执行权限：chmod a+x 文件名，a表示所有，x表示执行
+- 
+
+##### 重定向符号
+
+https://blog.csdn.net/hellozpc/article/details/46721811
+
+- 标准输入输出重定向：即指定命令产生的 stdout（标准输出信息）、stdin（标准输入信息） 写入哪个文件
+  - `>`：输出重定向到一个文件或设备，覆盖原来的文件。
+    - `goland.sh >/dev/null` 表示将 goland 运行产生的 stdout 的输出到 /dev/null 中
+  - `>!`：输出重定向到一个文件或设备 强制覆盖原来的文件
+  - `>>`：输出重定向到一个文件或设备 追加原来的文件
+  - `<`：输入重定向到一个程序
+- 标准错误重定向：即指定命令产生的 stderr（标准错误信息） 写入哪个文件
+  - `2>`：将一个标准错误输出重定向到一个文件或设备 覆盖原来的文件 b-shell
+    - `goland.sh >/dev/null` 表示将 goland 运行产生的 stdout 的输出到 /dev/null 中
+  - `2>>`：将一个标准错误输出重定向到一个文件或设备 追加到原来的文件
+  - `2>&1`：将一个标准错误输出重定向到标准输出 注释:1 可能就是代表 标准输出
+  - `>&`：将一个标准错误输出重定向到一个文件或设备 覆盖原来的文件 c-shell
+  - `|&`：将一个标准错误 管道 输送 到另一个命令作为输入
+
+##### 别名
+
+
+
+##### sysctl
+
+##### 可以查看和修改系统参数
+
+
+
+##### grubby
+
+可以修改内核参数
+
+
+
+##### 图形界面黑屏
+
+centos7上，使用root用户登录，会出现图形界面黑屏问题，在输入用户名密码之前是有图形界面的，但是输入用户名密码之后桌面出现一秒钟之后转为黑屏
+
+解决问题：通过 ctrl+alt+F2 切换到命令行界面，或者通过其它终端连接该机器，通过 `startx` 命令重启图形界面，可以发现缺少（损失）了某些文件，因为系统启动时会检查用户家目录下所有文件，因缺少相应文件导致图形界面不可用，通过 `startx` 重启图形界面过程中系统会自动重新创建 /root/.Xauthority 文件，图形界面就可以正常使用了。但是重启发现还是会黑屏，仍然需要通过 `startx` 重开图形界面，但是仅提示 `/root/.serverauth.xxx` 文件不存在，
+
+```sh
+$ startx
+xauth:  file /root/.serverauth.3218 does not exist
+xauth:  file /root/.Xauthority does not exist
+xauth:  file /root/.Xauthority does not exist
+
+
+X.Org X Server 1.20.4
+X Protocol Version 11, Revision 0
+Build Operating System:  3.10.0-957.1.3.el7.x86_64 
+Current Operating System: Linux MiWiFi-R3A-srv 3.10.0-1160.24.1.el7.x86_64 #1 SMP Thu Apr 8 19:51:47 UTC 2021 x86_64
+Kernel command line: BOOT_IMAGE=/vmlinuz-3.10.0-1160.24.1.el7.x86_64 root=/dev/mapper/centos-root ro crashkernel=auto rd.lvm.lv=centos/root rd.lvm.lv=centos/swap rhgb quiet LANG=zh_CN.UTF-8 user_namespace.enable=1
+Build Date: 24 February 2021  09:09:20PM
+Build ID: xorg-x11-server 1.20.4-15.el7_9 
+Current version of pixman: 0.34.0
+        Before reporting problems, check http://wiki.x.org
+        to make sure that you have the latest version.
+Markers: (--) probed, (**) from config file, (==) default setting,
+        (++) from command line, (!!) notice, (II) informational,
+        (WW) warning, (EE) error, (NI) not implemented, (??) unknown.
+(==) Log file: "/var/log/Xorg.1.log", Time: Wed Apr 21 00:16:03 2021
+(==) Using config directory: "/etc/X11/xorg.conf.d"
+(==) Using system config directory "/usr/share/X11/xorg.conf.d"
+VMware: No 3D enabled (0, Success).
+```
+
+
+
+##### sh -c
+
+这个命令将权限不够，因为重定向符号 “>” 和 ">>" 也是 bash 的命令。我们使用 sudo 只是让 echo 命令具有了 root 权限
+
+```sh
+sudo echo "hahah" >> test.csv`
+```
+
+ `sh -c` 命令，它可以让 bash 将一个字串作为完整的命令来执行，这样就可以将 sudo 的影响范围扩展到整条命令
+
+```sh
+sudo sh -c echo "hahah" >> test.csv`
+```
+
