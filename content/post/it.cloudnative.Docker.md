@@ -115,8 +115,16 @@ $ docker ps-a-q | xargs docker rm #条件批量删除
 $ docker top <container-id>
 $ docker commit <container-id> <要创建的目标镜像名:[标签名]>  -a="<作者>" -m="<提交的描述信息>"
  #提交容器副本使之成为一个新的镜像，可以docker ps -a看到
-
 ```
+
+停止并删除所有容器
+
+```sh
+docker stop $(docker ps -q)
+docker rm $(docker ps -aq)
+```
+
+
 
 执行容器
 

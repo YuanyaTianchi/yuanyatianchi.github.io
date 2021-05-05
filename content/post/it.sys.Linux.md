@@ -1536,3 +1536,99 @@ sudo echo "hahah" >> test.csv`
 sudo sh -c echo "hahah" >> test.csv`
 ```
 
+
+
+
+
+##### 关闭swap分区
+
+```sh
+# 删除 swap 区所有内容，即临时关闭
+swapoff -a
+# 删除 swap 挂载，注释 swap 相关行即可，这样系统下次启动不会再挂载 swap
+vim /etc/fstab
+# 重启
+reboot
+# 查看。swap 一行应该全部是 0
+free -h
+```
+
+
+
+##### 修改静态主机名hostname
+
+```sh
+vim /etc/hostname
+# 或者
+hostnamectl set-hostname xxx
+# 查看
+hostname
+hostnamectl
+```
+
+
+
+##### 开放端口
+
+新增/删除 端口 需要重启防火墙服务
+
+```sh
+#centos7启动防火墙
+systemctl start firewalld.service
+#centos7停止防火墙/关闭防火墙
+systemctl stop firewalld.service
+#centos7重启防火墙
+systemctl restart firewalld.service
+ 
+#设置开机启用防火墙
+systemctl enable firewalld.service
+#设置开机不启动防火墙
+systemctl disable firewalld.service
+
+#centos7查看防火墙所有信息
+firewall-cmd --list-all
+#centos7查看防火墙开放的端口信息
+firewall-cmd --list-ports
+# 重启防火墙
+firewall-cmd --reload
+```
+
+```sh
+# 新增开放一个端口号
+firewall-cmd --zone=public --add-port=80/tcp --permanent
+#说明:
+#–zone #作用域
+#–add-port=80/tcp #添加端口，格式为：端口/通讯协议
+#–permanent 永久生效，没有此参数重启后失效
+ 
+#多个端口:
+firewall-cmd --zone=public --add-port=80-90/tcp --permanent
+
+#查看本机已经启用的监听端口（即运行中的，开放不代表运行）
+ss -ant
+
+#删除
+firewall-cmd --zone=public --remove-port=80/tcp --permanent
+```
+
+
+
+##### 设置静态ip
+
+```sh
+$ vim /etc/sysconfig/network-scripts/ifcfg-enp0s3
+# 动态dhcp修改为静态ip
+BOOTPROTO="static"
+# 添加ip设置
+IPADDR=192.168.31.100
+GATEWAY=192.168.31.1
+NETMASK=255.255.255.0
+DNS1=192.168.31.1
+# 重启网络
+$ systemctl restart network
+```
+
+
+
+
+
