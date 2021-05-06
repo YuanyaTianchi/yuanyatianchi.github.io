@@ -2,9 +2,7 @@
 
 ## 集群搭建准备
 
-https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
-
-遵循官方指南：
+遵循官方指南：https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 
 - 一台兼容的 Linux 主机。Kubernetes 项目为基于 Debian 和 Red Hat 的 Linux 发行版以及一些不提供包管理器的发行版提供通用的指令
 - 每台机器 2 GB 或更多的 RAM （如果少于这个数字将会影响你应用的运行内存)
@@ -14,17 +12,27 @@ https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/install
 - 开启机器上的某些端口。请参见[这里](https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#check-required-ports) 了解更多详细信息。
 - 禁用交换分区。为了保证 kubelet 正常工作，你 **必须** 禁用交换分区
 
+这里准备3个虚拟主机，cpu-4个、内存-4g、存储-32g，并设置静态 ip 方便识别
 
-
-这里准备3个虚拟主机，并设置方便使用的静态ip
-
-- k8smaster：cpu-2个，内存-2g，存储-32g，ip-192.168.31.101
-- k8snode01：cpu-4个，内存-4g，存储-32g，ip-192.168.31.111
-- k8snode02：cpu-4个，内存-4g，存储-32g，ip-192.168.31.112
-
-接下来给3台机器都做好配置准备以及软件安装
+- k8smaster：192.168.31.101
+- k8snode01：192.168.31.111
+- k8snode02：192.168.31.112
 
 ```sh
+# 分别设置hostname
+hostnamectl set-hostname k8smaster/k8snode01/k8snode02
+# 分别修改静态ip
+vim /etc/sysconfig/network-scripts/ifcfg-enp0s3
+systemctl restart network
+```
+
+**之后未标注默认在 master 执行**
+
+### 配置
+
+```sh
+# k8smaster & k8snode01 & k8snode02
+
 # 关闭防火墙。或者开放官方指南中指定的端口
 systemctl stop firewalld
 systemctl disable firewalld
@@ -51,10 +59,10 @@ ntpdate time.windows.com
 reboot
 ```
 
-docker
+### Docker
 
 ```sh
-# 阿里docker源
+# yum 阿里 docker 源
 cat >/etc/yum.repos.d/docker.repo<<EOF
 [docker-ce-edge]
 name=Docker CE Edge - \$basearch
@@ -63,13 +71,14 @@ enabled=1
 gpgcheck=1
 gpgkey=https://mirrors.aliyun.com/docker-ce/linux/centos/gpg
 EOF
-
 # 安装
 yum -y install docker-ce
+
+# 设置开机启动 & 启动
 systemctl enable docker
 systemctl start docker
 
-# 阿里docker镜像源
+# 阿里 docker 镜像源
 cat >> /etc/docker/daemon.json << EOF
 {
   "registry-mirrors": ["https://ohm5orzk.mirror.aliyuncs.com"]
@@ -77,10 +86,14 @@ cat >> /etc/docker/daemon.json << EOF
 EOF
 ```
 
-Kubernetes：kubeadm，kubelet、kubectl
+### Kubernetes
+
+- `kubeadm`：用来初始化集群的指令。
+- `kubelet`：在集群中的每个节点上用来启动 Pod 和容器等。服务端
+- `kubectl`：用来与集群通信的命令行工具。客户端
 
 ```sh
-# 阿里Kubernetes源
+# 阿里 Kubernetes 源
 cat > /etc/yum.repos.d/kubernetes.repo << EOF
 [kubernetes]
 name=Kubernetes
@@ -90,8 +103,7 @@ gpgcheck=0
 repo_gpgcheck=0
 gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
 EOF
-
-# 指定版本安装，这里使用1.18.0
+# 安装，这里使用 1.18.0 版本
 yum install -y kubelet-1.18.0 kubeadm-1.18.0 kubectl-1.18.0
 systemctl enable kubelet
 # 到这里就结束了，kubelet 是不能直接单独启动的，后面将通过 kubeadm 初始化并启动 kubelet
@@ -99,60 +111,56 @@ systemctl enable kubelet
 
 
 
-## kubeadm搭建集群
+## 集群搭建
+
+有两种方式，kubeadm & 二进制
+
+### kubeadm
+
+初始化集群
 
 ```sh
-# 分别设置hostname
-hostnamectl set-hostname k8smaster/k8snode01/k8snode02
-# 分别修改静态ip
-vim /etc/sysconfig/network-scripts/ifcfg-enp0s3
-systemctl restart network
-```
-
-master
-
-```sh
-# 初始化集群
-
-# 在master添加hosts
+# 在 master 添加 hosts
 cat >> /etc/hosts << EOF
 192.168.31.101 k8smaster
 192.168.31.111 k8snode1
 192.168.31.112 k8snode2
 EOF
 
-# --apiserver-advertise-address设置你的master ip；--image-repository指定阿里云镜像仓库地址，因为默认拉取镜像地址k8s.gcr.io国内无法访问；
+# --apiserver-advertise-address 设置你的 master ip；--image-repository指定阿里云镜像仓库地址，因为默认拉取镜像地址k8s.gcr.io国内无法访问；
 $ kubeadm init --apiserver-advertise-address=192.168.31.101 --image-repository registry.aliyuncs.com/google_containers --kubernetes-version v1.18.0 --service-cidr=10.96.0.0/12  --pod-network-cidr=10.244.0.0/16
 Your Kubernetes control-plane has initialized successfully!
 ...
 # 成功可以看到successfully字样，以及一些后续操作的指导。
-# 如果遇到[ERROR FileContent--proc-sys-net-ipv4-ip_forward]: /proc/sys/net/ipv4/ip_forward contents are not set to 1。将其置为1即可，
+# 如果遇到[ERROR FileContent--proc-sys-net-ipv4-ip_forward]: /proc/sys/net/ipv4/ip_forward contents are not set to 1。将其置为1即可，重启 network 将失效
 echo 1 > /proc/sys/net/ipv4/ip_forward
-# 这样重启 network 将失效，所以写入脚本 /etc/rc.d/rc.local 使持久有效
+# 写入脚本 /etc/rc.d/rc.local 使持久有效
 echo "echo 1 > /proc/sys/net/ipv4/ip_forward" >> /etc/rc.d/rc.local
 
-# 可以通过docker看到kubeadm已经拉取了很多image并创建了实例进行运行
+# 可以通过 docker 可以看到 kubeadm 已经拉取了很多 image 并创建容器进行运行
 $ docker images
 $ docker ps -a
 
-# 运行以下命令使非 root 用户可以运行 kubectl
+# 运行以下命令使非 root 用户可以运行 kubectl。如果要重新 kubeadm init，需要先 rm -rf $HOME/.kube 删除已有配置并重新完成配置
 $ mkdir -p $HOME/.kube
 $ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 $ sudo chown $(id -u):$(id -g) $HOME/.kube/config
-# 如果要重新 kubeadm init，需要删除已有配置，然后重新执行上面配置，再重新 init
-rm -rf $HOME/.kube
-
-# root 用户可以直接配置为环境变量使用。当然root用户也可以选择与非 root 用户一样的方式
+# root 用户可以直接配置为环境变量使用。当然 root 用户也可以选择与非 root 用户一样的方式
 $ export KUBECONFIG=/etc/kubernetes/admin.conf
+$ vim /etc/profile
 $ source /etc/profile
 
-# 查看正在运行的节点，
-$ kubectl get nodes
+# 查看正在运行的节点
+$ kubectl get node
+NAME        STATUS      ROLES    AGE    VERSION
+k8smaster   NotReady    master   134m   v1.18.0
 ```
 
-#### slave加入一个master的集群
 
-master
+
+#### node 加入一个 master 的集群
+
+###### master
 
 ```sh
 # 默认token有效期24小时，如果过期或者遗忘可先重新生成token
@@ -164,17 +172,17 @@ $ kubeadm token list | awk -F" " '{print $1}' |tail -n 1
 $ openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^ .* //'
 ```
 
-node01 & node02
+###### node01 & node02
 
 ```sh
-# 加入集群。注意这里是master的ip，代表要加入的集群
-$ kubeadm join 192.168.31.101:6443 --token token值 --discovery-token-ca-cert-hash sha256:哈希值
+# 加入集群，注意是 master 的 ip
+$ kubeadm join 192.168.31.101:6443 --token token值 --discovery-token-ca-cert-hash sha256:hash值
 ```
 
-master
+###### master
 
 ```sh
-# 看一下
+# 查看节点
 $ kubectl get node
 NAME        STATUS      ROLES    AGE    VERSION
 k8smaster   NotReady    master   134m   v1.18.0
@@ -186,26 +194,16 @@ k8snode02   NotReady    <none>   115m   v1.18.0
 
 #### 部署CNI网络插件
 
-master
+###### master
 
 ```sh
 $ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 ```
 
-因为 https://raw.githubusercontent.com 完全被墙，开了小飞机都访问不了，这里直接使用其内容创建一个 kube-flannel.yml  使用。
-
-master
+因为 https://raw.githubusercontent.com 完全被墙，开飞机都访问不了。这里手动创建 kube-flannel.yml 文件，从 `it.cloudnative.Kubernetes.resource` 直接复制其内容进去
 
 ```sh
-# 文本过长，推荐直接win下copy好，再复制到虚拟机
-$ cat >> kube-flannel.yml << EOF
-这里拷贝下面yaml的内容
-EOF
-```
-
-通过 `it.cloudnative.Kubernetes.resource.kube-flannel.yml` 部署
-
-```sh
+# 通过 kube-flannel.yml 部署
 $ kubectl apply -f kube-flannel.yml
 # 查看 pods 已经全部 Running
 $ kubectl get pods -n kube-system
@@ -280,26 +278,47 @@ service/nginx        NodePort    10.96.110.50   <none>        80:32000/TCP   59m
 
 
 
+### 二进制
+
+
+
 ## kubectl
+
+`kubectl [option] [type...] <name...> [flags...] `
+
+- option：指定要对资源执行的操作
+  - get获取、delete删除
+- type：指定资源类型。资源类型是大小写敏感的，有单数、复数、缩略的形式
+  - node(nodes)、namespace(namespaces,ns)、pod(pods)、deployment(deployments,deploy)、service(services,svc)、
+- name：指定资源的名称，名称也是大小写敏感的，如果省略名称，则会显示所有的资源
+- flags：指定可选的参数。
+  - `-n` 指定 namespace（缺省 namespace 为 default），`-o wide` 表示查看更广泛的信息，`-f` 表示指定文件，`--all` 表示所有
+  - 例如可用 -s 或者 -server参数指定Kubernetes API server的地址和端口
+
+```sh
+# 表示查看 Namespace 为 kube-system 下的 Pod & Service 信息
+kubectl get pod,svc -n kube-system -o wide
+# 查看单个指定 Service
+kubectl get svc nginx01svc -o wide
+
+# 根据 yaml 创建 Pod
+kubectl apply -f nginx01.yaml
+
+# 删除指定对象
+kubectl delete pod,svc,statefulset nginx01,nginx01svc,nginx02svc,nginx01sts*
+# 删除所有 Service,StatefulSet
+kubectl delete svc,statefulset --all
+# 根据 yaml 文件删除
+kubectl delete -f nginx01.yaml
+```
+
+更多请查看 help
 
 ```sh
 kubectl --help
-kubectl [command] [type] [name] [flags]
 ```
 
-- command：指定要对资源执行的操作，例如create、get、describe、delete
-- type：指定资源类型，资源类型是大小写敏感的，开发者能够以单数 、复数 和 缩略的形式
 
-如
-
-```
-kubectl get pod pod1
-kubectl get pods pod1
-kubectl get po pod1
-```
-
-- name：指定资源的名称，名称也是大小写敏感的，如果省略名称，则会显示所有的资源，例如
-- flags：指定可选的参数，例如，可用 -s 或者 -server参数指定Kubernetes API server的地址和端口
 
 ## yaml声明式编程
 
