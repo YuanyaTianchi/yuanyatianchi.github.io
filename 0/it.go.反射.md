@@ -239,7 +239,7 @@ fmt.Println(x)
 
 对于复杂的 slice， map， struct， pointer 等方法，我写了一个例子：
 
-```
+```go
 package main
 
 import (
@@ -331,7 +331,7 @@ CanAddr 方法和 CanSet 方法不一样的地方在于：对于一些结构体�
 
 比如下面的例子：
 
-```
+```go
 package main
 
 import (

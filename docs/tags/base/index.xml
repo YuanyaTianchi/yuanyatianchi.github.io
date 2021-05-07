@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>base on 鸢雅</title>
+    <link>https://yuanyatianchi.github.io/tags/base/</link>
+    <description>Recent content in base on 鸢雅</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language><atom:link href="https://yuanyatianchi.github.io/tags/base/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>WinEnv</title>
+      <link>https://yuanyatianchi.github.io/post/it.base.winenv/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.base.winenv/</guid>
+      <description>Windows环境 database mysql https://dev.mysql.com/downloads/ 下载并解压：https://dev.mysql.com/downloads/mysql/ ，c++ 2019可再发行软件包(运行库)：https://aka.ms/vs/16/re</description>
+    </item>
+    
+    <item>
+      <title>网络编程</title>
+      <link>https://yuanyatianchi.github.io/post/it.base.networkprogramming/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.base.networkprogramming/</guid>
+      <description>网络编程</description>
+    </item>
+    
+    <item>
+      <title>面试大纲</title>
+      <link>https://yuanyatianchi.github.io/post/it.base.%E9%9D%A2%E8%AF%95%E5%A4%A7%E7%BA%B2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.base.%E9%9D%A2%E8%AF%95%E5%A4%A7%E7%BA%B2/</guid>
+      <description>面试大纲 算法 ascii：A-65、a-97 dp：base case、状态、选择、dp定义 dfs：backtrack(路径, 选择列表)、结束条件-决策树底层 bfs：要扩散的节点、已扩散的节点 math：平方</description>
+    </item>
+    
+  </channel>
+</rss>

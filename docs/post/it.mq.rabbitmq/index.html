@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.83.1" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/amzrk2/cdn-stcapi@1/favicons/favicon.ico" />
+
+
+<title>RabbitMQ - 鸢雅</title>
+
+
+<meta name="author" content="DSRKafuU" />
+
+
+<meta name="description" content="RabbitMQ" />
+
+
+<meta name="keywords" content="it, mq" />
+
+
+<meta property="og:title" content="RabbitMQ" />
+<meta name="twitter:title" content="RabbitMQ" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yuanyatianchi.github.io/post/it.mq.rabbitmq/" /><meta property="og:description" content="RabbitMQ" />
+<meta name="twitter:description" content="RabbitMQ" /><meta property="og:image" content="https://yuanyatianchi.github.io/img/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://yuanyatianchi.github.io/img/og.png" />
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+<link rel="stylesheet" href="https://yuanyatianchi.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+</head>
+
+<body data-theme="auto">
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://yuanyatianchi.github.io">鸢雅</a>
+            
+            <span class="title-sub">A minimal Hugo theme.</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://yuanyatianchi.github.io/post/it.mq.rabbitmq/">RabbitMQ</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;4926 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/mq">mq</a>&nbsp;</span>
+
+    </div>
+    
+    <div class="post-content markdown-body">
+        <h1 id="rabbitmq">RabbitMQ</h1>
+<p><a href="https://www.rabbitmq.com/">https://www.rabbitmq.com/</a></p>
+<h1 id="client">client</h1>
+<h2 id="go">go</h2>
+<pre><code class="language-shell">go get -u github.com/streadway/amqp
+</code></pre>
+<pre><code class="language-go">package rabbitmq
+
+const URL = &quot;amqp://guest:guest@127.0.0.1:5672/&quot; //格式：amqp://账号:密码@地址:端口/虚拟主机
+
+type RabbitMQ struct {
+	url string //连接信息
+
+	conn    *amqp.Connection //连接
+	channel *amqp.Channel    //通道
+
+	queueName    string //queue名
+	exchangeName string //exchange名
+	routingKey   string //routing key
+}
+
+/*RabbitMQ实例化*/
+func NewRabbitMQ(queueName string, exchangeName string, routingKey string) *RabbitMQ {
+	rabbitMQ := &amp;RabbitMQ{url: URL, queueName: queueName, exchangeName: exchangeName, routingKey: routingKey}
+	var err error
+
+	rabbitMQ.conn, err = amqp.Dial(rabbitMQ.url) //获取connection
+	rabbitMQ.failOnError(err, &quot;创建连接错误！&quot;)
+
+	rabbitMQ.channel, err = rabbitMQ.conn.Channel() //获取channel
+	rabbitMQ.failOnError(err, &quot;获取channel失败&quot;)
+	return rabbitMQ
+}
+
+/*断开通道和连接*/
+func (r *RabbitMQ) Destroy() {
+	r.channel.Close()
+	r.conn.Close()
+}
+
+/*错误处理
+包括可以将错误写入日志、数据库、发送邮件等。
+不用于代码错误处理*/
+func (r *RabbitMQ) failOnError(err error, message string) {
+	if err != nil {
+		log.Fatalf(&quot;%s:%s&quot;, message, err)
+		panic(fmt.Sprintf(&quot;%s:%s&quot;, message, err))
+	}
+}
+
+/*消息处理*/
+func handleMessages(messages &lt;-chan amqp.Delivery) {
+	forever := make(chan bool)
+	go func() {
+		for msg := range messages {
+			//消息处理
+			log.Printf(&quot;[*] Receieved a message:%s for messages, To exit press CTRL+C&quot;, msg.Body)
+		}
+	}()
+	log.Printf(&quot;[*] Waiting for messages, To exit press CTRL+C&quot;)
+	&lt;-forever
+}
+</code></pre>
+<h3 id="工作模式">工作模式</h3>
+<h4 id="simple">simple</h4>
+<p>简单模式：生产者→消息队列→消费者。一个生产者，一个消费者。消息被消费一次就删除</p>
+<pre><code class="language-go">package rabbitmq
+
+/*---------------------------Simple---------------------------*/
+
+/*Simple模式RabbitMQ实例化*/
+func NewRabbitMQSimple(queueName string) *RabbitMQ {
+	return NewRabbitMQ(queueName, &quot;&quot;, &quot;&quot;) //&quot;&quot;表示不指定，将默认使用RabbitMQ初始自带的name=(AMQP default)的Exchange
+}
+
+/*Simple模式生产*/
+func (r *RabbitMQ) PublishSimple(message string) {
+	//1.申请队列。如果队列存在则获取，如果队列不存在则自动创建并获取。保证队列存在，消息可以发送到队列
+	_, err := r.channel.QueueDeclare(
+		r.queueName, //name：队列名
+		false,       //durable：消息是否持久化
+		false,       //autoDelete：是否自动删除。当最后一个消费者断开连接后，是否自动删除队列中的消息
+		false,       //exclusive：是否具有排他性。true时，该队列无法被其它用户访问
+		false,       //noWait：是否不等待。发送消息时是否不等待RabbitMQ服务器响应，false则需要等待
+		nil,         //args：额外属性
+	)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	//2.消息发布到队列
+	r.channel.Publish(
+		r.exchangeName, //exchange：exchange名
+		r.queueName,    //queue：queue名
+		false,          //mandatory：是否托管。true时，会根据Exchange的类型和routeKey规则，寻找符合条件的队列，找不到，会将发布的消息返还给消息生产者
+		false,          //immediate：是否直属。true时，当exchange发送消息到队列后发现队列上没有绑定消费者，则将把发送的消息返还给消息生产者
+
+		amqp.Publishing{ //消息发布设置
+			ContentType: &quot;text/plain&quot;,    //消息内容类型
+			Body:        []byte(message), //消息体
+		},
+	)
+}
+
+/*Simple模式消费*/
+func (r *RabbitMQ) ConsumeSimple() {
+	//1.申请队列。如果队列存在则获取，如果队列不存在则自动创建并获取。保证队列存在，消息可以发送到队列
+	_, err := r.channel.QueueDeclare(r.queueName, false, false, false, false, nil)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	//2.消息接收
+	messages, err := r.channel.Consume(
+		r.queueName, //queue：队列名。如果不指定将随机生成队列名
+		&quot;&quot;,          //consumer：消费者。用来区分多个消费者。不指定
+		true,        //autoAck：是否自动命令正确应答，默认true。true时，消费消费消息后自动告诉RabbitMQ服务器消息正确消费完毕，mq服务器就可以去做删除消息等操作；false时，需要手动实现回调函数
+		false,       //exclusive
+		false,       //noLocal：是否非本地。true时，不能将同一个连接中发布的消息发送给该连接的消费者
+		false,       //noWait
+		nil,         //args
+	)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	//3.消息处理
+	handleMessages(messages)
+}
+</code></pre>
+<p>测试：先启动消费者，再启动生产者</p>
+<pre><code class="language-go">/*生产者*/
+func main() {
+   rabbitMQ := RabbitMQ.NewRabbitMQSimple(&quot;yuanyaQueueSimple&quot;)
+   rabbitMQ.PublishSimple(&quot;Hello yuanya！&quot;)
+   fmt.Println(&quot;发送成功！&quot;)
+}
+</code></pre>
+<pre><code class="language-go">/*消费者*/
+func main() {
+   rabbitMQ := RabbitMQ.NewRabbitMQSimple(&quot;yuanyaQueueSimple&quot;)
+   rabbitMQ.ConsumeSimple()
+}
+</code></pre>
+<h4 id="work">work</h4>
+<p>工作模式：生产者→消息队列→消费者1、消费者2&hellip;消费者N。一个生产者，多个消费者。一个消息只能被一个消费者消费一次。默认是轮询模式的负载均衡</p>
+<p>使用场景：生产消息的速度大于消费消息的速度，来增加系统的性能和处理能力，起到负载均衡</p>
+<p>代码实现与Simple模式一致，只是创建多创建几个消费者即可</p>
+<h4 id="publishsubscribe">publish/subscribe</h4>
+<p>发布订阅模式：生产者→exchange→queue1、queue2&hellip;queueN→consumer1、consumer2&hellip;consumerN。</p>
+<ol>
+<li>生产者：生产者发送消息到exchange</li>
+<li>exchange：&ldquo;fanout&rdquo;，发散类型，即广播。exchange广播消息给所有该queue</li>
+<li>queue：queue发送给对应消费者。默认一个queue对应一个consumer</li>
+</ol>
+<pre><code class="language-go">package rabbitmq
+
+/*---------------------------Publish/Subscribe---------------------------*/
+
+/*Publish/Subscribe模式RabbitMQ实例化*/
+func NewRabbitMQPubSub(exchangeName string) *RabbitMQ {
+	return NewRabbitMQ(&quot;&quot;, exchangeName, &quot;&quot;)
+}
+
+/*Publish/Subscribe模式生产*/
+func (r *RabbitMQ) PublishPubSub(message string) {
+	//1.Exchange声明。将尝试创建exchange
+	err := r.channel.ExchangeDeclare(
+		r.exchangeName, //name：交换名
+		&quot;fanout&quot;,       //kind：交换类型
+		true,           //durable
+		false,          //autoDelete
+		false,          //internal：内部的。
+		false,          //noWait
+		nil,            //args
+	)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	//2.消息发布到队列
+	r.channel.Publish(r.exchangeName, &quot;&quot;, false, false,
+		amqp.Publishing{
+			ContentType: &quot;text/plain&quot;,
+			Body:        []byte(message),
+		},
+	)
+}
+
+/*Publish/Subscribe模式消费*/
+func (r *RabbitMQ) ConsumePubSub() {
+	//1.尝试创建exchange
+	err := r.channel.ExchangeDeclare(r.exchangeName, &quot;fanout&quot;, true, false, false, false, nil)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	//2.申请队列
+	queue, err := r.channel.QueueDeclare(&quot;&quot;, false, false, true, false, nil)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	//3.绑定Queue、Exchange
+	r.channel.QueueBind(queue.Name, &quot;&quot;, r.exchangeName, false, nil)
+
+	//4.消息接收
+	messages, err := r.channel.Consume(queue.Name, &quot;&quot;, true, false, false, false, nil)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	//5.消息处理
+	handleMessages(messages)
+}
+</code></pre>
+<p>测试：先启动消费者，再启动生产者</p>
+<pre><code class="language-go">/*生产者*/
+func main() {
+   rabbitMQ := RabbitMQ.NewRabbitMQSimple(&quot;yuanyaQueuePubSub&quot;)
+   rabbitMQ.PublishSimple(&quot;Hello yuanya！&quot;)
+   fmt.Println(&quot;发送成功！&quot;)
+}
+</code></pre>
+<pre><code class="language-go">/*消费者1。可以接收消息*/
+func main() {
+   rabbitMQ := RabbitMQ.NewRabbitMQSimple(&quot;yuanyaQueuePubSub&quot;)
+   rabbitMQ.ConsumeSimple()
+}
+</code></pre>
+<pre><code class="language-go">/*消费者2。可以接收消息*/
+func main() {
+   rabbitMQ := RabbitMQ.NewRabbitMQSimple(&quot;yuanyaQueuePubSub&quot;)
+   rabbitMQ.ConsumeSimple()
+}
+</code></pre>
+<h4 id="routing">routing</h4>
+<p>路由模式：一个消息可以被多个消费者获取，并且消息的目标队列可以被生成者指定</p>
+<ol>
+<li>producer：producer发送消息到exchange</li>
+<li>exchange：&ldquo;direct&rdquo;，指导类型。发送消息到指定队列</li>
+<li>queue：queue发送给对应消费者。默认一个queue对应一个consumer</li>
+</ol>
+<pre><code class="language-go">package rabbitmq
+
+/*---------------------------Routing---------------------------*/
+
+/*Routing模式RabbitMQ实例化*/
+func NewRabbitMQRouting(exchangeName, routingKey string) *RabbitMQ {
+   return NewRabbitMQ(&quot;&quot;, exchangeName, routingKey)
+}
+
+/*Routing模式生产*/
+func (r *RabbitMQ) PublishRouting(message string) {
+   //1.Exchange声明
+   err := r.channel.ExchangeDeclare(r.exchangeName, &quot;direct&quot;, true, false, false, false, nil)
+   if err != nil {
+      fmt.Println(err)
+   }
+
+   //2.消息发布到队列
+   r.channel.Publish(r.exchangeName, r.routingKey, false, false,
+      amqp.Publishing{
+         ContentType: &quot;text/plain&quot;,
+         Body:        []byte(message),
+      },
+   )
+}
+
+/*Routing模式消费*/
+func (r *RabbitMQ) ConsumeRouting() {
+   //1.Exchange声明
+   err := r.channel.ExchangeDeclare(r.exchangeName, &quot;direct&quot;, true, false, false, false, nil)
+   if err != nil {
+      fmt.Println(err)
+   }
+
+   //2.申请队列
+   queue, err := r.channel.QueueDeclare(&quot;&quot;, false, false, true, false, nil)
+   if err != nil {
+      fmt.Println(err)
+   }
+
+   //3.绑定Queue、Exchange
+   r.channel.QueueBind(queue.Name, r.routingKey, r.exchangeName, false, nil, )
+
+   //4.消息接收
+   messages, err := r.channel.Consume(queue.Name, &quot;&quot;, true, false, false, false, nil)
+   if err != nil {
+      fmt.Println(err)
+   }
+
+   //5.消息处理
+   handleMessages(messages)
+}
+</code></pre>
+<p>测试：先启动消费者，再启动生产者</p>
+<pre><code class="language-go">/*生产者*/
+func main() {
+   rabbitMQ1 := RabbitMQ.NewRabbitMQRouting(&quot;yuanyaExchangeRouting&quot;, &quot;yuanyaRoutingKey1&quot;)
+   rabbitMQ2 := RabbitMQ.NewRabbitMQRouting(&quot;yuanyaExchangeRouting&quot;, &quot;yuanyaRoutingKey2&quot;)
+   rabbitMQ1.PublishRouting(&quot;Hello yuanya！1&quot;)
+   rabbitMQ2.PublishRouting(&quot;Hello yuanya！2&quot;)
+   fmt.Println(&quot;发送成功！&quot;)
+}
+</code></pre>
+<pre><code class="language-go">/*消费者1。可以接收yuanyaRoutingKey1对应的queue的消息*/
+func main() {
+	rabbitMQ := RabbitMQ.NewRabbitMQRouting(&quot;yuanyaExchangeRouting&quot;, &quot;yuanyaRoutingKey1&quot;)
+	rabbitMQ.ConsumeRouting()
+}
+</code></pre>
+<pre><code class="language-go">/*消费者2。yuanyaRoutingKey1和2对应的queue的消息都可以接收*/
+func main() {
+	rabbitMQ1 := RabbitMQ.NewRabbitMQRouting(&quot;yuanyaExchangeRouting&quot;, &quot;yuanyaKey2&quot;)
+	rabbitMQ2 := RabbitMQ.NewRabbitMQRouting(&quot;yuanyaExchangeRouting&quot;, &quot;yuanyaKey1&quot;)
+	go func() {rabbitMQ1.ConsumeRouting()}()
+	rabbitMQ2.ConsumeRouting()
+}
+</code></pre>
+<h4 id="topic">topic</h4>
+<p>主题模式：一个消息被多个消费者获取，消息的目标Queue可用RoutingKey以通配符的方式指定，如*.orange.*、lazy.#，#表示一个或多个词，*表示一个词，Exchange的Type必须是&quot;topic&quot;。比如消费者指定routing key为#，则接收所有消息，生产者随便定设置routing key如a.b.c都能被消费者接收。实现时除了把生产者、消费者获取Exchange时type指定为topic，其它代码一摸一样</p>
+<pre><code class="language-go">package rabbitmq
+
+/*---------------------------Topic---------------------------*/
+
+/*Topic模式RabbitMQ实例化*/
+func NewRabbitMQTopic(exchangeName, routingKey string) *RabbitMQ {
+   return NewRabbitMQ(&quot;&quot;, exchangeName, routingKey)
+}
+
+/*Topic模式生产*/
+func (r *RabbitMQ) PublishTopic(message string) {
+   //1.Exchange声明
+   err := r.channel.ExchangeDeclare(r.exchangeName, &quot;topic&quot;, true, false, false, false, nil)
+   if err != nil {
+      fmt.Println(err)
+   }
+
+   //2.消息发布到队列
+   r.channel.Publish(r.exchangeName, r.routingKey, false, false,
+      amqp.Publishing{
+         ContentType: &quot;text/plain&quot;,
+         Body:        []byte(message),
+      },
+   )
+}
+
+/*Topic模式消费*/
+func (r *RabbitMQ) ConsumeTopic() {
+   //1.Exchange声明
+   err := r.channel.ExchangeDeclare(r.exchangeName, &quot;topic&quot;, true, false, false, false, nil)
+   if err != nil {
+      fmt.Println(err)
+   }
+
+   //2.申请队列
+   queue, err := r.channel.QueueDeclare(&quot;&quot;, false, false, true, false, nil)
+   if err != nil {
+      fmt.Println(err)
+   }
+
+   //3.绑定Queue、Exchange
+   r.channel.QueueBind(queue.Name, r.routingKey, r.exchangeName, false, nil, )
+
+   //4.消息接收
+   messages, err := r.channel.Consume(queue.Name, &quot;&quot;, true, false, false, false, nil)
+   if err != nil {
+      fmt.Println(err)
+   }
+
+   //5.消息处理
+   handleMessages(messages)
+}
+</code></pre>
+<p>测试：先启动消费者，再启动生产者</p>
+<pre><code class="language-go">/*生产者*/
+func main() {
+   rabbitMQ := RabbitMQ.NewRabbitMQSimple(&quot;yuanyaQueueSimple&quot;)
+   rabbitMQ.PublishSimple(&quot;Hello yuanya！&quot;)
+   fmt.Println(&quot;发送成功！&quot;)
+}
+</code></pre>
+<pre><code class="language-go">/*消费者*/
+func main() {
+   rabbitMQ := RabbitMQ.NewRabbitMQSimple(&quot;yuanyaQueueSimple&quot;)
+   rabbitMQ.ConsumeSimple()
+}
+</code></pre>
+<h1 id="hello">hello</h1>
+<h2 id="安装">安装</h2>
+<h3 id="linux">linux</h3>
+<p>安装Erlang，因为RabbitMQ依赖Erlang</p>
+<pre><code class="language-shell">wget https://www.rabbitmq.com/releases/erlang/erlang-19.0.4-1.el7.centos.x86_64.rpm #下载
+rpm -ivh erlang-19.0.4-1.el7.centos.x86_64.rpm #安装
+</code></pre>
+<p>安装RabbitMQ</p>
+<pre><code class="language-shell">wget https://www.rabbitmq.com/releases/rabbitmq-server/v3.6.15/rabbitmq-server-3.6.15-1.el7.noarch.rpm #下载
+rpm -ivh rabbitmq-server-3.6.15-1.el7.noarch.rpm #安装
+systemctl start rabbitmq-server #启动
+rabbitmqctl stop #停止
+</code></pre>
+<h3 id="docker">docker</h3>
+<p>带有management的是带有web控制台的</p>
+<pre><code class="language-shell">docker pull rabbitmq:3.7.24-management 
+docker run -d -p 5672:5672 -p 15672:15672 rabbitmq:3.7.24-management
+</code></pre>
+<h2 id="api">API</h2>
+<h5 id="插件">插件</h5>
+<p>插件列表：显示的插件列表中带有E*或e*的表示已启用的插件，大写表示主插件，如[E*] rabbitmq_management</p>
+<pre><code class="language-shell">rabbitmq-plugins list #rabbitmq插件列表
+</code></pre>
+<p>启用插件</p>
+<pre><code class="language-shell">rabbitmq-plugins enable rabbitmq_management
+</code></pre>
+<p>停用插件</p>
+<pre><code class="language-shell">rabbitmq-plugins disable rabbitmq_management
+</code></pre>
+<h2 id="控制台">控制台</h2>
+<p>http://127.0.0.1:15672，缺省账号密码guest</p>
+<ul>
+<li>Overview：概览</li>
+<li>Connections：连接。用于连接rabbitmq的客户端和服务器。rabbitmq-client通过格式为&quot;amqp://账号:密码@地址:端口/虚拟主机&quot; 的url来获取服务器的Connection</li>
+<li>Channels：通道。用于客户端与服务器通信。客户端通过一个有效Connection获取Channel</li>
+<li>Exchanges：交换。等于根据规则转发信息的交换机。Exchange根据其Type对应规则转发给正确的Queue。未指定Exchange时，则将默认使用RabbitMQ初始自带的Name=&quot;(AMQP default)&ldquo;的Exchange转发给指定的Queue
+<ul>
+<li>Name：Exchange名字。
+<ul>
+<li>&ldquo;(AMQP default)&quot;：RabbitMQ初始自带的其中一个Exchange，Type为&quot;direct&rdquo;。该Exchange不能绑定Queue，但是可以通过QueueName转发消息给任何Queue</li>
+</ul>
+</li>
+<li>Type：Exchange类型
+<ul>
+<li>&ldquo;direct&rdquo;：指导。转发给该Exchange下的指定RoutingKey对应的所有Queue。&ldquo;direct&quot;类型下，必须指定RoutingKey</li>
+<li>&ldquo;fanout&rdquo;：发散。转发给该Exchange下的所有Queue，即广播。无需指定Queue</li>
+<li>&ldquo;topic&rdquo;：主题。</li>
+<li>&ldquo;headers&rdquo;</li>
+</ul>
+</li>
+<li>Bindings：绑定。绑定Queue与Exchange
+<ul>
+<li>To：QueueName，队列名。即当前Exchange绑定的Queue</li>
+<li>Routing key：路由键。等于对当前Exchange绑定的Queue进行分组的分组标识。一个Queue只能对应一个RoutingKey。RoutingKey只作用于Exchange内，不影响其它Exchange的RoutingKey</li>
+<li>Arguments：参数</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Queues：队列。如果不指定Queue。未指定Queue时，将根据Exchange的配置来决定是否报错、是否发散转发、是否指导转发等
+<ul>
+<li>Name：Queue名字</li>
+<li>Bindings：同Exchange的Bindings</li>
+</ul>
+</li>
+<li>Admin：
+<ul>
+<li>Users：用户</li>
+<li>Virtual Hosts：虚拟主机。可以有效隔离开发、测试等各种环境，</li>
+<li>Feature Flags</li>
+<li>Policies</li>
+<li>Limits</li>
+<li>Cluster</li>
+</ul>
+</li>
+</ul>
+<p>注意：传入空字符串&quot;&ldquo;表示不指定</p>
+<h2 id="核心">核心</h2>
+<ul>
+<li>
+<p>Connection：连接</p>
+</li>
+<li>
+<p>Channel：通道。用来通信。一个连接可对应多个通道</p>
+</li>
+<li>
+<h2 id="exchange交换等于根据规则转发信息的交换机producer发布消息消息首先发送到exchange">Exchange：交换。等于根据规则转发信息的交换机。producer发布消息，消息首先发送到Exchange，</h2>
+</li>
+<li>
+<p>Queue：队列</p>
+</li>
+<li>
+<p>流程</p>
+<ul>
+<li>producer发布消息，可以指定queueName、exchangeName、routingKey
+<ol>
+<li>消息首先根据exchangeName发送到指定的Exchange。如果未指定Exchange（exchangeName=&quot;&quot;），则将使用默认的Name为(AMQP default)、Type为direct的Exchange</li>
+<li>Exchange根据其Type、绑定的routingKey，将消息转发给正确的Queue。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/amzrk2" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/amzrk2" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algorithm/">Algorithm</a>
+            </span>
+            
+            <span>
+                <a href="/tags/base/">base</a>
+            </span>
+            
+            <span>
+                <a href="/tags/blog/">blog</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cloudnative/">cloudnative</a>
+            </span>
+            
+            <span>
+                <a href="/tags/coderebuild/">CodeRebuild</a>
+            </span>
+            
+            <span>
+                <a href="/tags/db/">db</a>
+            </span>
+            
+            <span>
+                <a href="/tags/go.project/">go.project</a>
+            </span>
+            
+            <span>
+                <a href="/tags/it/">it</a>
+            </span>
+            
+            <span>
+                <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/sys/">sys</a>
+            </span>
+            
+            <span>
+                <a href="/tags/tool/">tool</a>
+            </span>
+            
+            <span>
+                <a href="/tags/versioncontrol/">versioncontrol</a>
+            </span>
+            
+        </div>
+    </div>
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3><nav id="TableOfContents">
+  <ul>
+    <li><a href="#go">go</a>
+      <ul>
+        <li><a href="#工作模式">工作模式</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#安装">安装</a>
+      <ul>
+        <li><a href="#linux">linux</a></li>
+        <li><a href="#docker">docker</a></li>
+      </ul>
+    </li>
+    <li><a href="#api">API</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#控制台">控制台</a></li>
+    <li><a href="#核心">核心</a></li>
+    <li><a href="#exchange交换等于根据规则转发信息的交换机producer发布消息消息首先发送到exchange">Exchange：交换。等于根据规则转发信息的交换机。producer发布消息，消息首先发送到Exchange，</a></li>
+  </ul>
+</nav></div>
+</aside>
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/amzrk2" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/amzrk2" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algorithm/">Algorithm</a>
+            </span>
+            
+            <span>
+                <a href="/tags/base/">base</a>
+            </span>
+            
+            <span>
+                <a href="/tags/blog/">blog</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cloudnative/">cloudnative</a>
+            </span>
+            
+            <span>
+                <a href="/tags/coderebuild/">CodeRebuild</a>
+            </span>
+            
+            <span>
+                <a href="/tags/db/">db</a>
+            </span>
+            
+            <span>
+                <a href="/tags/go.project/">go.project</a>
+            </span>
+            
+            <span>
+                <a href="/tags/it/">it</a>
+            </span>
+            
+            <span>
+                <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/sys/">sys</a>
+            </span>
+            
+            <span>
+                <a href="/tags/tool/">tool</a>
+            </span>
+            
+            <span>
+                <a href="/tags/versioncontrol/">versioncontrol</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#go">go</a>
+      <ul>
+        <li><a href="#工作模式">工作模式</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#安装">安装</a>
+      <ul>
+        <li><a href="#linux">linux</a></li>
+        <li><a href="#docker">docker</a></li>
+      </ul>
+    </li>
+    <li><a href="#api">API</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#控制台">控制台</a></li>
+    <li><a href="#核心">核心</a></li>
+    <li><a href="#exchange交换等于根据规则转发信息的交换机producer发布消息消息首先发送到exchange">Exchange：交换。等于根据规则转发信息的交换机。producer发布消息，消息首先发送到Exchange，</a></li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2021
+                <a href="https://yuanyatianchi.github.io">DSRKafuU</a>
+                 | <a href="https://github.com/itsme/my_blog">Source code</a> 
+                | Powered by <a href="https://github.com/amzrk2/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.0/lazysizes.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+</body>
+
+</html>

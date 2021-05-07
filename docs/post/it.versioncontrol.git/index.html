@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.83.1" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/amzrk2/cdn-stcapi@1/favicons/favicon.ico" />
+
+
+<title>git - 鸢雅</title>
+
+
+<meta name="author" content="DSRKafuU" />
+
+
+<meta name="description" content="git" />
+
+
+<meta name="keywords" content="it, versioncontrol" />
+
+
+<meta property="og:title" content="git" />
+<meta name="twitter:title" content="git" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yuanyatianchi.github.io/post/it.versioncontrol.git/" /><meta property="og:description" content="git" />
+<meta name="twitter:description" content="git" /><meta property="og:image" content="https://yuanyatianchi.github.io/img/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://yuanyatianchi.github.io/img/og.png" />
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+<link rel="stylesheet" href="https://yuanyatianchi.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+</head>
+
+<body data-theme="auto">
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://yuanyatianchi.github.io">鸢雅</a>
+            
+            <span class="title-sub">A minimal Hugo theme.</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://yuanyatianchi.github.io/post/it.versioncontrol.git/">git</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;2759 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/versioncontrol">versioncontrol</a>&nbsp;</span>
+
+    </div>
+    
+    <div class="post-content markdown-body">
+        <h1 id="git">git</h1>
+<ul>
+<li>192.30.253.113 <a href="http://github.com" target="_blank">github.com</a>：修改host，提高GitHub的push和pull速度</li>
+<li>命令行符号
+<ul>
+<li><input disabled="" type="checkbox"> ：可写可不写</li>
+<li>&lt;&gt;：必须写且需要用你自己的内容替换</li>
+<li>{ }：必须在其中做出选择(选项之间以 | 隔开)</li>
+</ul>
+</li>
+<li>结构
+<ul>
+<li>工作区</li>
+<li>暂存区</li>
+<li>本地库</li>
+</ul>
+</li>
+</ul>
+<p><a href="https://www.yiibai.com/git">https://www.yiibai.com/git</a></p>
+<h2 id="api">api</h2>
+<h6 id="clone">clone</h6>
+<ul>
+<li>克隆项目。一般建议使用ssh，https有可能出一些不知所以的问题</li>
+</ul>
+<pre><code class="language-shell">#ssh
+git clone git@github.com:YuanyaTianchi/yuanyatianchi.git
+#https
+git clone https://github.com/YuanyaTianchi/yuanyatianchi.git
+</code></pre>
+<h6 id="remote">remote</h6>
+<ul>
+<li>远程库操作</li>
+</ul>
+<pre><code class="language-shell">#查看远程库名字
+git remote
+#查看远程仓库详细地址
+git remote -v
+#
+</code></pre>
+<ul>
+<li>git remote add [<options>] <repositoryName> <repositoryUrl>：创建repository
+<ul>
+<li>repositoryName：一般命名为origin</li>
+</ul>
+</li>
+<li>git remote remove <repositoryName>：删除远程的仓库的所有跟踪分支和配置设置</li>
+<li>git remote rename <oldName> <newName>：重命名远程仓库在本地的简称</li>
+<li>git remote show <repositoryName>：查看某个远程仓库的详细信息</li>
+<li></li>
+<li>git pull &lt;&ndash;rebase&gt; <repositoryName> <branchName> &lt;&ndash;allow-unrelated-histories&gt;：获取远程仓库项目文件
+<ul>
+<li>&ndash;allow-unrelated-histories：可选参数，可以合并两个独立启动仓库的历史</li>
+</ul>
+</li>
+<li>提交到本地仓库后再推送到远程仓库</li>
+<li>git push &lt;&ndash;set-upstream&gt; <repositoryName> <branchName>：推送到远程仓库</li>
+<li>git remote rm：删除源(origin)</li>
+</ul>
+<h6 id="pull">pull</h6>
+<ul>
+<li><code>git pull [option]... &lt;远程主机名&gt; [branch-name]:[local-branch-name]</code>
+<ul>
+<li>-q：</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-shell">git pull origin remoteBranch:localBranch #获取远程origin上的分支branch1，并合并到本地的分支branch2
+</code></pre>
+<h6 id="push">push</h6>
+<h6 id="revert">revert</h6>
+<p><a href="https://juejin.im/post/6844903614767448072">https://juejin.im/post/6844903614767448072</a></p>
+<ul>
+<li>git revert [将被回退的版本]</li>
+</ul>
+<pre><code class="language-shell">
+</code></pre>
+<h6 id="reset">reset</h6>
+<ul>
+<li>git reset [要回退到的版本]</li>
+</ul>
+<h6 id="log">log</h6>
+<ul>
+<li>git log</li>
+</ul>
+<pre><code class="language-shell">git log --graph --abbrev-commit --pretty=oneline #图形化，hash值简化，单行
+</code></pre>
+<h6 id="merge">merge</h6>
+<p>我的需求在<code>feature/tianchi/xxx</code>分支上写完，要合并到<code>develop</code>里面，需要先选择到开发分支再去merge我的分支，会是<code>Merge branch 'feature/tianchi/xxx' into 'develop'</code>，千万<strong>不要</strong>在我的分支上去merge开发分支，会变成<code>Merge branch 'develop' into 'feature/tianchi/xxx'</code></p>
+<pre><code class="language-shell">#正确操作如下
+git pull origin develop:develop
+git checkout develop
+git merge feature/tianchi/xxx
+</code></pre>
+<h6 id="rebase">rebase</h6>
+<ul>
+<li>rebase
+<ul>
+<li>-r：&ndash;rebase-merges简写。</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-shell">git rebase -r
+</code></pre>
+<h2 id="cfg">cfg</h2>
+<p>仓库：每个仓库的Git配置文件都放在<code>.git/config</code>文件中</p>
+<p>全局：家目录下.gitconfig文件</p>
+<h6 id="别名">别名</h6>
+<pre><code>[alias]
+    ch = checkout
+    co = commit
+    br = branch
+    st = status
+    lg = log --graph --abbrev-commit --pretty=oneline
+</code></pre>
+<h2 id="本地库操作">本地库操作</h2>
+<h3 id="本地库初始化">本地库初始化</h3>
+<ol>
+<li>在cmd中进到项目目录下</li>
+<li>git init：本地库初始化。生成一个.git目录，该目录中存放的是本地库相关的子目录和文件</li>
+<li>设置签名：username和email用于区分不同开发人员的身份。这里设置的签名和登录远程库(代码托管中心)的账号密码没有任何关系。默认项目级别(仓库级别)仅在当前本地库范围内生效，项目级别信息保存在.git/config下。系统用户级别：指定&ndash;global，系统用户级别信息保存在系统用户家目录下的.config文件中。项目级别优先于系统用户级别。至少设置一个
+<ol>
+<li>git config [&ndash;global] user.name <username>：设置用户名</li>
+<li>git config [&ndash;global] user.email <email>：设置Email地址</li>
+<li>cat .git/cogfig：查看本地库配置文件</li>
+</ol>
+</li>
+</ol>
+<h3 id="基本操作">基本操作</h3>
+<ul>
+<li>git help &lt;命令&gt;：查看该命令文档</li>
+</ul>
+<h3 id="文件操作">文件操作</h3>
+<ul>
+<li>git status：查看状态。
+<ul>
+<li>on branch master表示在主分支上，no commits yet表示无提交内容</li>
+<li>红色文件表示未添加到暂存区中，绿色表示已添加到暂存区中</li>
+</ul>
+</li>
+<li>git add <filename>：将文件从工作区添加到暂存区。unstage表示从暂存区中移除</li>
+<li>git rm <filename>：从暂存区删除</li>
+<li>git commit [-m <description>] [-a] <filename>：将文件从暂存区中提交到本地库，添加后会进入vim，写本次提交描述内容
+<ul>
+<li>-m：无需编辑vim，直接在后面写入描述内容，；</li>
+<li>-a：无需git add操作，直接添加&amp;提交，不过就不存在暂存区的撤销操作时间了</li>
+<li>结果内容：
+<ul>
+<li>root-commit：表示根提交(第一次提交)</li>
+<li>数字编号：暂时粗略认为是本次提交的版本号</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="版本移动">版本移动</h3>
+<ul>
+<li>git log [&ndash;pretty={oneline}] [&ndash;oneline]：查看日志版本，只显示当前及以前版本。这里有2个版本的记录，这里hash值表示该次提交的索引，HEAD是指向当前版本的指针
+<ul>
+<li>&ndash;pretty=oneline将每个版本只以一行显示</li>
+<li>&ndash;oneline不仅一行显示还只显示部分hash值</li>
+</ul>
+</li>
+<li>git reflog：查看日志，显示前后所有版本以及版本移动
+<ul>
+<li>HEAD@{n}表示移动到对应版本指针需要移动n步</li>
+</ul>
+</li>
+<li>git reset &ndash;{hard/mixed/soft} HEAD <headHash>：索引移动(推荐)
+<ul>
+<li>&ndash;mixed在本地枯移动HEAD指针，重置暂存区，默认策略</li>
+<li>&ndash;hard在本地库移动HEAD指针，重置暂存区，重置工作区（会删除文件），</li>
+<li>&ndash;soft仅在本地库移动HEAD指针</li>
+</ul>
+</li>
+<li>git reset  &ndash;hard HEAD^^^：^移动，只能后退，3个^即表示后退3个版本</li>
+<li>git reset  &ndash;hard HEAD~<n>：~移动，只能后退，n即表示后退n个版本</li>
+<li>git checkout <versionNumber> <filename>：选择某个版本的文件到工作区</li>
+<li>git diff [HEAD] [<filename>]：在修改工作区文件之后
+<ul>
+<li>无HEAD：表示工作区与暂存区的该文件比较，显示文件变化</li>
+<li>有HEAD：表示工作区与本地库的该文件比较，显示文件变化</li>
+<li>无<filename>：将比较当前工作区中的所有文件</li>
+</ul>
+</li>
+</ul>
+<h3 id="分支管理">分支管理</h3>
+<p>分支：在版本控制过程中，使用多条线同时推进多个任务。同时并行推进多个功能开发，提高开发效率。各个分支在开发过程中，如果一个分支开发失败，不会对其他分支有任何影响，删除重新开始即可</p>
+<ul>
+<li>git branch [-v] [-a]：
+<ul>
+<li>-v：显示版本号</li>
+<li>-a：包括远程分支</li>
+</ul>
+</li>
+<li>git branch <branchName>：创建分支</li>
+<li>git branch -D <branchName>：删除分支</li>
+<li>git checkout <branchName>：切换分支</li>
+<li>git merge <branchName>：合并某分支，将当前所在分支与某分支合并。
+<ul>
+<li>分支合并冲突：当两个分支都修改了同一个文件中同一行的内容，合并时取舍哪个分支的该处内容git是无法判断的，只需要vim手动编辑后再添加提交(提交不能带文件名)即可</li>
+</ul>
+</li>
+</ul>
+<h3 id="clean">clean</h3>
+<pre><code class="language-sh">git clean -f
+git clean -d -fx #强制删除Untracked files
+</code></pre>
+<h2 id="合并工程">合并工程</h2>
+<ul>
+<li>假如有master、test、develop分支，现在有一个需求从master切出来一个demand，需求子任务从demand切出来一个demand/child：<code>git pull origin demand:demand</code>，<code>git ch demand</code>，<code>git ch -b demand/child</code>
+<ul>
+<li>任务开发完后，需要merge demand/child into develop。切到任务分支<code>git ch demand/child</code>，拉取develop分支<code>git pull origin develop:develop</code>，会有很多改变，会因版本而merge develop into demand/child的相关提示，中止merge<code>git merge --abort</code>，不能让merge develop into demand/child发生，这反了，切到dev<code>git ch develop</code>，merge demand/child into develop<code>git merge demand/child</code>，编译检查<code>go build xxx</code>，提交之前再检查版本<code>git lg -5</code>是否是merge demand/child into develop，推送<code>git push origin develop:develop</code></li>
+<li>develop环境调试完，需要merge demand/child into demand。切到任务分支<code>git ch demand/child</code>，直接拉取远程demand并合并到demand/child<code>git pull origin demand:demand/child</code>，因为demand本来就是demand/child的源，所以直接合并之后要再合并回去<code>git push origin demand/child:demand</code>，不会有什么影响，也能将其他人的更改合并进来，如果develop也这么做的话，会将demand/child不需要的develop的内容合并进来，那就只有回退版本再重新操作了</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/amzrk2" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/amzrk2" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algorithm/">Algorithm</a>
+            </span>
+            
+            <span>
+                <a href="/tags/base/">base</a>
+            </span>
+            
+            <span>
+                <a href="/tags/blog/">blog</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cloudnative/">cloudnative</a>
+            </span>
+            
+            <span>
+                <a href="/tags/coderebuild/">CodeRebuild</a>
+            </span>
+            
+            <span>
+                <a href="/tags/db/">db</a>
+            </span>
+            
+            <span>
+                <a href="/tags/go.project/">go.project</a>
+            </span>
+            
+            <span>
+                <a href="/tags/it/">it</a>
+            </span>
+            
+            <span>
+                <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/sys/">sys</a>
+            </span>
+            
+            <span>
+                <a href="/tags/tool/">tool</a>
+            </span>
+            
+            <span>
+                <a href="/tags/versioncontrol/">versioncontrol</a>
+            </span>
+            
+        </div>
+    </div>
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3><nav id="TableOfContents">
+  <ul>
+    <li><a href="#api">api</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#cfg">cfg</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#本地库操作">本地库操作</a>
+      <ul>
+        <li><a href="#本地库初始化">本地库初始化</a></li>
+        <li><a href="#基本操作">基本操作</a></li>
+        <li><a href="#文件操作">文件操作</a></li>
+        <li><a href="#版本移动">版本移动</a></li>
+        <li><a href="#分支管理">分支管理</a></li>
+        <li><a href="#clean">clean</a></li>
+      </ul>
+    </li>
+    <li><a href="#合并工程">合并工程</a></li>
+  </ul>
+</nav></div>
+</aside>
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/amzrk2" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/amzrk2" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algorithm/">Algorithm</a>
+            </span>
+            
+            <span>
+                <a href="/tags/base/">base</a>
+            </span>
+            
+            <span>
+                <a href="/tags/blog/">blog</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cloudnative/">cloudnative</a>
+            </span>
+            
+            <span>
+                <a href="/tags/coderebuild/">CodeRebuild</a>
+            </span>
+            
+            <span>
+                <a href="/tags/db/">db</a>
+            </span>
+            
+            <span>
+                <a href="/tags/go.project/">go.project</a>
+            </span>
+            
+            <span>
+                <a href="/tags/it/">it</a>
+            </span>
+            
+            <span>
+                <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/sys/">sys</a>
+            </span>
+            
+            <span>
+                <a href="/tags/tool/">tool</a>
+            </span>
+            
+            <span>
+                <a href="/tags/versioncontrol/">versioncontrol</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#api">api</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#cfg">cfg</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#本地库操作">本地库操作</a>
+      <ul>
+        <li><a href="#本地库初始化">本地库初始化</a></li>
+        <li><a href="#基本操作">基本操作</a></li>
+        <li><a href="#文件操作">文件操作</a></li>
+        <li><a href="#版本移动">版本移动</a></li>
+        <li><a href="#分支管理">分支管理</a></li>
+        <li><a href="#clean">clean</a></li>
+      </ul>
+    </li>
+    <li><a href="#合并工程">合并工程</a></li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2021
+                <a href="https://yuanyatianchi.github.io">DSRKafuU</a>
+                 | <a href="https://github.com/itsme/my_blog">Source code</a> 
+                | Powered by <a href="https://github.com/amzrk2/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.0/lazysizes.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,2038 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.83.1" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/amzrk2/cdn-stcapi@1/favicons/favicon.ico" />
+
+
+<title> - 鸢雅</title>
+
+
+<meta name="author" content="DSRKafuU" />
+
+
+<meta name="description" content="A minimal Hugo theme with nice theme color." />
+
+
+
+<meta property="og:title" content="" />
+<meta name="twitter:title" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yuanyatianchi.github.io/post/it.cloudnative.kubernetes.resource/" /><meta property="og:description" content="resources 一些 Kubernetes 的资源 https://gitee.com/yswyn/K8s/tree/master 。大多因为被墙难以获取的。 yaml kube-flannel.yml --- apiVersion: policy/v1beta1 kind: PodSecurityPolicy metadata: name: psp.flannel.unprivileged annotations: seccomp.security.alpha.kubernetes.io/allowedProfileNames: docker/default seccomp.security.alpha.kubernetes.io/defaultProfileName: docker/default apparmor.security.beta.kubernetes.io/allowedProfileNames: runtime/default apparmor.security.beta.kubernetes.io/defaultProfileName: runtime/default spec: privileged: false volumes: - configMap - secret - emptyDir - hostPath allowedHostPaths: - pathPrefix: &quot;/etc/cni/net.d&quot; - pathPrefix: &quot;/etc/kube-flannel&quot; - pathPrefix: &quot;/run/flannel&quot; readOnlyRootFilesystem: false # Users and groups runAsUser: rule: RunAsAny supplementalGroups: rule: RunAsAny fsGroup: rule: RunAsAny # Privilege Escalation allowPrivilegeEscalation: false defaultAllowPrivilegeEscalation: false # Capabilities allowedCapabilities: [&#39;NET_ADMIN&#39;] defaultAddCapabilities: [] requiredDropCapabilities: [] # Host namespaces hostPID: false hostIPC: false hostNetwork:" />
+<meta name="twitter:description" content="resources 一些 Kubernetes 的资源 https://gitee.com/yswyn/K8s/tree/master 。大多因为被墙难以获取的。 yaml kube-flannel.yml --- apiVersion: policy/v1beta1 kind: PodSecurityPolicy metadata: name: psp.flannel.unprivileged annotations: seccomp.security.alpha.kubernetes.io/allowedProfileNames: docker/default seccomp.security.alpha.kubernetes.io/defaultProfileName: docker/default apparmor.security.beta.kubernetes.io/allowedProfileNames: runtime/default apparmor.security.beta.kubernetes.io/defaultProfileName: runtime/default spec: privileged: false volumes: - configMap - secret - emptyDir - hostPath allowedHostPaths: - pathPrefix: &quot;/etc/cni/net.d&quot; - pathPrefix: &quot;/etc/kube-flannel&quot; - pathPrefix: &quot;/run/flannel&quot; readOnlyRootFilesystem: false # Users and groups runAsUser: rule: RunAsAny supplementalGroups: rule: RunAsAny fsGroup: rule: RunAsAny # Privilege Escalation allowPrivilegeEscalation: false defaultAllowPrivilegeEscalation: false # Capabilities allowedCapabilities: [&#39;NET_ADMIN&#39;] defaultAddCapabilities: [] requiredDropCapabilities: [] # Host namespaces hostPID: false hostIPC: false hostNetwork:" /><meta property="og:image" content="https://yuanyatianchi.github.io/img/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://yuanyatianchi.github.io/img/og.png" />
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+<link rel="stylesheet" href="https://yuanyatianchi.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+</head>
+
+<body data-theme="auto">
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://yuanyatianchi.github.io">鸢雅</a>
+            
+            <span class="title-sub">A minimal Hugo theme.</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://yuanyatianchi.github.io/post/it.cloudnative.kubernetes.resource/"></a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;3535 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;No tag</span>
+
+    </div>
+    
+    <div class="post-content markdown-body">
+        <h1 id="resources">resources</h1>
+<p>一些 Kubernetes 的资源 <a href="https://gitee.com/yswyn/K8s/tree/master">https://gitee.com/yswyn/K8s/tree/master</a> 。大多因为被墙难以获取的。</p>
+<h5 id="yaml">yaml</h5>
+<h6 id="kube-flannelyml">kube-flannel.yml</h6>
+<pre><code class="language-yaml">---
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: psp.flannel.unprivileged
+  annotations:
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: docker/default
+    seccomp.security.alpha.kubernetes.io/defaultProfileName: docker/default
+    apparmor.security.beta.kubernetes.io/allowedProfileNames: runtime/default
+    apparmor.security.beta.kubernetes.io/defaultProfileName: runtime/default
+spec:
+  privileged: false
+  volumes:
+    - configMap
+    - secret
+    - emptyDir
+    - hostPath
+  allowedHostPaths:
+    - pathPrefix: &quot;/etc/cni/net.d&quot;
+    - pathPrefix: &quot;/etc/kube-flannel&quot;
+    - pathPrefix: &quot;/run/flannel&quot;
+  readOnlyRootFilesystem: false
+  # Users and groups
+  runAsUser:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+  fsGroup:
+    rule: RunAsAny
+  # Privilege Escalation
+  allowPrivilegeEscalation: false
+  defaultAllowPrivilegeEscalation: false
+  # Capabilities
+  allowedCapabilities: ['NET_ADMIN']
+  defaultAddCapabilities: []
+  requiredDropCapabilities: []
+  # Host namespaces
+  hostPID: false
+  hostIPC: false
+  hostNetwork: true
+  hostPorts:
+  - min: 0
+    max: 65535
+  # SELinux
+  seLinux:
+    # SELinux is unused in CaaSP
+    rule: 'RunAsAny'
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: flannel
+rules:
+  - apiGroups: ['extensions']
+    resources: ['podsecuritypolicies']
+    verbs: ['use']
+    resourceNames: ['psp.flannel.unprivileged']
+  - apiGroups:
+      - &quot;&quot;
+    resources:
+      - pods
+    verbs:
+      - get
+  - apiGroups:
+      - &quot;&quot;
+    resources:
+      - nodes
+    verbs:
+      - list
+      - watch
+  - apiGroups:
+      - &quot;&quot;
+    resources:
+      - nodes/status
+    verbs:
+      - patch
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: flannel
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flannel
+subjects:
+- kind: ServiceAccount
+  name: flannel
+  namespace: kube-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: flannel
+  namespace: kube-system
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: kube-flannel-cfg
+  namespace: kube-system
+  labels:
+    tier: node
+    app: flannel
+data:
+  cni-conf.json: |
+    {
+      &quot;name&quot;: &quot;cbr0&quot;,
+      &quot;cniVersion&quot;: &quot;0.3.1&quot;,
+      &quot;plugins&quot;: [
+        {
+          &quot;type&quot;: &quot;flannel&quot;,
+          &quot;delegate&quot;: {
+            &quot;hairpinMode&quot;: true,
+            &quot;isDefaultGateway&quot;: true
+          }
+        },
+        {
+          &quot;type&quot;: &quot;portmap&quot;,
+          &quot;capabilities&quot;: {
+            &quot;portMappings&quot;: true
+          }
+        }
+      ]
+    }
+  net-conf.json: |
+    {
+      &quot;Network&quot;: &quot;10.244.0.0/16&quot;,
+      &quot;Backend&quot;: {
+        &quot;Type&quot;: &quot;vxlan&quot;
+      }
+    }
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: kube-flannel-ds-amd64
+  namespace: kube-system
+  labels:
+    tier: node
+    app: flannel
+spec:
+  selector:
+    matchLabels:
+      app: flannel
+  template:
+    metadata:
+      labels:
+        tier: node
+        app: flannel
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/os
+                    operator: In
+                    values:
+                      - linux
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
+      hostNetwork: true
+      tolerations:
+      - operator: Exists
+        effect: NoSchedule
+      serviceAccountName: flannel
+      initContainers:
+      - name: install-cni
+        image: quay.io/coreos/flannel:v0.11.0-amd64
+        command:
+        - cp
+        args:
+        - -f
+        - /etc/kube-flannel/cni-conf.json
+        - /etc/cni/net.d/10-flannel.conflist
+        volumeMounts:
+        - name: cni
+          mountPath: /etc/cni/net.d
+        - name: flannel-cfg
+          mountPath: /etc/kube-flannel/
+      containers:
+      - name: kube-flannel
+        image: quay.io/coreos/flannel:v0.11.0-amd64
+        command:
+        - /opt/bin/flanneld
+        args:
+        - --ip-masq
+        - --kube-subnet-mgr
+        resources:
+          requests:
+            cpu: &quot;100m&quot;
+            memory: &quot;50Mi&quot;
+          limits:
+            cpu: &quot;100m&quot;
+            memory: &quot;50Mi&quot;
+        securityContext:
+          privileged: false
+          capabilities:
+            add: [&quot;NET_ADMIN&quot;]
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        volumeMounts:
+        - name: run
+          mountPath: /run/flannel
+        - name: flannel-cfg
+          mountPath: /etc/kube-flannel/
+      volumes:
+        - name: run
+          hostPath:
+            path: /run/flannel
+        - name: cni
+          hostPath:
+            path: /etc/cni/net.d
+        - name: flannel-cfg
+          configMap:
+            name: kube-flannel-cfg
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: kube-flannel-ds-arm64
+  namespace: kube-system
+  labels:
+    tier: node
+    app: flannel
+spec:
+  selector:
+    matchLabels:
+      app: flannel
+  template:
+    metadata:
+      labels:
+        tier: node
+        app: flannel
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/os
+                    operator: In
+                    values:
+                      - linux
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - arm64
+      hostNetwork: true
+      tolerations:
+      - operator: Exists
+        effect: NoSchedule
+      serviceAccountName: flannel
+      initContainers:
+      - name: install-cni
+        image: quay.io/coreos/flannel:v0.11.0-arm64
+        command:
+        - cp
+        args:
+        - -f
+        - /etc/kube-flannel/cni-conf.json
+        - /etc/cni/net.d/10-flannel.conflist
+        volumeMounts:
+        - name: cni
+          mountPath: /etc/cni/net.d
+        - name: flannel-cfg
+          mountPath: /etc/kube-flannel/
+      containers:
+      - name: kube-flannel
+        image: quay.io/coreos/flannel:v0.11.0-arm64
+        command:
+        - /opt/bin/flanneld
+        args:
+        - --ip-masq
+        - --kube-subnet-mgr
+        resources:
+          requests:
+            cpu: &quot;100m&quot;
+            memory: &quot;50Mi&quot;
+          limits:
+            cpu: &quot;100m&quot;
+            memory: &quot;50Mi&quot;
+        securityContext:
+          privileged: false
+          capabilities:
+             add: [&quot;NET_ADMIN&quot;]
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        volumeMounts:
+        - name: run
+          mountPath: /run/flannel
+        - name: flannel-cfg
+          mountPath: /etc/kube-flannel/
+      volumes:
+        - name: run
+          hostPath:
+            path: /run/flannel
+        - name: cni
+          hostPath:
+            path: /etc/cni/net.d
+        - name: flannel-cfg
+          configMap:
+            name: kube-flannel-cfg
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: kube-flannel-ds-arm
+  namespace: kube-system
+  labels:
+    tier: node
+    app: flannel
+spec:
+  selector:
+    matchLabels:
+      app: flannel
+  template:
+    metadata:
+      labels:
+        tier: node
+        app: flannel
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/os
+                    operator: In
+                    values:
+                      - linux
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - arm
+      hostNetwork: true
+      tolerations:
+      - operator: Exists
+        effect: NoSchedule
+      serviceAccountName: flannel
+      initContainers:
+      - name: install-cni
+        image: quay.io/coreos/flannel:v0.11.0-arm
+        command:
+        - cp
+        args:
+        - -f
+        - /etc/kube-flannel/cni-conf.json
+        - /etc/cni/net.d/10-flannel.conflist
+        volumeMounts:
+        - name: cni
+          mountPath: /etc/cni/net.d
+        - name: flannel-cfg
+          mountPath: /etc/kube-flannel/
+      containers:
+      - name: kube-flannel
+        image: quay.io/coreos/flannel:v0.11.0-arm
+        command:
+        - /opt/bin/flanneld
+        args:
+        - --ip-masq
+        - --kube-subnet-mgr
+        resources:
+          requests:
+            cpu: &quot;100m&quot;
+            memory: &quot;50Mi&quot;
+          limits:
+            cpu: &quot;100m&quot;
+            memory: &quot;50Mi&quot;
+        securityContext:
+          privileged: false
+          capabilities:
+             add: [&quot;NET_ADMIN&quot;]
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        volumeMounts:
+        - name: run
+          mountPath: /run/flannel
+        - name: flannel-cfg
+          mountPath: /etc/kube-flannel/
+      volumes:
+        - name: run
+          hostPath:
+            path: /run/flannel
+        - name: cni
+          hostPath:
+            path: /etc/cni/net.d
+        - name: flannel-cfg
+          configMap:
+            name: kube-flannel-cfg
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: kube-flannel-ds-ppc64le
+  namespace: kube-system
+  labels:
+    tier: node
+    app: flannel
+spec:
+  selector:
+    matchLabels:
+      app: flannel
+  template:
+    metadata:
+      labels:
+        tier: node
+        app: flannel
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/os
+                    operator: In
+                    values:
+                      - linux
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - ppc64le
+      hostNetwork: true
+      tolerations:
+      - operator: Exists
+        effect: NoSchedule
+      serviceAccountName: flannel
+      initContainers:
+      - name: install-cni
+        image: quay.io/coreos/flannel:v0.11.0-ppc64le
+        command:
+        - cp
+        args:
+        - -f
+        - /etc/kube-flannel/cni-conf.json
+        - /etc/cni/net.d/10-flannel.conflist
+        volumeMounts:
+        - name: cni
+          mountPath: /etc/cni/net.d
+        - name: flannel-cfg
+          mountPath: /etc/kube-flannel/
+      containers:
+      - name: kube-flannel
+        image: quay.io/coreos/flannel:v0.11.0-ppc64le
+        command:
+        - /opt/bin/flanneld
+        args:
+        - --ip-masq
+        - --kube-subnet-mgr
+        resources:
+          requests:
+            cpu: &quot;100m&quot;
+            memory: &quot;50Mi&quot;
+          limits:
+            cpu: &quot;100m&quot;
+            memory: &quot;50Mi&quot;
+        securityContext:
+          privileged: false
+          capabilities:
+             add: [&quot;NET_ADMIN&quot;]
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        volumeMounts:
+        - name: run
+          mountPath: /run/flannel
+        - name: flannel-cfg
+          mountPath: /etc/kube-flannel/
+      volumes:
+        - name: run
+          hostPath:
+            path: /run/flannel
+        - name: cni
+          hostPath:
+            path: /etc/cni/net.d
+        - name: flannel-cfg
+          configMap:
+            name: kube-flannel-cfg
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: kube-flannel-ds-s390x
+  namespace: kube-system
+  labels:
+    tier: node
+    app: flannel
+spec:
+  selector:
+    matchLabels:
+      app: flannel
+  template:
+    metadata:
+      labels:
+        tier: node
+        app: flannel
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/os
+                    operator: In
+                    values:
+                      - linux
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - s390x
+      hostNetwork: true
+      tolerations:
+      - operator: Exists
+        effect: NoSchedule
+      serviceAccountName: flannel
+      initContainers:
+      - name: install-cni
+        image: quay.io/coreos/flannel:v0.11.0-s390x
+        command:
+        - cp
+        args:
+        - -f
+        - /etc/kube-flannel/cni-conf.json
+        - /etc/cni/net.d/10-flannel.conflist
+        volumeMounts:
+        - name: cni
+          mountPath: /etc/cni/net.d
+        - name: flannel-cfg
+          mountPath: /etc/kube-flannel/
+      containers:
+      - name: kube-flannel
+        image: quay.io/coreos/flannel:v0.11.0-s390x
+        command:
+        - /opt/bin/flanneld
+        args:
+        - --ip-masq
+        - --kube-subnet-mgr
+        resources:
+          requests:
+            cpu: &quot;100m&quot;
+            memory: &quot;50Mi&quot;
+          limits:
+            cpu: &quot;100m&quot;
+            memory: &quot;50Mi&quot;
+        securityContext:
+          privileged: false
+          capabilities:
+             add: [&quot;NET_ADMIN&quot;]
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        volumeMounts:
+        - name: run
+          mountPath: /run/flannel
+        - name: flannel-cfg
+          mountPath: /etc/kube-flannel/
+      volumes:
+        - name: run
+          hostPath:
+            path: /run/flannel
+        - name: cni
+          hostPath:
+            path: /etc/cni/net.d
+        - name: flannel-cfg
+          configMap:
+            name: kube-flannel-cfg
+</code></pre>
+<h6 id="ingress-controlleryaml">ingress-controller.yaml</h6>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Namespace
+metadata:
+  name: ingress-nginx
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+
+---
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: nginx-configuration
+  namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: tcp-services
+  namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: udp-services
+  namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nginx-ingress-serviceaccount
+  namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: nginx-ingress-clusterrole
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+rules:
+  - apiGroups:
+      - &quot;&quot;
+    resources:
+      - configmaps
+      - endpoints
+      - nodes
+      - pods
+      - secrets
+    verbs:
+      - list
+      - watch
+  - apiGroups:
+      - &quot;&quot;
+    resources:
+      - nodes
+    verbs:
+      - get
+  - apiGroups:
+      - &quot;&quot;
+    resources:
+      - services
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - &quot;extensions&quot;
+    resources:
+      - ingresses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - &quot;&quot;
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - &quot;extensions&quot;
+    resources:
+      - ingresses/status
+    verbs:
+      - update
+
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: nginx-ingress-role
+  namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+rules:
+  - apiGroups:
+      - &quot;&quot;
+    resources:
+      - configmaps
+      - pods
+      - secrets
+      - namespaces
+    verbs:
+      - get
+  - apiGroups:
+      - &quot;&quot;
+    resources:
+      - configmaps
+    resourceNames:
+      # Defaults to &quot;&lt;election-id&gt;-&lt;ingress-class&gt;&quot;
+      # Here: &quot;&lt;ingress-controller-leader&gt;-&lt;nginx&gt;&quot;
+      # This has to be adapted if you change either parameter
+      # when launching the nginx-ingress-controller.
+      - &quot;ingress-controller-leader-nginx&quot;
+    verbs:
+      - get
+      - update
+  - apiGroups:
+      - &quot;&quot;
+    resources:
+      - configmaps
+    verbs:
+      - create
+  - apiGroups:
+      - &quot;&quot;
+    resources:
+      - endpoints
+    verbs:
+      - get
+
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: nginx-ingress-role-nisa-binding
+  namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: nginx-ingress-role
+subjects:
+  - kind: ServiceAccount
+    name: nginx-ingress-serviceaccount
+    namespace: ingress-nginx
+
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: nginx-ingress-clusterrole-nisa-binding
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: nginx-ingress-clusterrole
+subjects:
+  - kind: ServiceAccount
+    name: nginx-ingress-serviceaccount
+    namespace: ingress-nginx
+
+---
+
+apiVersion: apps/v1
+kind: DaemonSet 
+metadata:
+  name: nginx-ingress-controller
+  namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ingress-nginx
+      app.kubernetes.io/part-of: ingress-nginx
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ingress-nginx
+        app.kubernetes.io/part-of: ingress-nginx
+      annotations:
+        prometheus.io/port: &quot;10254&quot;
+        prometheus.io/scrape: &quot;true&quot;
+    spec:
+      hostNetwork: true
+      serviceAccountName: nginx-ingress-serviceaccount
+      containers:
+        - name: nginx-ingress-controller
+          image: siriuszg/nginx-ingress-controller:0.20.0
+          args:
+            - /nginx-ingress-controller
+            - --configmap=$(POD_NAMESPACE)/nginx-configuration
+            - --tcp-services-configmap=$(POD_NAMESPACE)/tcp-services
+            - --udp-services-configmap=$(POD_NAMESPACE)/udp-services
+            - --publish-service=$(POD_NAMESPACE)/ingress-nginx
+            - --annotations-prefix=nginx.ingress.kubernetes.io
+          securityContext:
+            allowPrivilegeEscalation: true
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - NET_BIND_SERVICE
+            # www-data -&gt; 33
+            runAsUser: 33
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          ports:
+            - name: http
+              containerPort: 80
+            - name: https
+              containerPort: 443
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 10254
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 10254
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress-nginx
+  namespace: ingress-nginx
+spec:
+  #type: NodePort
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+    protocol: TCP
+  - name: https
+    port: 443
+    targetPort: 443
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+</code></pre>
+<h6 id="kubernetes-dashboardyaml">kubernetes-dashboard.yaml</h6>
+<pre><code class="language-yaml"># Copyright 2017 The Kubernetes Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# ------------------- Dashboard Secret ------------------- #
+
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    k8s-app: kubernetes-dashboard
+  name: kubernetes-dashboard-certs
+  namespace: kube-system
+type: Opaque
+
+---
+# ------------------- Dashboard Service Account ------------------- #
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    k8s-app: kubernetes-dashboard
+  name: kubernetes-dashboard
+  namespace: kube-system
+
+---
+# ------------------- Dashboard Role &amp; Role Binding ------------------- #
+
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: kubernetes-dashboard-minimal
+  namespace: kube-system
+rules:
+  # Allow Dashboard to create 'kubernetes-dashboard-key-holder' secret.
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;secrets&quot;]
+  verbs: [&quot;create&quot;]
+  # Allow Dashboard to create 'kubernetes-dashboard-settings' config map.
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;configmaps&quot;]
+  verbs: [&quot;create&quot;]
+  # Allow Dashboard to get, update and delete Dashboard exclusive secrets.
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;secrets&quot;]
+  resourceNames: [&quot;kubernetes-dashboard-key-holder&quot;, &quot;kubernetes-dashboard-certs&quot;]
+  verbs: [&quot;get&quot;, &quot;update&quot;, &quot;delete&quot;]
+  # Allow Dashboard to get and update 'kubernetes-dashboard-settings' config map.
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;configmaps&quot;]
+  resourceNames: [&quot;kubernetes-dashboard-settings&quot;]
+  verbs: [&quot;get&quot;, &quot;update&quot;]
+  # Allow Dashboard to get metrics from heapster.
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;services&quot;]
+  resourceNames: [&quot;heapster&quot;]
+  verbs: [&quot;proxy&quot;]
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;services/proxy&quot;]
+  resourceNames: [&quot;heapster&quot;, &quot;http:heapster:&quot;, &quot;https:heapster:&quot;]
+  verbs: [&quot;get&quot;]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: kubernetes-dashboard-minimal
+  namespace: kube-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: kubernetes-dashboard-minimal
+subjects:
+- kind: ServiceAccount
+  name: kubernetes-dashboard
+  namespace: kube-system
+
+---
+# ------------------- Dashboard Deployment ------------------- #
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  labels:
+    k8s-app: kubernetes-dashboard
+  name: kubernetes-dashboard
+  namespace: kube-system
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s-app: kubernetes-dashboard
+  template:
+    metadata:
+      labels:
+        k8s-app: kubernetes-dashboard
+    spec:
+      containers:
+      - name: kubernetes-dashboard
+        image: k8s.gcr.io/kubernetes-dashboard-amd64:v1.10.1
+        ports:
+        - containerPort: 8443
+          protocol: TCP
+        args:
+          - --auto-generate-certificates
+          # Uncomment the following line to manually specify Kubernetes API server Host
+          # If not specified, Dashboard will attempt to auto discover the API server and connect
+          # to it. Uncomment only if the default does not work.
+          # - --apiserver-host=http://my-address:port
+        volumeMounts:
+        - name: kubernetes-dashboard-certs
+          mountPath: /certs
+          # Create on-disk volume to store exec logs
+        - mountPath: /tmp
+          name: tmp-volume
+        livenessProbe:
+          httpGet:
+            scheme: HTTPS
+            path: /
+            port: 8443
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+      volumes:
+      - name: kubernetes-dashboard-certs
+        secret:
+          secretName: kubernetes-dashboard-certs
+      - name: tmp-volume
+        emptyDir: {}
+      serviceAccountName: kubernetes-dashboard
+      # Comment the following tolerations if Dashboard must not be deployed on master
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+
+---
+# ------------------- Dashboard Service ------------------- #
+
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    k8s-app: kubernetes-dashboard
+  name: kubernetes-dashboard
+  namespace: kube-system
+spec:
+  ports:
+    - port: 443
+      targetPort: 8443
+  selector:
+    k8s-app: kubernetes-dashboard
+</code></pre>
+<h6 id="kubesphere-complete-setupyaml">kubesphere-complete-setup.yaml</h6>
+<pre><code class="language-yaml">---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kubesphere-system
+
+---
+apiVersion: v1
+data:
+  ks-config.yaml: |
+    ---
+
+    persistence:
+      storageClass: &quot;&quot;
+
+    etcd:
+      monitoring: False
+      endpointIps: 192.168.0.7,192.168.0.8,192.168.0.9
+      port: 2379
+      tlsEnable: True
+
+    common:
+      mysqlVolumeSize: 20Gi
+      minioVolumeSize: 20Gi
+      etcdVolumeSize: 20Gi
+      openldapVolumeSize: 2Gi
+      redisVolumSize: 2Gi
+
+    metrics_server:
+      enabled: True
+
+    console:
+      enableMultiLogin: False  # enable/disable multi login
+      port: 30880
+
+    monitoring:
+      prometheusReplicas: 1
+      prometheusMemoryRequest: 400Mi
+      prometheusVolumeSize: 20Gi
+      grafana:
+        enabled: False
+
+    logging:
+      enabled: True
+      elasticsearchMasterReplicas: 1
+      elasticsearchDataReplicas: 1
+      logsidecarReplicas: 2
+      elasticsearchMasterVolumeSize: 4Gi
+      elasticsearchDataVolumeSize: 20Gi
+      logMaxAge: 7
+      elkPrefix: logstash
+      containersLogMountedPath: &quot;&quot;
+      kibana:
+        enabled: False
+
+    openpitrix:
+      enabled: True
+
+    devops:
+      enabled: True
+      jenkinsMemoryLim: 2Gi
+      jenkinsMemoryReq: 1500Mi
+      jenkinsVolumeSize: 8Gi
+      jenkinsJavaOpts_Xms: 512m
+      jenkinsJavaOpts_Xmx: 512m
+      jenkinsJavaOpts_MaxRAM: 2g
+      sonarqube:
+        enabled: True
+        postgresqlVolumeSize: 8Gi
+
+    servicemesh:
+      enabled: True
+
+    notification:
+      enabled: True
+
+    alerting:
+      enabled: True
+
+kind: ConfigMap
+metadata:
+  name: ks-installer
+  namespace: kubesphere-system
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ks-installer
+  namespace: kubesphere-system
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: ks-installer
+rules:
+- apiGroups:
+  - &quot;&quot;
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - apps
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - extensions
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - batch
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - apiregistration.k8s.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - tenant.kubesphere.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - certificates.k8s.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - devops.kubesphere.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - monitoring.coreos.com
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - logging.kubesphere.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - jaegertracing.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - storage.k8s.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - admissionregistration.k8s.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ks-installer
+subjects:
+- kind: ServiceAccount
+  name: ks-installer
+  namespace: kubesphere-system
+roleRef:
+  kind: ClusterRole
+  name: ks-installer
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ks-installer
+  namespace: kubesphere-system
+  labels:
+    app: ks-install
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ks-install
+  template:
+    metadata:
+      labels:
+        app: ks-install
+    spec:
+      serviceAccountName: ks-installer
+      containers:
+      - name: installer
+        image: kubesphere/ks-installer:v2.1.1
+        imagePullPolicy: &quot;Always&quot;
+</code></pre>
+<h6 id="productyaml">product.yaml</h6>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: product
+  namespace: ms 
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      project: ms
+      app: product
+  template:
+    metadata:
+      labels:
+        project: ms 
+        app: product
+    spec:
+      imagePullSecrets:
+      - name: registry-pull-secret
+      containers:
+      - name: product
+        image: 192.168.31.70/microservice/product:2019-07-10-21-34-34
+        imagePullPolicy: Always
+        ports:
+          - protocol: TCP
+            containerPort: 8010 
+        env:
+          - name: JAVA_OPTS
+            value: &quot;-Xmx1g&quot;
+        resources:
+          requests:
+            cpu: 0.5
+            memory: 256Mi
+          limits:
+            cpu: 1
+            memory: 1Gi
+        readinessProbe:
+          tcpSocket:
+            port: 8010
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 8010
+          initialDelaySeconds: 60
+          periodSeconds: 10
+</code></pre>
+<h5 id="sh">sh</h5>
+<h6 id="get_helmsh">get_helm.sh</h6>
+<pre><code class="language-sh">#!/usr/bin/env bash
+
+# Copyright The Helm Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# The install script is based off of the MIT-licensed script from glide,
+# the package manager for Go: https://github.com/Masterminds/glide.sh/blob/master/get
+
+PROJECT_NAME=&quot;helm&quot;
+TILLER_NAME=&quot;tiller&quot;
+
+: ${USE_SUDO:=&quot;true&quot;}
+: ${HELM_INSTALL_DIR:=&quot;/usr/local/bin&quot;}
+
+# initArch discovers the architecture for this system.
+initArch() {
+  ARCH=$(uname -m)
+  case $ARCH in
+    armv5*) ARCH=&quot;armv5&quot;;;
+    armv6*) ARCH=&quot;armv6&quot;;;
+    armv7*) ARCH=&quot;arm&quot;;;
+    aarch64) ARCH=&quot;arm64&quot;;;
+    x86) ARCH=&quot;386&quot;;;
+    x86_64) ARCH=&quot;amd64&quot;;;
+    i686) ARCH=&quot;386&quot;;;
+    i386) ARCH=&quot;386&quot;;;
+  esac
+}
+
+# initOS discovers the operating system for this system.
+initOS() {
+  OS=$(echo `uname`|tr '[:upper:]' '[:lower:]')
+
+  case &quot;$OS&quot; in
+    # Minimalist GNU for Windows
+    mingw*) OS='windows';;
+  esac
+}
+
+# runs the given command as root (detects if we are root already)
+runAsRoot() {
+  local CMD=&quot;$*&quot;
+
+  if [ $EUID -ne 0 -a $USE_SUDO = &quot;true&quot; ]; then
+    CMD=&quot;sudo $CMD&quot;
+  fi
+
+  $CMD
+}
+
+# verifySupported checks that the os/arch combination is supported for
+# binary builds.
+verifySupported() {
+  local supported=&quot;darwin-386\ndarwin-amd64\nlinux-386\nlinux-amd64\nlinux-arm\nlinux-arm64\nlinux-ppc64le\nwindows-386\nwindows-amd64&quot;
+  if ! echo &quot;${supported}&quot; | grep -q &quot;${OS}-${ARCH}&quot;; then
+    echo &quot;No prebuilt binary for ${OS}-${ARCH}.&quot;
+    echo &quot;To build from source, go to https://github.com/helm/helm&quot;
+    exit 1
+  fi
+
+  if ! type &quot;curl&quot; &gt; /dev/null &amp;&amp; ! type &quot;wget&quot; &gt; /dev/null; then
+    echo &quot;Either curl or wget is required&quot;
+    exit 1
+  fi
+}
+
+# checkDesiredVersion checks if the desired version is available.
+checkDesiredVersion() {
+  if [ &quot;x$DESIRED_VERSION&quot; == &quot;x&quot; ]; then
+    # Get tag from release URL
+    local release_url=&quot;https://github.com/helm/helm/releases&quot;
+    if type &quot;curl&quot; &gt; /dev/null; then
+
+      TAG=$(curl -Ls $release_url | grep 'href=&quot;/helm/helm/releases/tag/v2.' | grep -v no-underline | head -n 1 | cut -d '&quot;' -f 2 | awk '{n=split($NF,a,&quot;/&quot;);print a[n]}' | awk 'a !~ $0{print}; {a=$0}')
+    elif type &quot;wget&quot; &gt; /dev/null; then
+      TAG=$(wget $release_url -O - 2&gt;&amp;1 | grep 'href=&quot;/helm/helm/releases/tag/v2.' | grep -v no-underline | head -n 1 | cut -d '&quot;' -f 2 | awk '{n=split($NF,a,&quot;/&quot;);print a[n]}' | awk 'a !~ $0{print}; {a=$0}')
+    fi
+  else
+    TAG=$DESIRED_VERSION
+  fi
+}
+
+# checkHelmInstalledVersion checks which version of helm is installed and
+# if it needs to be changed.
+checkHelmInstalledVersion() {
+  if [[ -f &quot;${HELM_INSTALL_DIR}/${PROJECT_NAME}&quot; ]]; then
+    local version=$(&quot;${HELM_INSTALL_DIR}/${PROJECT_NAME}&quot; version -c | grep '^Client' | cut -d'&quot;' -f2)
+    if [[ &quot;$version&quot; == &quot;$TAG&quot; ]]; then
+      echo &quot;Helm ${version} is already ${DESIRED_VERSION:-latest}&quot;
+      return 0
+    else
+      echo &quot;Helm ${TAG} is available. Changing from version ${version}.&quot;
+      return 1
+    fi
+  else
+    return 1
+  fi
+}
+
+# downloadFile downloads the latest binary package and also the checksum
+# for that binary.
+downloadFile() {
+  HELM_DIST=&quot;helm-$TAG-$OS-$ARCH.tar.gz&quot;
+  DOWNLOAD_URL=&quot;https://get.helm.sh/$HELM_DIST&quot;
+  CHECKSUM_URL=&quot;$DOWNLOAD_URL.sha256&quot;
+  HELM_TMP_ROOT=&quot;$(mktemp -dt helm-installer-XXXXXX)&quot;
+  HELM_TMP_FILE=&quot;$HELM_TMP_ROOT/$HELM_DIST&quot;
+  HELM_SUM_FILE=&quot;$HELM_TMP_ROOT/$HELM_DIST.sha256&quot;
+  echo &quot;Downloading $DOWNLOAD_URL&quot;
+  if type &quot;curl&quot; &gt; /dev/null; then
+    curl -SsL &quot;$CHECKSUM_URL&quot; -o &quot;$HELM_SUM_FILE&quot;
+  elif type &quot;wget&quot; &gt; /dev/null; then
+    wget -q -O &quot;$HELM_SUM_FILE&quot; &quot;$CHECKSUM_URL&quot;
+  fi
+  if type &quot;curl&quot; &gt; /dev/null; then
+    curl -SsL &quot;$DOWNLOAD_URL&quot; -o &quot;$HELM_TMP_FILE&quot;
+  elif type &quot;wget&quot; &gt; /dev/null; then
+    wget -q -O &quot;$HELM_TMP_FILE&quot; &quot;$DOWNLOAD_URL&quot;
+  fi
+}
+
+# installFile verifies the SHA256 for the file, then unpacks and
+# installs it.
+installFile() {
+  HELM_TMP=&quot;$HELM_TMP_ROOT/$PROJECT_NAME&quot;
+  local sum=$(openssl sha1 -sha256 ${HELM_TMP_FILE} | awk '{print $2}')
+  local expected_sum=$(cat ${HELM_SUM_FILE})
+  if [ &quot;$sum&quot; != &quot;$expected_sum&quot; ]; then
+    echo &quot;SHA sum of ${HELM_TMP_FILE} does not match. Aborting.&quot;
+    exit 1
+  fi
+
+  mkdir -p &quot;$HELM_TMP&quot;
+  tar xf &quot;$HELM_TMP_FILE&quot; -C &quot;$HELM_TMP&quot;
+  HELM_TMP_BIN=&quot;$HELM_TMP/$OS-$ARCH/$PROJECT_NAME&quot;
+  TILLER_TMP_BIN=&quot;$HELM_TMP/$OS-$ARCH/$TILLER_NAME&quot;
+  echo &quot;Preparing to install $PROJECT_NAME and $TILLER_NAME into ${HELM_INSTALL_DIR}&quot;
+  runAsRoot cp &quot;$HELM_TMP_BIN&quot; &quot;$HELM_INSTALL_DIR&quot;
+  echo &quot;$PROJECT_NAME installed into $HELM_INSTALL_DIR/$PROJECT_NAME&quot;
+  if [ -x &quot;$TILLER_TMP_BIN&quot; ]; then
+    runAsRoot cp &quot;$TILLER_TMP_BIN&quot; &quot;$HELM_INSTALL_DIR&quot;
+    echo &quot;$TILLER_NAME installed into $HELM_INSTALL_DIR/$TILLER_NAME&quot;
+  else
+    echo &quot;info: $TILLER_NAME binary was not found in this release; skipping $TILLER_NAME installation&quot;
+  fi
+}
+
+# fail_trap is executed if an error occurs.
+fail_trap() {
+  result=$?
+  if [ &quot;$result&quot; != &quot;0&quot; ]; then
+    if [[ -n &quot;$INPUT_ARGUMENTS&quot; ]]; then
+      echo &quot;Failed to install $PROJECT_NAME with the arguments provided: $INPUT_ARGUMENTS&quot;
+      help
+    else
+      echo &quot;Failed to install $PROJECT_NAME&quot;
+    fi
+    echo -e &quot;\tFor support, go to https://github.com/helm/helm.&quot;
+  fi
+  cleanup
+  exit $result
+}
+
+# testVersion tests the installed client to make sure it is working.
+testVersion() {
+  set +e
+  HELM=&quot;$(which $PROJECT_NAME)&quot;
+  if [ &quot;$?&quot; = &quot;1&quot; ]; then
+    echo &quot;$PROJECT_NAME not found. Is $HELM_INSTALL_DIR on your &quot;'$PATH?'
+    exit 1
+  fi
+  set -e
+  echo &quot;Run '$PROJECT_NAME init' to configure $PROJECT_NAME.&quot;
+}
+
+# help provides possible cli installation arguments
+help () {
+  echo &quot;Accepted cli arguments are:&quot;
+  echo -e &quot;\t[--help|-h ] -&gt;&gt; prints this help&quot;
+  echo -e &quot;\t[--version|-v &lt;desired_version&gt;]&quot;
+  echo -e &quot;\te.g. --version v2.4.0  or -v latest&quot;
+  echo -e &quot;\t[--no-sudo]  -&gt;&gt; install without sudo&quot;
+}
+
+# cleanup temporary files to avoid https://github.com/helm/helm/issues/2977
+cleanup() {
+  if [[ -d &quot;${HELM_TMP_ROOT:-}&quot; ]]; then
+    rm -rf &quot;$HELM_TMP_ROOT&quot;
+  fi
+}
+
+# Execution
+
+#Stop execution on any error
+trap &quot;fail_trap&quot; EXIT
+set -e
+
+# Parsing input arguments (if any)
+export INPUT_ARGUMENTS=&quot;${@}&quot;
+set -u
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    '--version'|-v)
+       shift
+       if [[ $# -ne 0 ]]; then
+           export DESIRED_VERSION=&quot;${1}&quot;
+       else
+           echo -e &quot;Please provide the desired version. e.g. --version v2.4.0 or -v latest&quot;
+           exit 0
+       fi
+       ;;
+    '--no-sudo')
+       USE_SUDO=&quot;false&quot;
+       ;;
+    '--help'|-h)
+       help
+       exit 0
+       ;;
+    *) exit 1
+       ;;
+  esac
+  shift
+done
+set +u
+
+initArch
+initOS
+verifySupported
+checkDesiredVersion
+if ! checkHelmInstalledVersion; then
+  downloadFile
+  installFile
+fi
+testVersion
+cleanup
+</code></pre>
+<h6 id="master_imagessh">master_images.sh</h6>
+<pre><code class="language-sh">#!/bin/bash
+
+images=(
+	kube-apiserver:v1.17.3
+    kube-proxy:v1.17.3
+	kube-controller-manager:v1.17.3
+	kube-scheduler:v1.17.3
+	coredns:1.6.5
+	etcd:3.4.3-0
+    pause:3.1
+)
+
+for imageName in ${images[@]} ; do
+    docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/$imageName
+#   docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/$imageName  k8s.gcr.io/$imageName
+done
+echo
+</code></pre>
+<h6 id="node_imagessh">node_images.sh</h6>
+<pre><code class="language-sh">#!/bin/bash
+
+images=(
+    kube-proxy:v1.17.3
+    pause:3.1
+)
+
+for imageName in ${images[@]} ; do
+    docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/$imageName
+#    docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/$imageName  k8s.gcr.io/$imageName
+done
+</code></pre>
+<h5 id="other">other</h5>
+<h6 id="vagrantfile">Vagrantfile</h6>
+<pre><code>Vagrant.configure(&quot;2&quot;) do |config|
+   (1..3).each do |i|
+        config.vm.define &quot;k8s-node#{i}&quot; do |node|
+		config.ssh.insert_key = false
+            # 设置虚拟机的Box
+            node.vm.box = &quot;centos/7&quot;
+
+            # 设置虚拟机的主机名
+            node.vm.hostname=&quot;k8s-node#{i}&quot;
+
+            # 设置虚拟机的IP
+            node.vm.network &quot;private_network&quot;, ip: &quot;192.168.56.#{99+i}&quot;, netmask: &quot;255.255.255.0&quot;
+
+            # 设置主机与虚拟机的共享目录
+            # node.vm.synced_folder &quot;~/Documents/vagrant/share&quot;, &quot;/home/vagrant/share&quot;
+
+            # VirtaulBox相关配置
+            node.vm.provider &quot;virtualbox&quot; do |v|
+                # 设置虚拟机的名称
+                v.name = &quot;k8s-node#{i}&quot;
+                # 设置虚拟机的内存大小
+                v.memory = 2096
+                # 设置虚拟机的CPU个数
+                v.cpus = 2
+				
+            end
+        end
+   end
+end
+</code></pre>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/amzrk2" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/amzrk2" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algorithm/">Algorithm</a>
+            </span>
+            
+            <span>
+                <a href="/tags/base/">base</a>
+            </span>
+            
+            <span>
+                <a href="/tags/blog/">blog</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cloudnative/">cloudnative</a>
+            </span>
+            
+            <span>
+                <a href="/tags/coderebuild/">CodeRebuild</a>
+            </span>
+            
+            <span>
+                <a href="/tags/db/">db</a>
+            </span>
+            
+            <span>
+                <a href="/tags/go.project/">go.project</a>
+            </span>
+            
+            <span>
+                <a href="/tags/it/">it</a>
+            </span>
+            
+            <span>
+                <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/sys/">sys</a>
+            </span>
+            
+            <span>
+                <a href="/tags/tool/">tool</a>
+            </span>
+            
+            <span>
+                <a href="/tags/versioncontrol/">versioncontrol</a>
+            </span>
+            
+        </div>
+    </div>
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+</aside>
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/amzrk2" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/amzrk2" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algorithm/">Algorithm</a>
+            </span>
+            
+            <span>
+                <a href="/tags/base/">base</a>
+            </span>
+            
+            <span>
+                <a href="/tags/blog/">blog</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cloudnative/">cloudnative</a>
+            </span>
+            
+            <span>
+                <a href="/tags/coderebuild/">CodeRebuild</a>
+            </span>
+            
+            <span>
+                <a href="/tags/db/">db</a>
+            </span>
+            
+            <span>
+                <a href="/tags/go.project/">go.project</a>
+            </span>
+            
+            <span>
+                <a href="/tags/it/">it</a>
+            </span>
+            
+            <span>
+                <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/sys/">sys</a>
+            </span>
+            
+            <span>
+                <a href="/tags/tool/">tool</a>
+            </span>
+            
+            <span>
+                <a href="/tags/versioncontrol/">versioncontrol</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2021
+                <a href="https://yuanyatianchi.github.io">DSRKafuU</a>
+                 | <a href="https://github.com/itsme/my_blog">Source code</a> 
+                | Powered by <a href="https://github.com/amzrk2/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.0/lazysizes.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+</body>
+
+</html>

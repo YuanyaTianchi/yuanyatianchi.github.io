@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.83.1" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/amzrk2/cdn-stcapi@1/favicons/favicon.ico" />
+
+
+<title>Kafka - 鸢雅</title>
+
+
+<meta name="author" content="DSRKafuU" />
+
+
+<meta name="description" content="Kafka" />
+
+
+<meta name="keywords" content="it, mq" />
+
+
+<meta property="og:title" content="Kafka" />
+<meta name="twitter:title" content="Kafka" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yuanyatianchi.github.io/post/it.mq.kafka/" /><meta property="og:description" content="Kafka" />
+<meta name="twitter:description" content="Kafka" /><meta property="og:image" content="https://yuanyatianchi.github.io/img/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://yuanyatianchi.github.io/img/og.png" />
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+<link rel="stylesheet" href="https://yuanyatianchi.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+</head>
+
+<body data-theme="auto">
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://yuanyatianchi.github.io">鸢雅</a>
+            
+            <span class="title-sub">A minimal Hugo theme.</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://yuanyatianchi.github.io/post/it.mq.kafka/">Kafka</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;2397 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/mq">mq</a>&nbsp;</span>
+
+    </div>
+    
+    <div class="post-content markdown-body">
+        <h1 id="kafka">Kafka</h1>
+<p><a href="http://kafka.apache.org/">http://kafka.apache.org/</a></p>
+<h1 id="client">client</h1>
+<h2 id="go">go</h2>
+<p>链接kafka使用第三方库 <a href="https://github.com/Shopify/sarama">https://github.com/Shopify/sarama</a> ，<code>sarama v1.20</code>之后的版本加入了<code>zstd</code>压缩算法，编译需要用到cgo，win上需要下载 <a href="http://mingw-w64.org/doku.php/download">http://mingw-w64.org/doku.php/download</a> ，当然也可以使用<code>v1.20</code>之前的版本</p>
+<pre><code class="language-shell">got get -u github.com/Shopify/sarama
+</code></pre>
+<pre><code class="language-GO">/*kafka地址列表*/
+var KAFKA_ADDR_LIST = []string{&quot;127.0.0.1:9092&quot;}
+</code></pre>
+<pre><code class="language-go">/*生产者*/
+func Producer() {
+	var (
+		config          *sarama.Config          //客户端配置
+		syncProducer    sarama.SyncProducer     //Producer客户端
+		producerMessage *sarama.ProducerMessage //producer消息
+	)
+
+	//构造配置
+	config = sarama.NewConfig()
+	config.Producer.RequiredAcks = sarama.WaitForAll          //发送完数据需要leader和follow都确认
+	config.Producer.Partitioner = sarama.NewRandomPartitioner //新选出一个partition
+	config.Producer.Return.Successes = true                   //成功交付的消息将在success channel返回
+
+	//通过配置构造producer客户端
+	syncProducer, err := sarama.NewSyncProducer(KAFKA_ADDR_LIST, config)
+	if err != nil {
+		fmt.Println(&quot;producer closed, err:&quot;, err)
+		return
+	}
+	defer syncProducer.Close()
+
+	//构造消息
+	producerMessage = &amp;sarama.ProducerMessage{
+		Topic: &quot;web_log&quot;,                                  //指定Topic
+		Value: sarama.StringEncoder(&quot;this is a test log&quot;), //消息内容
+	}
+
+	//发送消息
+	pid, offset, err := syncProducer.SendMessage(producerMessage)
+	if err != nil {
+		fmt.Println(&quot;send msg failed, err:&quot;, err)
+		return
+	}
+	fmt.Printf(&quot;pid:%v offset:%v\n&quot;, pid, offset)
+}
+</code></pre>
+<pre><code class="language-go">/*消费者*/
+func Consumer() (err error) {
+	var (
+		consumer sarama.Consumer //consumer客户端
+	)
+
+	//构造consumer实例
+	consumer, err = sarama.NewConsumer(KAFKA_ADDR_LIST, nil)
+	if err != nil {
+		fmt.Printf(&quot;fail to start consumer, err:%v\n&quot;, err)
+		return err
+	}
+
+	//通过topic取到所有的分区
+	partitionList, err := consumer.Partitions(&quot;web_log&quot;)
+	if err != nil {
+		fmt.Printf(&quot;fail to get list of partition:err%v\n&quot;, err)
+		return
+	}
+	fmt.Println(partitionList)
+
+	//遍历所有的分区
+	for partition := range partitionList {
+		//针对每个分区创建一个对应的分区消费者
+		partitionConsumer, err := consumer.ConsumePartition(&quot;web_log&quot;, int32(partition), sarama.OffsetNewest)
+		if err != nil {
+			fmt.Printf(&quot;failed to start consumer for partition %d,err:%v\n&quot;, partition, err)
+			return
+		}
+		defer partitionConsumer.AsyncClose()
+		
+		// 异步从每个分区消费信息
+		go func(sarama.PartitionConsumer) {
+			for msg := range partitionConsumer.Messages() {
+				fmt.Printf(&quot;Partition:%d Offset:%d Key:%v Value:%v&quot;, msg.Partition, msg.Offset, msg.Key, msg.Value)
+			}
+		}(partitionConsumer)
+	}
+	
+	return nil
+}
+</code></pre>
+<h1 id="hello">hello</h1>
+<pre><code class="language-bash">#通过docker-compose启动
+docker-compose up -d #默认执行./docker-compose.yml
+docker-compose -f ./docker-compose-kafka.yml up -d #指定yml文件
+</code></pre>
+<pre><code class="language-Yaml">version: '2'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper01
+    ports:
+      - &quot;2181:2181&quot;
+  kafka:
+    image: wurstmeister/zookeeper
+    container_name: kafka01
+    ports:
+      - &quot;9092:9092&quot;
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 172.16.69.166
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper01:2181 #这里的zookeeper由上面container_name指定
+    depends_on:
+      - zookeeper01
+</code></pre>
+<p>3zookeeper+3kafka的docker-compose.yml</p>
+<pre><code class="language-yaml">version: '3.4' 
+
+services: 
+  zoo1: 
+    image: zookeeper:3.4 
+    restart: always 
+    hostname: zoo1 
+    container_name: zoo1 
+    ports: 
+      - 2184:2181 
+    volumes: 
+      - &quot;/home/zk/workspace/volumes/zkcluster/zoo1/data:/data&quot; 
+      - &quot;/home/zk/workspace/volumes/zkcluster/zoo1/datalog:/datalog&quot; 
+    environment: 
+      ZOO_MY_ID: 1 
+      ZOO_SERVERS: server.1=0.0.0.0:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888 
+      networks: 
+        kafka: 
+          ipv4_address: 172.30.0.11 
+  zoo2: 
+    image: zookeeper:3.4 
+    restart: always 
+    hostname: zoo2 
+    container_name: zoo2 
+    ports: 
+      - 2185:2181 
+    volumes: 
+      - &quot;/home/zk/workspace/volumes/zkcluster/zoo2/data:/data&quot; 
+      - &quot;/home/zk/workspace/volumes/zkcluster/zoo2/datalog:/datalog&quot; 
+    environment: 
+      ZOO_MY_ID: 2 
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=0.0.0.0:2888:3888 server.3=zoo3:2888:3888 
+    networks: 
+      kafka: 
+        ipv4_address: 172.30.0.12 
+  zoo3: 
+    image: zookeeper:3.4 
+    restart: always 
+    hostname: zoo3 
+    container_name: zoo3 
+    ports: 
+      - 2186:2181 
+    volumes: 
+      - &quot;/home/zk/workspace/volumes/zkcluster/zoo3/data:/data&quot; 
+      - &quot;/home/zk/workspace/volumes/zkcluster/zoo3/datalog:/datalog&quot; 
+    environment: 
+      ZOO_MY_ID: 3 
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=0.0.0.0:2888:3888 
+    networks: 
+      kafka: 
+        ipv4_address: 172.30.0.13 
+
+  kafka1: 
+    image: wurstmeister/kafka 
+    restart: always 
+    hostname: kafka1 
+    container_name: kafka1 
+    privileged: true 
+    ports: 
+      - 9092:9092 
+    environment: 
+      KAFKA_ADVERTISED_HOST_NAME: kafka1 
+      KAFKA_LISTENERS: PLAINTEXT://kafka1:9092 
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092 
+      KAFKA_ADVERTISED_PORT: 9092 
+      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181 
+    volumes: 
+      - /home/zk/workspace/volumes/kafkaCluster/kafka1/logs:/kafka 
+    networks: 
+      kafka: 
+        ipv4_address: 172.30.1.11 
+    extra_hosts: 
+      - &quot;zoo1:172.30.0.11&quot; 
+      - &quot;zoo2:172.30.0.12&quot; 
+      - &quot;zoo3:172.30.0.13&quot; 
+    depends_on: 
+      - zoo1 
+      - zoo2 
+      - zoo3 
+    external_links: 
+      - zoo1 
+      - zoo2 
+      - zoo3 
+  kafka2: 
+    image: wurstmeister/kafka 
+    restart: always 
+    hostname: kafka2 
+    container_name: kafka2 
+    privileged: true 
+    ports: 
+      - 9093:9093 
+    environment: 
+      KAFKA_ADVERTISED_HOST_NAME: kafka2 
+      KAFKA_LISTENERS: PLAINTEXT://kafka2:9093 
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9093 
+      KAFKA_ADVERTISED_PORT: 9093 
+      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181 
+    volumes: 
+      - /home/zk/workspace/volumes/kafkaCluster/kafka2/logs:/kafka 
+    networks: 
+      kafka: 
+        ipv4_address: 172.30.1.12 
+    extra_hosts: 
+      - &quot;zoo1:172.30.0.11&quot; 
+      - &quot;zoo2:172.30.0.12&quot; 
+      - &quot;zoo3:172.30.0.13&quot; 
+    depends_on: 
+      - zoo1 
+      - zoo2 
+      - zoo3 
+    external_links: 
+      - zoo1 
+      - zoo2 
+      - zoo3 
+  kafka3: 
+    image: wurstmeister/kafka 
+    restart: always 
+    hostname: kafka3 
+    container_name: kafka3 
+    privileged: true 
+    ports: 
+      - 9094:9094 
+    environment: 
+      KAFKA_ADVERTISED_HOST_NAME: kafka3 
+      KAFKA_LISTENERS: PLAINTEXT://kafka3:9094 
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9094 
+      KAFKA_ADVERTISED_PORT: 9094 
+      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181 
+    volumes: 
+      - /home/zk/workspace/volumes/kafkaCluster/kafka3/logs:/kafka 
+    networks: 
+      kafka: 
+        ipv4_address: 172.30.1.13 
+    extra_hosts: 
+      - &quot;zoo1:172.30.0.11&quot; 
+      - &quot;zoo2:172.30.0.12&quot; 
+      - &quot;zoo3:172.30.0.13&quot; 
+    depends_on: 
+      - zoo1 
+      - zoo2 
+      - zoo3 
+    external_links: 
+      - zoo1 
+      - zoo2 
+      - zoo3 
+
+networks: 
+  kafka: 
+    external: 
+      name: kafka
+</code></pre>
+<p>Kafka是一个分布式的基于发布/订阅模式的消息队列(MessageQueue)，主要应用于大数据实时处理领域。</p>
+<ul>
+<li>
+<h2 id="消息队列">消息队列</h2>
+<ul>
+<li>解耦：允许你独立的扩展或修改两边的处理过程，只要确保它们遵守同样的接口约束。</li>
+<li>可恢复性：系统的一部分组件失效时，不会影响到整个系统。消息队列降低了进程间的耦合度，所
+以即使一个处理消息的进程挂掉，加入队列中的消息仍然可以在系统恢复后被处理。</li>
+<li>缓冲。有助于控制和优化数据流经过系统的速度，解决生产消息和消费消息的处理速度不一致的情况。</li>
+<li>灵活性&amp;峰值处理能力。
+在访问量剧增的情况下，应用仍然需要继续发挥作用，但是这样的突发流量并不常见。
+如果为以能处理这类峰值访问为标准来投入资源随时待命无疑是巨大的浪费。使用消息队列
+能够使关键组件顶住突发的访问压力，而不会因为突发的超负荷的请求而完全崩溃。</li>
+<li>异步通信。
+很多时候，用户不想也不需要立即处理消息。消息队列提供了异步处理机制，允许用户
+把一个消息放入队列，但并不立即处理它。想向队列中放入多少消息就放多少，然后在需要
+的时候再去处理它们。。</li>
+<li>模式
+<ul>
+<li>点对点模式(一对一，消费者主动拉取数据，消息收到后消息清除) 
+消息生产者生产消息发送到Queue中,然后消息消费者从Queue中取出并且消费消息。心
+消息被消费以后，queue 中不再有存储，所以消息消费者不可能消费到已经被消费的消息。.
+Queue支持存在多个消费者，但是对一个消息而言，只会有一个消费者可以消费。</li>
+<li>(2)发布/订阅模式(一对多，消费者消费数据之后不会清除消息) +
+消息生产者(发布)将消息发布到topic中，同时有多个消息消费者(订阅)消费该消
+息。和点对点方式不同，发布到topic的消息会被所有订阅者消费。
+<ul>
+<li>mq主动推出。如公众号。在大数据量下容易使得消费者方崩溃或资源浪费，如生产者消息生产速度是50m/s，消费者A接收消息速度是100m/s，消费者B是10m/s，则B崩溃，A浪费</li>
+<li>消费者主动拉取。缺点是消费者需要维护一个长轮询来查看mq中是否有新消息可以拉取。kafka就是如此。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>架构：图1</p>
+<ul>
+<li>topic主题，有分区partition，每个分区（一个leader）都有备份（若干follower）。kafka集群中follower只是leader的备份，不能在同一台机器上，消息生产者和消息消费者只找leader，而不是像其它一些集群随机从leader和follower中择其一访问。</li>
+<li>消费者可以分组，一组中的消费者是竞争关系，一个分区的一条消息只能被一个组中的一个消费者消费一次，如果一个topic有两个分区，但是订阅它的消费者只有一个，则该topic发布的一条消息到两个分区中，这一个消费者可以从两个分区中各消费一次该消息，即该消费者可以消费两次同一条消息，提高了消费能力。一个topic的分区与订阅该topic的消费者是m对n的关系，那么最好的情况是m=n</li>
+<li>消费者消费到一半挂掉，重启需要接着上一次消费mq中的消息，那么消费者就需要记录上一次消费到mq的什么位置offset，内存中当然有一份记录以便正常运转使用，但是挂掉内存就释放了，而kafka0.9版本之前的外部存储就是保存在zookeeper中的，0.9及版本之后保存在kafka本地某个topic里面（不是本地磁盘，kafka的消息是存在本地磁盘的，缺省保留168小时即7天）。因为消费者本来就要维护与kafka集群的连接，如果offset存储在zookeeper中则还需要维护与zookeeper的连接，并且交互频率与消息拉取频率一致，太过于频繁</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/amzrk2" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/amzrk2" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algorithm/">Algorithm</a>
+            </span>
+            
+            <span>
+                <a href="/tags/base/">base</a>
+            </span>
+            
+            <span>
+                <a href="/tags/blog/">blog</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cloudnative/">cloudnative</a>
+            </span>
+            
+            <span>
+                <a href="/tags/coderebuild/">CodeRebuild</a>
+            </span>
+            
+            <span>
+                <a href="/tags/db/">db</a>
+            </span>
+            
+            <span>
+                <a href="/tags/go.project/">go.project</a>
+            </span>
+            
+            <span>
+                <a href="/tags/it/">it</a>
+            </span>
+            
+            <span>
+                <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/sys/">sys</a>
+            </span>
+            
+            <span>
+                <a href="/tags/tool/">tool</a>
+            </span>
+            
+            <span>
+                <a href="/tags/versioncontrol/">versioncontrol</a>
+            </span>
+            
+        </div>
+    </div>
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3><nav id="TableOfContents">
+  <ul>
+    <li><a href="#go">go</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#消息队列">消息队列</a></li>
+  </ul>
+</nav></div>
+</aside>
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/amzrk2" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/amzrk2" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algorithm/">Algorithm</a>
+            </span>
+            
+            <span>
+                <a href="/tags/base/">base</a>
+            </span>
+            
+            <span>
+                <a href="/tags/blog/">blog</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cloudnative/">cloudnative</a>
+            </span>
+            
+            <span>
+                <a href="/tags/coderebuild/">CodeRebuild</a>
+            </span>
+            
+            <span>
+                <a href="/tags/db/">db</a>
+            </span>
+            
+            <span>
+                <a href="/tags/go.project/">go.project</a>
+            </span>
+            
+            <span>
+                <a href="/tags/it/">it</a>
+            </span>
+            
+            <span>
+                <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/sys/">sys</a>
+            </span>
+            
+            <span>
+                <a href="/tags/tool/">tool</a>
+            </span>
+            
+            <span>
+                <a href="/tags/versioncontrol/">versioncontrol</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#go">go</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#消息队列">消息队列</a></li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2021
+                <a href="https://yuanyatianchi.github.io">DSRKafuU</a>
+                 | <a href="https://github.com/itsme/my_blog">Source code</a> 
+                | Powered by <a href="https://github.com/amzrk2/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.0/lazysizes.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+</body>
+
+</html>

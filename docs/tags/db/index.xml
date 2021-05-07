@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>db on 鸢雅</title>
+    <link>https://yuanyatianchi.github.io/tags/db/</link>
+    <description>Recent content in db on 鸢雅</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language><atom:link href="https://yuanyatianchi.github.io/tags/db/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>etcd</title>
+      <link>https://yuanyatianchi.github.io/post/it.db.etcd/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.db.etcd/</guid>
+      <description>etcd clients Golang https://github.com/etcd-io/etcd/tree/master/clientv3 go get go.etcd.io/etcd/clientv3 #解决包导入版本问题：https://segmentfault.com/q/1010000021762281/ client中有KV、Lease、Watcher等对象，通过这些对象来操作k</description>
+    </item>
+    
+    <item>
+      <title>MongoDB</title>
+      <link>https://yuanyatianchi.github.io/post/it.db.mongodb/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.db.mongodb/</guid>
+      <description>MongoDB 文档数据库(schema free)，基于二进制JSON存储文档（BSON）。无需定义类型，field:value形式 高性能、高可用、直接加机器即可以解决扩展性问题 支持丰富的CRUD操作，例如:聚合统</description>
+    </item>
+    
+    <item>
+      <title>MySQL</title>
+      <link>https://yuanyatianchi.github.io/post/it.db.mysql/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.db.mysql/</guid>
+      <description>mysql https://www.mysql.com/ ，https://www.mysql.com/cn/ 3306 sql DDL，数据定义语言。定义和管理数据对象，如数据库，数据表等。CREATE、DROP、ALTER DML，数据操作语言。用于操作数据库对象中所</description>
+    </item>
+    
+    <item>
+      <title>Redis</title>
+      <link>https://yuanyatianchi.github.io/post/it.db.redis/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.db.redis/</guid>
+      <description>redis https://redis.io/，http://www.redis.cn/ Redis的特性 速度快 数据存在内存（主要原因） c语言编写（50000line，单机的核心代码只有23000line） 单线程</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.83.1" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/amzrk2/cdn-stcapi@1/favicons/favicon.ico" />
+
+
+<title> - 鸢雅</title>
+
+
+<meta name="author" content="DSRKafuU" />
+
+
+<meta name="description" content="A minimal Hugo theme with nice theme color." />
+
+
+
+<meta property="og:title" content="" />
+<meta name="twitter:title" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yuanyatianchi.github.io/post/it.go.project.yuanyatools/" /><meta property="og:description" content="YuanyaTools Excel https://github.com/360EntSecGroup-Skylar/excelize 安装 github.com/360EntSecGroup-Skylar/excelize 如果使用Go Modules管理软件包，安装v2 github.com/360EntSecGroup-Skylar/excelize/v2 读 import ( &quot;github.com/360EntSecGroup-Skylar/excelize&quot; ) func readExcel(excelPath string) [][]string { xlsx, err := excelize.OpenFile(excelPath) if err != nil { fmt.Println(&quot;open excel error,&quot;, err.Error()) os.Exit(1) } sheetIndex := xlsx.GetActiveSheetIndex() //获取激活状态下sheetIndex sheetName := xlsx.GetSheetName(sheetIndex) //根据sheetIndex获取shee" />
+<meta name="twitter:description" content="YuanyaTools Excel https://github.com/360EntSecGroup-Skylar/excelize 安装 github.com/360EntSecGroup-Skylar/excelize 如果使用Go Modules管理软件包，安装v2 github.com/360EntSecGroup-Skylar/excelize/v2 读 import ( &quot;github.com/360EntSecGroup-Skylar/excelize&quot; ) func readExcel(excelPath string) [][]string { xlsx, err := excelize.OpenFile(excelPath) if err != nil { fmt.Println(&quot;open excel error,&quot;, err.Error()) os.Exit(1) } sheetIndex := xlsx.GetActiveSheetIndex() //获取激活状态下sheetIndex sheetName := xlsx.GetSheetName(sheetIndex) //根据sheetIndex获取shee" /><meta property="og:image" content="https://yuanyatianchi.github.io/img/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://yuanyatianchi.github.io/img/og.png" />
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+<link rel="stylesheet" href="https://yuanyatianchi.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+</head>
+
+<body data-theme="auto">
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://yuanyatianchi.github.io">鸢雅</a>
+            
+            <span class="title-sub">A minimal Hugo theme.</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://yuanyatianchi.github.io/post/it.go.project.yuanyatools/"></a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1537 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;No tag</span>
+
+    </div>
+    
+    <div class="post-content markdown-body">
+        <h1 id="yuanyatools">YuanyaTools</h1>
+<h2 id="excel">Excel</h2>
+<p><a href="https://github.com/360EntSecGroup-Skylar/excelize">https://github.com/360EntSecGroup-Skylar/excelize</a></p>
+<p>安装</p>
+<pre><code class="language-shell">github.com/360EntSecGroup-Skylar/excelize
+</code></pre>
+<p>如果使用Go Modules管理软件包，安装v2</p>
+<pre><code class="language-shell">github.com/360EntSecGroup-Skylar/excelize/v2
+</code></pre>
+<h3 id="读">读</h3>
+<pre><code class="language-go">import (
+	&quot;github.com/360EntSecGroup-Skylar/excelize&quot;
+)
+func readExcel(excelPath string) [][]string {
+	xlsx, err := excelize.OpenFile(excelPath)
+	if err != nil {
+		fmt.Println(&quot;open excel error,&quot;, err.Error())
+		os.Exit(1)
+	}
+	sheetIndex := xlsx.GetActiveSheetIndex()   //获取激活状态下sheetIndex
+	sheetName := xlsx.GetSheetName(sheetIndex) //根据sheetIndex获取sheetName
+	rows, err := xlsx.GetRows(sheetName)       //根据sheetName获取cells的内容
+	return rows
+}
+</code></pre>
+<h2 id="短信">短信</h2>
+<h3 id="阿里云">阿里云</h3>
+<p><a href="https://github.com/aliyun/alibaba-cloud-sdk-go">https://github.com/aliyun/alibaba-cloud-sdk-go</a></p>
+<ol>
+<li>
+<p>阿里云控制台短信服务：https://dysms.console.aliyun.com/dysms.htm</p>
+</li>
+<li>
+<p>国内消息 - 签名管理 - 添加签名</p>
+<ul>
+<li>验证码：随便填写合法合理内容，就可以通过审核</li>
+<li>通用：需要签名来源证明，否则无法通过审核</li>
+</ul>
+</li>
+<li>
+<p>国内消息 - 模板管理 - 添加模板。得到模版CODE</p>
+<ul>
+<li>验证码：随便填写合法合理内容</li>
+<li>短信通知</li>
+<li>推广短息</li>
+</ul>
+</li>
+<li>
+<p>概览 - AccessKey - 创建AccessKey。得到AccessKeySecret</p>
+</li>
+<li>
+<p>程序 <a href="https://api.aliyun.com/new#/?product=Dysmsapi">https://api.aliyun.com/new#/?product=Dysmsapi</a></p>
+<pre><code class="language-go">func SendMsmAuthCode() {
+	client, err := dysmsapi.NewClientWithAccessKey(&quot;REGION_ID&quot;/*区域ID，如cn-chengdu*/,
+     &quot;ACCESS_KEY_ID&quot;/*概览-AccessKey-AccessKeyId*/, &quot;ACCESS_KEY_SECRET&quot;/*概览-AccessKey-AccessKeyId*/)
+	if err != nil {
+     panic(err)
+	}
+
+	request := dysmsapi.CreateSendSmsRequest()
+	request.Scheme = &quot;https&quot;
+
+	request.PhoneNumbers = &quot;PHONE&quot;         //接收短信的手机号
+	request.SignName = &quot;SIGN_NAME&quot;         //国内消息-签名管理-签名名称
+	request.TemplateCode = &quot;TEMPLATE_CODE&quot; //国内消息-模板管理-模板CODE
+
+	authCode := fmt.Sprintf(&quot;%06v&quot;, rand.New(rand.NewSource(time.Now().UnixNano())).Int31n(1000000))
+	par, err := json.Marshal(map[string]interface{}{
+     &quot;code&quot;: authCode, //验证码
+	})
+	request.TemplateParam = string(par)
+
+	response, err := client.SendSms(request)
+	if err != nil {
+     fmt.Print(err.Error())
+	}
+	fmt.Printf(&quot;response is %#v\n&quot;, response)
+}
+</code></pre>
+</li>
+</ol>
+<h2 id="图形验证码">图形验证码</h2>
+<p>在服务器端负责生成图形化验证码，并以数据流的形式供前端访问获取，同时将生成的验证码存储到全局的缓存中，在本案例中，我们使用redis作为全局缓存，并设置缓存失效时间。当用户使用用户名和密码进行登录时，进行验证码验证。验证通过即可继续进行登录</p>
+<p>一个开源的验证码工具库：https://github.com/mojocn/base64Captcha</p>
+<h3 id="redis">Redis</h3>
+<pre><code class="language-go">//redis_config.json配置文件
+&quot;redis_config&quot;: {
+    &quot;addr&quot;: &quot;127.0.0.1&quot;,
+    &quot;port&quot;: &quot;6379&quot;,
+    &quot;password&quot;: &quot;&quot;,
+    &quot;db&quot;: 0
+}
+</code></pre>
+<pre><code class="language-go">type RedisConfig struct {
+    Addr string json:&quot;addr&quot;
+    Port string json:&quot;port&quot;
+    Db   int    json:&quot;db&quot;
+}
+
+</code></pre>
+<p>进行了redis配置以后，需要对redis进行初始化。可以封装redis初始化操作函数</p>
+<pre><code class="language-go">type RedisStore struct {
+    redisClient *redis.Client
+}
+
+var Redis *redis.Client
+
+func InitRediStore() *RedisStore {
+    config := GetConfig().RedistConfig
+
+    Redis = redis.NewClient(&amp;redis.Options{
+        Addr:     config.Addr + &quot;:&quot; + config.Port,
+        Password: &quot;&quot;,
+        DB:       config.Db,
+    })
+
+    customeStore := &amp;RedisStore{Redis}
+    base64Captcha.SetCustomStore(customeStore)
+
+    return customeStore
+}
+</code></pre>
+<p>为customeStore提供Set和Get两个方法</p>
+<pre><code class="language-go">func (cs *RedisStore) Set(id string, value string) {
+    err := cs.redisClient.Set(id, value, time.Minute*10).Err()
+    if err != nil {
+        log.Println(err.Error())
+    }
+}
+
+func (cs *RedisStore) Get(id string, clear bool) string {
+    val, err := cs.redisClient.Get(id).Result()
+    if err != nil {
+        toolbox.Error(err.Error())
+        return &quot;&quot;
+    }
+    if clear {
+        err := cs.redisClient.Del(id).Err()
+        if err != nil {
+            toolbox.Error(err.Error())
+            return &quot;&quot;
+        }
+    }
+    return val
+}
+</code></pre>
+<p>对Redis进行初始化和定义完成以后，需要在main中调用一下初始化操作InitRediStore</p>
+<pre><code class="language-go">func main(){
+    ...
+    //Redis配置初始化
+     toolbox.InitRediStore()
+    ...
+}
+</code></pre>
+<h3 id="验证码生成和验证">验证码生成和验证</h3>
+<p>本项目中采用的验证码的生成库支持三种验证码，分别是：audio，character和digit。我们选择character类型。定义Captcha.go文件，实现验证码的生成和验证码函数的定义。在进行验证码生成时，默认提供验证码的配置，并生成验证码后返回给客户端浏览器。如下是生成验证码的函数定义</p>
+<pre><code class="language-go">//生成验证码
+func GenerateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
+
+    // parse request parameters
+    // 接收客户端发送来的请求参数
+
+    postParameters := ConfigJsonBody{
+        CaptchaType: &quot;character&quot;,
+        ConfigCharacter: base64Captcha.ConfigCharacter{
+            Height:             60,
+            Width:              240,
+            Mode:               3,
+            ComplexOfNoiseText: 0,
+            ComplexOfNoiseDot:  0,
+            IsUseSimpleFont:    true,
+            IsShowHollowLine:   false,
+            IsShowNoiseDot:     false,
+            IsShowNoiseText:    false,
+            IsShowSlimeLine:    false,
+            IsShowSineLine:     false,
+            CaptchaLen:         6,
+            BgColor: &amp;color.RGBA{
+                R: 3,
+                G: 102,
+                B: 214,
+                A: 254,
+            },
+        },
+    }
+    // 创建base64图像验证码
+
+    var config interface{}
+    switch postParameters.CaptchaType {
+    case &quot;audio&quot;:
+        config = postParameters.ConfigAudio
+    case &quot;character&quot;:
+        config = postParameters.ConfigCharacter
+    default:
+        config = postParameters.ConfigDigit
+    }
+    captchaId, captcaInterfaceInstance := base64Captcha.GenerateCaptcha(postParameters.Id, config)
+    base64blob := base64Captcha.CaptchaWriteToBase64Encoding(captcaInterfaceInstance)
+
+    // 设置json响应
+    w.Header().Set(&quot;Content-Type&quot;, &quot;application/json; charset=utf-8&quot;)
+    body := map[string]interface{}{&quot;code&quot;: 1, &quot;data&quot;: base64blob, &quot;captchaId&quot;: captchaId, &quot;msg&quot;: &quot;success&quot;}
+    json.NewEncoder(w).Encode(body)
+}
+</code></pre>
+<p>验证码接口解析：图形化验证码是用户名和密码登录功能的数据，属于Member模块。因此在MemberController中增加获取验证码的接口解析，如下</p>
+<pre><code class="language-go">func (mc *MemberController) Router(engine *gin.Engine){
+    //获取验证码
+    engine.GET(&quot;/api/captcha&quot;, mc.captcha)
+}
+</code></pre>
+<p>验证码验证：</p>
+<pre><code class="language-go">func CaptchaVerify(r *http.Request) bool {
+    //parse request parameters
+    //接收客户端发送来的请求参数
+    decoder := json.NewDecoder(r.Body)
+    var postParameters ConfigJsonBody
+    err := decoder.Decode(&amp;postParameters)
+    if err != nil {
+        log.Println(err)
+    }
+
+    defer r.Body.Close()
+
+    //比较图像验证码
+    verifyResult := base64Captcha.VerifyCaptcha(postParameters.Id, postParameters.VerifyValue)
+    return verifyResult
+}
+</code></pre>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/amzrk2" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/amzrk2" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algorithm/">Algorithm</a>
+            </span>
+            
+            <span>
+                <a href="/tags/base/">base</a>
+            </span>
+            
+            <span>
+                <a href="/tags/blog/">blog</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cloudnative/">cloudnative</a>
+            </span>
+            
+            <span>
+                <a href="/tags/coderebuild/">CodeRebuild</a>
+            </span>
+            
+            <span>
+                <a href="/tags/db/">db</a>
+            </span>
+            
+            <span>
+                <a href="/tags/go.project/">go.project</a>
+            </span>
+            
+            <span>
+                <a href="/tags/it/">it</a>
+            </span>
+            
+            <span>
+                <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/sys/">sys</a>
+            </span>
+            
+            <span>
+                <a href="/tags/tool/">tool</a>
+            </span>
+            
+            <span>
+                <a href="/tags/versioncontrol/">versioncontrol</a>
+            </span>
+            
+        </div>
+    </div>
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3><nav id="TableOfContents">
+  <ul>
+    <li><a href="#excel">Excel</a>
+      <ul>
+        <li><a href="#读">读</a></li>
+      </ul>
+    </li>
+    <li><a href="#短信">短信</a>
+      <ul>
+        <li><a href="#阿里云">阿里云</a></li>
+      </ul>
+    </li>
+    <li><a href="#图形验证码">图形验证码</a>
+      <ul>
+        <li><a href="#redis">Redis</a></li>
+        <li><a href="#验证码生成和验证">验证码生成和验证</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+</aside>
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/amzrk2" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/amzrk2" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algorithm/">Algorithm</a>
+            </span>
+            
+            <span>
+                <a href="/tags/base/">base</a>
+            </span>
+            
+            <span>
+                <a href="/tags/blog/">blog</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cloudnative/">cloudnative</a>
+            </span>
+            
+            <span>
+                <a href="/tags/coderebuild/">CodeRebuild</a>
+            </span>
+            
+            <span>
+                <a href="/tags/db/">db</a>
+            </span>
+            
+            <span>
+                <a href="/tags/go.project/">go.project</a>
+            </span>
+            
+            <span>
+                <a href="/tags/it/">it</a>
+            </span>
+            
+            <span>
+                <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/sys/">sys</a>
+            </span>
+            
+            <span>
+                <a href="/tags/tool/">tool</a>
+            </span>
+            
+            <span>
+                <a href="/tags/versioncontrol/">versioncontrol</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#excel">Excel</a>
+      <ul>
+        <li><a href="#读">读</a></li>
+      </ul>
+    </li>
+    <li><a href="#短信">短信</a>
+      <ul>
+        <li><a href="#阿里云">阿里云</a></li>
+      </ul>
+    </li>
+    <li><a href="#图形验证码">图形验证码</a>
+      <ul>
+        <li><a href="#redis">Redis</a></li>
+        <li><a href="#验证码生成和验证">验证码生成和验证</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2021
+                <a href="https://yuanyatianchi.github.io">DSRKafuU</a>
+                 | <a href="https://github.com/itsme/my_blog">Source code</a> 
+                | Powered by <a href="https://github.com/amzrk2/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.0/lazysizes.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+</body>
+
+</html>

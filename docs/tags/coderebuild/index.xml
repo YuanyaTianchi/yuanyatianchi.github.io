@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CodeRebuild on 鸢雅</title>
+    <link>https://yuanyatianchi.github.io/tags/coderebuild/</link>
+    <description>Recent content in CodeRebuild on 鸢雅</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language><atom:link href="https://yuanyatianchi.github.io/tags/coderebuild/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CodeRebuild</title>
+      <link>https://yuanyatianchi.github.io/post/it.base.coderefactoring/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.base.coderefactoring/</guid>
+      <description>重构笔记 一个例子 // 影片类型 type MovieType int var ( CHILD_RENTS MovieType = 2 // 儿童租用的 REGULAR MovieType = 0 // 普通的 NEW_RELEASE MovieType = 1 // 新发布的 ) // 影片 type Movie struct { Title string PriceCode MovieType } // 租借记录 type Rental struct { Movie *Movie DaysRented int // 租借天数 } // 顾客 type Customer struct { Name string Rentals []*Rental } // 添加租借记录 func (cus *Customer) AddRental(rental</description>
+    </item>
+    
+  </channel>
+</rss>
