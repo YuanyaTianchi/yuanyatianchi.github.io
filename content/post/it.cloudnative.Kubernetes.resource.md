@@ -1,4 +1,16 @@
-# resources
+
+
++++
+
+title = "Kubernetes.resources"
+description = "Kubernetes.resources"
+tags = ["it", "cloudnative"]
+
++++
+
+
+
+# Kubernetes.resources
 
 一些 Kubernetes 的资源 https://gitee.com/yswyn/K8s/tree/master 。大多因为被墙难以获取的。
 
