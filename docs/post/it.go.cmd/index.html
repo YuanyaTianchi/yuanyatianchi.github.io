@@ -15,21 +15,23 @@
 <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/amzrk2/cdn-stcapi@1/favicons/favicon.ico" />
 
 
-<title> - 鸢雅</title>
+<title>go.cmd - 鸢雅</title>
 
 
 <meta name="author" content="DSRKafuU" />
 
 
-<meta name="description" content="A minimal Hugo theme with nice theme color." />
+<meta name="description" content="go.cmd" />
 
 
+<meta name="keywords" content="it, go" />
 
-<meta property="og:title" content="" />
-<meta name="twitter:title" content="" />
+
+<meta property="og:title" content="go.cmd" />
+<meta name="twitter:title" content="go.cmd" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://yuanyatianchi.github.io/post/it.go.cmd/" /><meta property="og:description" content="shell go Go语言中包含了大量用于处理Go语言代码的命令和工具。其中，go命令就是最常用的一个，它有许多子命令。这些子命令都拥有不同的功能，如下所示。 build：用于编译给定的代码包或Go语言源码文件及其依" />
-<meta name="twitter:description" content="shell go Go语言中包含了大量用于处理Go语言代码的命令和工具。其中，go命令就是最常用的一个，它有许多子命令。这些子命令都拥有不同的功能，如下所示。 build：用于编译给定的代码包或Go语言源码文件及其依" /><meta property="og:image" content="https://yuanyatianchi.github.io/img/og.png" />
+<meta property="og:url" content="https://yuanyatianchi.github.io/post/it.go.cmd/" /><meta property="og:description" content="go.cmd" />
+<meta name="twitter:description" content="go.cmd" /><meta property="og:image" content="https://yuanyatianchi.github.io/img/og.png" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://yuanyatianchi.github.io/img/og.png" />
 
@@ -89,16 +91,17 @@
 <article>
     
     <h2 class="post-item post-title">
-        <a href="https://yuanyatianchi.github.io/post/it.go.cmd/"></a>
+        <a href="https://yuanyatianchi.github.io/post/it.go.cmd/">go.cmd</a>
     </h2>
     <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1368 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;No tag</span>
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1369 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/go">go</a>&nbsp;</span>
 
     </div>
     
     <div class="post-content markdown-body">
-        <h1 id="shell">shell</h1>
-<h2 id="go">go</h2>
+        <h1 id="gocmd">go.cmd</h1>
+<h2 id="shell">shell</h2>
+<h3 id="go">go</h3>
 <p>Go语言中包含了大量用于处理Go语言代码的命令和工具。其中，go命令就是最常用的一个，它有许多子命令。这些子命令都拥有不同的功能，如下所示。</p>
 <ul>
 <li>build：用于编译给定的代码包或Go语言源码文件及其依赖包。</li>
@@ -115,13 +118,13 @@
 <li>tool：用于运行Go语言的特殊工具。</li>
 <li>version：用于显示当前安装的Go语言的版本信息</li>
 </ul>
-<h3 id="get">get</h3>
+<h4 id="get">get</h4>
 <pre><code class="language-shell">go get github.com/go-sql-driver/mysql #命令可以下载依赖包
 go get github.com/go-sql-driver/mysql@v1.4.1 #指定下载版本，或升级到指定的版本号version
 go get -u github.com/go-sql-driver/mysql@v1.4.1 #将会升级到最新的次要版本或者修订版本(x.y.z, z是修订版本号， y是次要版本号)
 go get -u=patch #将会升级到最新的修订版本
 </code></pre>
-<h3 id="module">module</h3>
+<h4 id="module">module</h4>
 <p>Go语言从v1.5开始开始引入<code>vendor</code>模式，如果项目目录下有vendor目录，那么go工具链会优先使用<code>vendor</code>内的包进行编译、测试等。godep是一个通过vender模式实现的Go语言的第三方依赖管理工具，类似的还有由社区维护准官方包管理工具dep</p>
 <p><code>go module</code>是Go1.11版本后官方推出的版本管理工具，从Go1.13版本开始，<code>go module</code>作为Go默认的依赖管理工具</p>
 <table>
@@ -286,7 +289,7 @@ latest
             </span>
             
             <span>
-                <a href="/tags/go.project/">go.project</a>
+                <a href="/tags/go/">go</a>
             </span>
             
             <span>
@@ -295,6 +298,10 @@ latest
             
             <span>
                 <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/project/">project</a>
             </span>
             
             <span>
@@ -314,10 +321,9 @@ latest
     <div class="sidebar-item sidebar-toc">
         <h3>TOC</h3><nav id="TableOfContents">
   <ul>
-    <li><a href="#go">go</a>
+    <li><a href="#shell">shell</a>
       <ul>
-        <li><a href="#get">get</a></li>
-        <li><a href="#module">module</a></li>
+        <li><a href="#go">go</a></li>
       </ul>
     </li>
   </ul>
@@ -413,7 +419,7 @@ latest
             </span>
             
             <span>
-                <a href="/tags/go.project/">go.project</a>
+                <a href="/tags/go/">go</a>
             </span>
             
             <span>
@@ -422,6 +428,10 @@ latest
             
             <span>
                 <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/project/">project</a>
             </span>
             
             <span>
@@ -445,10 +455,9 @@ latest
         <h3>TOC</h3>
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#go">go</a>
+    <li><a href="#shell">shell</a>
       <ul>
-        <li><a href="#get">get</a></li>
-        <li><a href="#module">module</a></li>
+        <li><a href="#go">go</a></li>
       </ul>
     </li>
   </ul>

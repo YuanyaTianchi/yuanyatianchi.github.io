@@ -90,53 +90,14 @@
 
 <div class="post">
     <h2 class="post-item post-title">
-        <a href="https://yuanyatianchi.github.io/post/it.versioncontrol.git/">git</a>
+        <a href="https://yuanyatianchi.github.io/post/it.cloudnative.kubernetes.resource/">Kubernetes.resources</a>
     </h2>
     <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;2759 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/versioncontrol">versioncontrol</a>&nbsp;</span>
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;3535 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/cloudnative">cloudnative</a>&nbsp;</span>
 
     </div>
     <div class="post-item post-summary markdown-body">
-        git 192.30.253.113 github.com：修改host，提高GitHub的push和pull速度 命令行符号 ：可写可不写 &lt;&gt;：必须写且需要用你自己的内容替换 { }：必须在其中做出选择(选项之间以 | 隔开) 结构 工
-    </div>
-</div>
-
-<div class="post">
-    <h2 class="post-item post-title">
-        <a href="https://yuanyatianchi.github.io/post/it.mq.kafka/">Kafka</a>
-    </h2>
-    <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;2397 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/mq">mq</a>&nbsp;</span>
-
-    </div>
-    <div class="post-item post-summary markdown-body">
-        Kafka http://kafka.apache.org/ client go 链接kafka使用第三方库 https://github.com/Shopify/sarama ，sarama v1.20之后的版本加入了zstd压缩算法，编译需要用到cgo，win上需要下载 http://mingw-w64.org/doku.php/download ，当然也可以使用v1.20之前的版本 got get -u github.com/Shopify/sarama /*kafka地址列表*
-    </div>
-</div>
-
-<div class="post">
-    <h2 class="post-item post-title">
-        <a href="https://yuanyatianchi.github.io/post/it.cloudnative.kubernetes.base/">Kubernetes.base</a>
-    </h2>
-    <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;48128 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/cloudnative">cloudnative</a>&nbsp;</span>
-
-    </div>
-    <div class="post-item post-summary markdown-body">
-        Kubernetes.base 架构设计与实现原理 Kubernetes 为软件工程师提供了强大的容器编排能力，模糊了开发和运维之间的边界，让我们开发、管理和维护一个大型的分布式系统和项目变得更加容易 介绍 Kubernetes 被定义成一个用于自动化部署、扩容和管理容器应用
-    </div>
-</div>
-
-<div class="post">
-    <h2 class="post-item post-title">
-        <a href="https://yuanyatianchi.github.io/post/it.cloudnative.kubernetes.hello/">Kubernetes.hello</a>
-    </h2>
-    <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;25330 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/cloudnative">cloudnative</a>&nbsp;</span>
-
-    </div>
-    <div class="post-item post-summary markdown-body">
-        Kubernetes.hello 集群搭建准备 遵循官方指南：https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/install-kubea
+        Kubernetes.resources 一些 Kubernetes 的资源 https://gitee.com/yswyn/K8s/tree/master 。大多因为被墙难以获取的。 yaml kube-flannel.yml --- apiVersion: policy/v1beta1 kind: PodSecurityPolicy metadata: name: psp.flannel.unprivileged annotations: seccomp.security.alpha.kubernetes.io/allowedProfileNames: docker/default seccomp.security.alpha.kubernetes.io/defaultProfileName: docker/default apparmor.security.beta.kubernetes.io/allowedProfileNames: runtime/default apparmor.security.beta.kubernetes.io/defaultProfileName: runtime/default spec: privileged: false volumes: - configMap - secret - emptyDir - hostPath allowedHostPaths: - pathPrefix: &quot;/etc/cni/net.d&quot; - pathPrefix: &quot;/etc/kube-flannel&quot; - pathPrefix: &quot;/run/flannel&quot; readOnlyRootFilesystem: false # Users and groups runAsUser: rule: RunAsAny supplementalGroups: rule: RunAsAny fsGroup: rule: RunAsAny # Privilege Escalation allowPrivilegeEscalation: false defaultAllowPrivilegeEscalation: false # Capabilities allowedCapabilities: ['NET_ADMIN'] defaultAddCapabilities: [] requiredDropCapabilities: [] # Host namespaces hostPID: false hostIPC: false hostNetwork:
     </div>
 </div>
 
@@ -215,6 +176,45 @@
     </div>
     <div class="post-item post-summary markdown-body">
         redis https://redis.io/，http://www.redis.cn/ Redis的特性 速度快 数据存在内存（主要原因） c语言编写（50000line，单机的核心代码只有23000line） 单线程
+    </div>
+</div>
+
+<div class="post">
+    <h2 class="post-item post-title">
+        <a href="https://yuanyatianchi.github.io/post/tool.typora/">Typora</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;148 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/tool">tool</a>&nbsp;</span>
+
+    </div>
+    <div class="post-item post-summary markdown-body">
+        所有操作都只在 行首 起效，所有操作的 空格 不可缺省。 基本 标题 &lsquo;### 标题内容&rsquo;：有几个 &lsquo;#&rsquo; 即是几级标题，同时也是几号字体。 有序列表 &lsquo;1. ' 无序列表 &lsquo;- ' 或 &lsquo;+ ' 插入 代码块 &lsquo;```语言名&rsquo
+    </div>
+</div>
+
+<div class="post">
+    <h2 class="post-item post-title">
+        <a href="https://yuanyatianchi.github.io/post/tool.uml/">UML</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1807 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/tool">tool</a>&nbsp;</span>
+
+    </div>
+    <div class="post-item post-summary markdown-body">
+        UML 时序图 什么是时序图 时序图(Sequence Diagram)，又名序列图、循序图，是一种UML交互图。它通过描述对象之间发送消息的时间顺序显示多个对象之间的动态协作。 使用场景 时序图的使用场景非常广泛，
+    </div>
+</div>
+
+<div class="post">
+    <h2 class="post-item post-title">
+        <a href="https://yuanyatianchi.github.io/post/it.base.winenv/">WinEnv</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;758 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/base">base</a>&nbsp;</span>
+
+    </div>
+    <div class="post-item post-summary markdown-body">
+        Windows环境 database mysql https://dev.mysql.com/downloads/ 下载并解压：https://dev.mysql.com/downloads/mysql/ ，c++ 2019可再发行软件包(运行库)：https://aka.ms/vs/16/re
     </div>
 </div>
 
@@ -369,7 +369,7 @@
             </span>
             
             <span>
-                <a href="/tags/go.project/">go.project</a>
+                <a href="/tags/go/">go</a>
             </span>
             
             <span>
@@ -378,6 +378,10 @@
             
             <span>
                 <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/project/">project</a>
             </span>
             
             <span>
@@ -488,7 +492,7 @@
             </span>
             
             <span>
-                <a href="/tags/go.project/">go.project</a>
+                <a href="/tags/go/">go</a>
             </span>
             
             <span>
@@ -497,6 +501,10 @@
             
             <span>
                 <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/project/">project</a>
             </span>
             
             <span>

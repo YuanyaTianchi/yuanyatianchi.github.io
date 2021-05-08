@@ -20,36 +20,6 @@
     <loc>https://yuanyatianchi.github.io/about/</loc>
     <lastmod>2020-04-11T19:15:32+08:00</lastmod>
   </url><url>
-    <loc>https://yuanyatianchi.github.io/post/it.cloudnative.kubernetes.resource/</loc>
-  </url><url>
-    <loc>https://yuanyatianchi.github.io/post/it.go.base/</loc>
-  </url><url>
-    <loc>https://yuanyatianchi.github.io/post/it.go.books/</loc>
-  </url><url>
-    <loc>https://yuanyatianchi.github.io/post/it.go.cmd/</loc>
-  </url><url>
-    <loc>https://yuanyatianchi.github.io/post/it.go.hello/</loc>
-  </url><url>
-    <loc>https://yuanyatianchi.github.io/post/it.go.project.yuanyacrontab/</loc>
-  </url><url>
-    <loc>https://yuanyatianchi.github.io/post/it.go.project.yuanyatools/</loc>
-  </url><url>
-    <loc>https://yuanyatianchi.github.io/post/it.go.%E5%8E%9F%E7%90%86/</loc>
-  </url><url>
-    <loc>https://yuanyatianchi.github.io/post/it.go.%E5%A3%B0%E6%98%8E/</loc>
-  </url><url>
-    <loc>https://yuanyatianchi.github.io/post/it.go.%E5%B9%B6%E5%8F%91/</loc>
-  </url><url>
-    <loc>https://yuanyatianchi.github.io/post/it.go.%E6%B3%A8%E9%87%8A/</loc>
-  </url><url>
-    <loc>https://yuanyatianchi.github.io/post/it.go.%E6%B5%8B%E8%AF%95/</loc>
-  </url><url>
-    <loc>https://yuanyatianchi.github.io/post/it.go.%E7%B1%BB%E5%9E%8B/</loc>
-  </url><url>
-    <loc>https://yuanyatianchi.github.io/post/it.go.%E8%AF%AD%E5%8F%A5/</loc>
-  </url><url>
-    <loc>https://yuanyatianchi.github.io/post/it.go.%E9%94%99%E8%AF%AF/</loc>
-  </url><url>
     <loc>https://yuanyatianchi.github.io/tags/algorithm/</loc>
   </url><url>
     <loc>https://yuanyatianchi.github.io/post/it.base.algorithm/</loc>
@@ -72,13 +42,37 @@
   </url><url>
     <loc>https://yuanyatianchi.github.io/post/it.versioncontrol.git/</loc>
   </url><url>
-    <loc>https://yuanyatianchi.github.io/tags/go.project/</loc>
+    <loc>https://yuanyatianchi.github.io/tags/go/</loc>
+  </url><url>
+    <loc>https://yuanyatianchi.github.io/post/it.go.base/</loc>
+  </url><url>
+    <loc>https://yuanyatianchi.github.io/post/it.go.books/</loc>
+  </url><url>
+    <loc>https://yuanyatianchi.github.io/post/it.go.cmd/</loc>
+  </url><url>
+    <loc>https://yuanyatianchi.github.io/post/it.go.hello/</loc>
+  </url><url>
+    <loc>https://yuanyatianchi.github.io/post/it.go.%E5%A3%B0%E6%98%8E/</loc>
+  </url><url>
+    <loc>https://yuanyatianchi.github.io/post/it.go.%E5%B9%B6%E5%8F%91/</loc>
+  </url><url>
+    <loc>https://yuanyatianchi.github.io/post/it.go.%E6%B3%A8%E9%87%8A/</loc>
+  </url><url>
+    <loc>https://yuanyatianchi.github.io/post/it.go.%E6%B5%8B%E8%AF%95/</loc>
+  </url><url>
+    <loc>https://yuanyatianchi.github.io/post/it.go.%E7%B1%BB%E5%9E%8B/</loc>
+  </url><url>
+    <loc>https://yuanyatianchi.github.io/post/it.go.%E8%AF%AD%E5%8F%A5/</loc>
+  </url><url>
+    <loc>https://yuanyatianchi.github.io/post/it.go.%E9%94%99%E8%AF%AF/</loc>
   </url><url>
     <loc>https://yuanyatianchi.github.io/post/it.mq.kafka/</loc>
   </url><url>
     <loc>https://yuanyatianchi.github.io/post/it.cloudnative.kubernetes.base/</loc>
   </url><url>
     <loc>https://yuanyatianchi.github.io/post/it.cloudnative.kubernetes.hello/</loc>
+  </url><url>
+    <loc>https://yuanyatianchi.github.io/post/it.cloudnative.kubernetes.resource/</loc>
   </url><url>
     <loc>https://yuanyatianchi.github.io/post/it.sys.linux/</loc>
   </url><url>
@@ -89,6 +83,8 @@
     <loc>https://yuanyatianchi.github.io/tags/mq/</loc>
   </url><url>
     <loc>https://yuanyatianchi.github.io/post/it.db.mysql/</loc>
+  </url><url>
+    <loc>https://yuanyatianchi.github.io/tags/project/</loc>
   </url><url>
     <loc>https://yuanyatianchi.github.io/post/it.mq.rabbitmq/</loc>
   </url><url>
@@ -102,13 +98,17 @@
   </url><url>
     <loc>https://yuanyatianchi.github.io/post/tool.typora/</loc>
   </url><url>
+    <loc>https://yuanyatianchi.github.io/post/tool.uml/</loc>
+  </url><url>
     <loc>https://yuanyatianchi.github.io/tags/versioncontrol/</loc>
   </url><url>
     <loc>https://yuanyatianchi.github.io/post/it.base.winenv/</loc>
   </url><url>
+    <loc>https://yuanyatianchi.github.io/post/it.go.project.yuanyacrontab/</loc>
+  </url><url>
     <loc>https://yuanyatianchi.github.io/post/it.go.project.yuanyadocker/</loc>
   </url><url>
-    <loc>https://yuanyatianchi.github.io/post/tool.uml/</loc>
+    <loc>https://yuanyatianchi.github.io/post/it.go.project.yuanyatools/</loc>
   </url><url>
     <loc>https://yuanyatianchi.github.io/post/it.base.networkprogramming/</loc>
   </url><url>

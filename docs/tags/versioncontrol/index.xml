@@ -7,12 +7,12 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language><atom:link href="https://yuanyatianchi.github.io/tags/versioncontrol/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>git</title>
+      <title>Git</title>
       <link>https://yuanyatianchi.github.io/post/it.versioncontrol.git/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://yuanyatianchi.github.io/post/it.versioncontrol.git/</guid>
-      <description>git 192.30.253.113 github.com：修改host，提高GitHub的push和pull速度 命令行符号 ：可写可不写 &amp;lt;&amp;gt;：必须写且需要用你自己的内容替换 { }：必须在其中做出选择(选项之间以 | 隔开) 结构 工</description>
+      <description>Git 192.30.253.113 github.com：修改host，提高GitHub的push和pull速度 命令行符号 ：可写可不写 &amp;lt;&amp;gt;：必须写且需要用你自己的内容替换 { }：必须在其中做出选择(选项之间以 | 隔开) 结构 工</description>
     </item>
     
   </channel>

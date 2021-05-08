@@ -33,5 +33,14 @@
       <description>Kubernetes.hello 集群搭建准备 遵循官方指南：https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/install-kubea</description>
     </item>
     
+    <item>
+      <title>Kubernetes.resources</title>
+      <link>https://yuanyatianchi.github.io/post/it.cloudnative.kubernetes.resource/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.cloudnative.kubernetes.resource/</guid>
+      <description>Kubernetes.resources 一些 Kubernetes 的资源 https://gitee.com/yswyn/K8s/tree/master 。大多因为被墙难以获取的。 yaml kube-flannel.yml --- apiVersion: policy/v1beta1 kind: PodSecurityPolicy metadata: name: psp.flannel.unprivileged annotations: seccomp.security.alpha.kubernetes.io/allowedProfileNames: docker/default seccomp.security.alpha.kubernetes.io/defaultProfileName: docker/default apparmor.security.beta.kubernetes.io/allowedProfileNames: runtime/default apparmor.security.beta.kubernetes.io/defaultProfileName: runtime/default spec: privileged: false volumes: - configMap - secret - emptyDir - hostPath allowedHostPaths: - pathPrefix: &amp;quot;/etc/cni/net.d&amp;quot; - pathPrefix: &amp;quot;/etc/kube-flannel&amp;quot; - pathPrefix: &amp;quot;/run/flannel&amp;quot; readOnlyRootFilesystem: false # Users and groups runAsUser: rule: RunAsAny supplementalGroups: rule: RunAsAny fsGroup: rule: RunAsAny # Privilege Escalation allowPrivilegeEscalation: false defaultAllowPrivilegeEscalation: false # Capabilities allowedCapabilities: [&#39;NET_ADMIN&#39;] defaultAddCapabilities: [] requiredDropCapabilities: [] # Host namespaces hostPID: false hostIPC: false hostNetwork:</description>
+    </item>
+    
   </channel>
 </rss>

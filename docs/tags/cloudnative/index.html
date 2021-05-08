@@ -131,6 +131,19 @@
     </div>
 </div>
 
+<div class="post">
+    <h2 class="post-item post-title">
+        <a href="https://yuanyatianchi.github.io/post/it.cloudnative.kubernetes.resource/">Kubernetes.resources</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;3535 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/cloudnative">cloudnative</a>&nbsp;</span>
+
+    </div>
+    <div class="post-item post-summary markdown-body">
+        Kubernetes.resources 一些 Kubernetes 的资源 https://gitee.com/yswyn/K8s/tree/master 。大多因为被墙难以获取的。 yaml kube-flannel.yml --- apiVersion: policy/v1beta1 kind: PodSecurityPolicy metadata: name: psp.flannel.unprivileged annotations: seccomp.security.alpha.kubernetes.io/allowedProfileNames: docker/default seccomp.security.alpha.kubernetes.io/defaultProfileName: docker/default apparmor.security.beta.kubernetes.io/allowedProfileNames: runtime/default apparmor.security.beta.kubernetes.io/defaultProfileName: runtime/default spec: privileged: false volumes: - configMap - secret - emptyDir - hostPath allowedHostPaths: - pathPrefix: &quot;/etc/cni/net.d&quot; - pathPrefix: &quot;/etc/kube-flannel&quot; - pathPrefix: &quot;/run/flannel&quot; readOnlyRootFilesystem: false # Users and groups runAsUser: rule: RunAsAny supplementalGroups: rule: RunAsAny fsGroup: rule: RunAsAny # Privilege Escalation allowPrivilegeEscalation: false defaultAllowPrivilegeEscalation: false # Capabilities allowedCapabilities: ['NET_ADMIN'] defaultAddCapabilities: [] requiredDropCapabilities: [] # Host namespaces hostPID: false hostIPC: false hostNetwork:
+    </div>
+</div>
+
 
 
 
@@ -218,7 +231,7 @@
             </span>
             
             <span>
-                <a href="/tags/go.project/">go.project</a>
+                <a href="/tags/go/">go</a>
             </span>
             
             <span>
@@ -227,6 +240,10 @@
             
             <span>
                 <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/project/">project</a>
             </span>
             
             <span>
@@ -337,7 +354,7 @@
             </span>
             
             <span>
-                <a href="/tags/go.project/">go.project</a>
+                <a href="/tags/go/">go</a>
             </span>
             
             <span>
@@ -346,6 +363,10 @@
             
             <span>
                 <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/project/">project</a>
             </span>
             
             <span>

@@ -53,12 +53,111 @@
     </item>
     
     <item>
-      <title>git</title>
+      <title>Git</title>
       <link>https://yuanyatianchi.github.io/post/it.versioncontrol.git/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://yuanyatianchi.github.io/post/it.versioncontrol.git/</guid>
-      <description>git 192.30.253.113 github.com：修改host，提高GitHub的push和pull速度 命令行符号 ：可写可不写 &amp;lt;&amp;gt;：必须写且需要用你自己的内容替换 { }：必须在其中做出选择(选项之间以 | 隔开) 结构 工</description>
+      <description>Git 192.30.253.113 github.com：修改host，提高GitHub的push和pull速度 命令行符号 ：可写可不写 &amp;lt;&amp;gt;：必须写且需要用你自己的内容替换 { }：必须在其中做出选择(选项之间以 | 隔开) 结构 工</description>
+    </item>
+    
+    <item>
+      <title>go.base</title>
+      <link>https://yuanyatianchi.github.io/post/it.go.base/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.go.base/</guid>
+      <description>go.base channel 函数调用栈 函数调用过程 https://www.bilibili.com/video/BV1hv411x7we?p=5 ， 虚拟地址空间：栈、堆、（只读）数据段、代码段 代码段：我们按照编程语言的语法定义的函数，会被编译器编译为一堆堆机器指令，写入可执行文件，程序执行时，可执行文件被加载到内存，</description>
+    </item>
+    
+    <item>
+      <title>go.book</title>
+      <link>https://yuanyatianchi.github.io/post/it.go.books/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.go.books/</guid>
+      <description>go.book 网站 官方：https://golang.google.cn/ 标准库：https://studygolang.com/pkgdoc 标准库实例：https://books.studygolang.com</description>
+    </item>
+    
+    <item>
+      <title>go.cmd</title>
+      <link>https://yuanyatianchi.github.io/post/it.go.cmd/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.go.cmd/</guid>
+      <description>go.cmd shell go Go语言中包含了大量用于处理Go语言代码的命令和工具。其中，go命令就是最常用的一个，它有许多子命令。这些子命令都拥有不同的功能，如下所示。 build：用于编译给定的代码包或Go语言源码文件及其</description>
+    </item>
+    
+    <item>
+      <title>go.hello</title>
+      <link>https://yuanyatianchi.github.io/post/it.go.hello/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.go.hello/</guid>
+      <description>go.hello 中文官网：https://golang.google.cn/ 中文文档：https://studygolang.com/pkgdoc 环境 linux 安装：https://golang.google.cn/dl/</description>
+    </item>
+    
+    <item>
+      <title>go.声明</title>
+      <link>https://yuanyatianchi.github.io/post/it.go.%E5%A3%B0%E6%98%8E/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.go.%E5%A3%B0%E6%98%8E/</guid>
+      <description>声明 本包：package 包命名：自己开发的程序，一般采用域名作为顶级包名，这样就不会重复了，没有域名可以使用github.com/&amp;lt;username&amp;gt;作为顶级路径 main包：go build 同时要满</description>
+    </item>
+    
+    <item>
+      <title>go.并发</title>
+      <link>https://yuanyatianchi.github.io/post/it.go.%E5%B9%B6%E5%8F%91/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.go.%E5%B9%B6%E5%8F%91/</guid>
+      <description>并发 并发是一个cpu核心快速分配时间片交替执行多个任务，并行是多个cpu核心分别执行自己的任务。核心数量受限于硬件，这时候就需要程序设计提高并发量，即并发编程 并发模型 https://www.bilibili.com/video/av70488008?p=116 操作系统体系架构：无论语言层面何</description>
+    </item>
+    
+    <item>
+      <title>go.文档</title>
+      <link>https://yuanyatianchi.github.io/post/it.go.%E6%B3%A8%E9%87%8A/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.go.%E6%B3%A8%E9%87%8A/</guid>
+      <description>文档注释 go doc go会自动把我们的注释转换为文档 go doc：显示当前文件夹下的文档 go doc Queue：显示指定type的文档 go doc Pop：显示指定方法 godoc go1.13之后官方安装不再包含godoc，通过go get golang.org/x/tools/cmd/godoc 获取</description>
+    </item>
+    
+    <item>
+      <title>go.测试</title>
+      <link>https://yuanyatianchi.github.io/post/it.go.%E6%B5%8B%E8%AF%95/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.go.%E6%B5%8B%E8%AF%95/</guid>
+      <description>测试 Debugging Sucks ! Testing Rocks ! /*单元测试文件名必须以 _test.go 为后缀，前缀一般为要测试的文件名*/ func TestMain(m *testing.M) { //TestMain 在测试函数执行前后执行其它内容，类似AOP。TestMain(m *testing.M)为固定写法 fmt.Println(&amp;quot;before m.Run()&amp;quot;) m.Run() //执行的</description>
+    </item>
+    
+    <item>
+      <title>go.类型</title>
+      <link>https://yuanyatianchi.github.io/post/it.go.%E7%B1%BB%E5%9E%8B/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.go.%E7%B1%BB%E5%9E%8B/</guid>
+      <description>类型 类型 byte：字节，8bit (u)int，(u)int8，(u)int16，(u)int32，(u)int64：整数，int长度默认与操作系统位数一致，加u表示无符号整数 rune：int32的别名</description>
+    </item>
+    
+    <item>
+      <title>go.语句</title>
+      <link>https://yuanyatianchi.github.io/post/it.go.%E8%AF%AD%E5%8F%A5/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.go.%E8%AF%AD%E5%8F%A5/</guid>
+      <description>语句 控制语句：control statement 条件 if func ifSentence() { content1, err1 := ioutil.ReadFile(&amp;quot;if.txt&amp;quot;) if err1 != nil { fmt.Println(err1) } else { fmt.Printf(&amp;quot;%s\n&amp;quot;, content1) } if content2, err2 := ioutil.ReadFile(&amp;quot;if.txt&amp;quot;); err2 != nil { //if后的变量只在if的块中存活 fmt.Println(err2) } else { fmt.Printf(&amp;quot;%s\n&amp;quot;, content2) } } swich func switchSentence1(a, b int, op string) int { var result int switch op { //switch的每个cas</description>
+    </item>
+    
+    <item>
+      <title>go.错误</title>
+      <link>https://yuanyatianchi.github.io/post/it.go.%E9%94%99%E8%AF%AF/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.go.%E9%94%99%E8%AF%AF/</guid>
+      <description>错误 error Go 语言通过内置的错误接口提供了非常简单的错误处理机制 /*error的定义*/ type error interface { Error() string } /*error创建*/ func main() { error1 := errors.New(&amp;quot;error1Message&amp;quot;) fmt.Printf(&amp;quot;%T\n&amp;quot;, error1) //*errors.errorString fmt.Println(error1) //error1Message error2 := fmt.Errorf(&amp;quot;%s&amp;quot;, &amp;quot;error2Message&amp;quot;) fmt.Printf(&amp;quot;%T\n&amp;quot;, error2) //*errors.errorString fmt.Println(error2) //error2Message } 错误处理方式 func ErrorHandle() { file, err := os.OpenFile(&amp;quot;./demo.txt&amp;quot;, os.O_RDONLY, os.ModePerm) /*一般采</description>
     </item>
     
     <item>
@@ -86,6 +185,15 @@
       
       <guid>https://yuanyatianchi.github.io/post/it.cloudnative.kubernetes.hello/</guid>
       <description>Kubernetes.hello 集群搭建准备 遵循官方指南：https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/install-kubea</description>
+    </item>
+    
+    <item>
+      <title>Kubernetes.resources</title>
+      <link>https://yuanyatianchi.github.io/post/it.cloudnative.kubernetes.resource/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.cloudnative.kubernetes.resource/</guid>
+      <description>Kubernetes.resources 一些 Kubernetes 的资源 https://gitee.com/yswyn/K8s/tree/master 。大多因为被墙难以获取的。 yaml kube-flannel.yml --- apiVersion: policy/v1beta1 kind: PodSecurityPolicy metadata: name: psp.flannel.unprivileged annotations: seccomp.security.alpha.kubernetes.io/allowedProfileNames: docker/default seccomp.security.alpha.kubernetes.io/defaultProfileName: docker/default apparmor.security.beta.kubernetes.io/allowedProfileNames: runtime/default apparmor.security.beta.kubernetes.io/defaultProfileName: runtime/default spec: privileged: false volumes: - configMap - secret - emptyDir - hostPath allowedHostPaths: - pathPrefix: &amp;quot;/etc/cni/net.d&amp;quot; - pathPrefix: &amp;quot;/etc/kube-flannel&amp;quot; - pathPrefix: &amp;quot;/run/flannel&amp;quot; readOnlyRootFilesystem: false # Users and groups runAsUser: rule: RunAsAny supplementalGroups: rule: RunAsAny fsGroup: rule: RunAsAny # Privilege Escalation allowPrivilegeEscalation: false defaultAllowPrivilegeEscalation: false # Capabilities allowedCapabilities: [&#39;NET_ADMIN&#39;] defaultAddCapabilities: [] requiredDropCapabilities: [] # Host namespaces hostPID: false hostIPC: false hostNetwork:</description>
     </item>
     
     <item>
@@ -152,12 +260,30 @@
     </item>
     
     <item>
+      <title>YuanyaCrontab</title>
+      <link>https://yuanyatianchi.github.io/post/it.go.project.yuanyacrontab/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.go.project.yuanyacrontab/</guid>
+      <description>Golang分布式任务调度 传统方案-linux下的crontab 配置任务时,需要ssh登录脚本服务器进行操作 服务器宕机，任务将终止调度，需要人工迁移 排查问题低效，无法方便的查看任务状态与错误输出 分布式</description>
+    </item>
+    
+    <item>
       <title>YuanyaDocker</title>
       <link>https://yuanyatianchi.github.io/post/it.go.project.yuanyadocker/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://yuanyatianchi.github.io/post/it.go.project.yuanyadocker/</guid>
       <description>MyDocker Docker 是一个使用了 Linux Namespace Cgroups 的虚拟化工具。 Linux Namespace Linux Namespace 是 Kernel 的一个功能，它可以隔离一系列的系统资源，比如 PIO ( Process ID ）、User ID、Network 等。可能会想到 chroot 命令，就像 chroot 允许把当前目录变成根目录一样（被隔离开来</description>
+    </item>
+    
+    <item>
+      <title>YuanyaTools</title>
+      <link>https://yuanyatianchi.github.io/post/it.go.project.yuanyatools/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.go.project.yuanyatools/</guid>
+      <description>YuanyaTools Excel https://github.com/360EntSecGroup-Skylar/excelize 安装 github.com/360EntSecGroup-Skylar/excelize 如果使用Go Modules管理软件包，安装v2 github.com/360EntSecGroup-Skylar/excelize/v2 读 import ( &amp;quot;github.com/360EntSecGroup-Skylar/excelize&amp;quot; ) func readExcel(excelPath string) [][]string { xlsx, err := excelize.OpenFile(excelPath) if err != nil { fmt.Println(&amp;quot;open excel error,&amp;quot;, err.Error()) os.Exit(1) } sheetIndex := xlsx.GetActiveSheetIndex() //获取激活状态下sheetIndex sheetName := xlsx.GetSheetName(sheetIndex) //根据sheetIndex获取shee</description>
     </item>
     
     <item>

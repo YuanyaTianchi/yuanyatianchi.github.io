@@ -103,118 +103,118 @@
 
 <div class="post">
     <h2 class="post-item post-title">
-        <a href="https://yuanyatianchi.github.io/post/it.cloudnative.kubernetes.resource/"></a>
+        <a href="https://yuanyatianchi.github.io/post/it.base.algorithm/">Algorithm</a>
     </h2>
     <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;3535 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;No tag</span>
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;11008 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/algorithm">Algorithm</a>&nbsp;</span>
 
     </div>
     <div class="post-item post-summary markdown-body">
-        resources 一些 Kubernetes 的资源 https://gitee.com/yswyn/K8s/tree/master 。大多因为被墙难以获取的。 yaml kube-flannel.yml --- apiVersion: policy/v1beta1 kind: PodSecurityPolicy metadata: name: psp.flannel.unprivileged annotations: seccomp.security.alpha.kubernetes.io/allowedProfileNames: docker/default seccomp.security.alpha.kubernetes.io/defaultProfileName: docker/default apparmor.security.beta.kubernetes.io/allowedProfileNames: runtime/default apparmor.security.beta.kubernetes.io/defaultProfileName: runtime/default spec: privileged: false volumes: - configMap - secret - emptyDir - hostPath allowedHostPaths: - pathPrefix: &quot;/etc/cni/net.d&quot; - pathPrefix: &quot;/etc/kube-flannel&quot; - pathPrefix: &quot;/run/flannel&quot; readOnlyRootFilesystem: false # Users and groups runAsUser: rule: RunAsAny supplementalGroups: rule: RunAsAny fsGroup: rule: RunAsAny # Privilege Escalation allowPrivilegeEscalation: false defaultAllowPrivilegeEscalation: false # Capabilities allowedCapabilities: ['NET_ADMIN'] defaultAddCapabilities: [] requiredDropCapabilities: [] # Host namespaces hostPID: false hostIPC: false hostNetwork:
+        算法 DP dp：dp 问题的一般形式就是求最值，求解dp的核心问题是穷举。因为要求最值，肯定要把所有可行的答案穷举出来，然后在其中找最值。 重叠子问题：动态规划的穷举有点特别，因为这类问题存在「重叠子问题」，
     </div>
 </div>
 
 <div class="post">
     <h2 class="post-item post-title">
-        <a href="https://yuanyatianchi.github.io/post/it.go.base/"></a>
+        <a href="https://yuanyatianchi.github.io/post/it.base.coderefactoring/">CodeRebuild</a>
     </h2>
     <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;34174 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;No tag</span>
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;852 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/coderebuild">CodeRebuild</a>&nbsp;</span>
 
     </div>
     <div class="post-item post-summary markdown-body">
-        channel 函数调用栈 函数调用过程 https://www.bilibili.com/video/BV1hv411x7we?p=5 ， 虚拟地址空间：栈、堆、（只读）数据段、代码段 代码段：我们按照编程语言的语法定义的函数，会被编译器编译为一堆堆机器指令，写入可执行文件，程序执行时，可执行文件被加载到内存，这
+        重构笔记 一个例子 // 影片类型 type MovieType int var ( CHILD_RENTS MovieType = 2 // 儿童租用的 REGULAR MovieType = 0 // 普通的 NEW_RELEASE MovieType = 1 // 新发布的 ) // 影片 type Movie struct { Title string PriceCode MovieType } // 租借记录 type Rental struct { Movie *Movie DaysRented int // 租借天数 } // 顾客 type Customer struct { Name string Rentals []*Rental } // 添加租借记录 func (cus *Customer) AddRental(rental
     </div>
 </div>
 
 <div class="post">
     <h2 class="post-item post-title">
-        <a href="https://yuanyatianchi.github.io/post/it.go.books/"></a>
+        <a href="https://yuanyatianchi.github.io/post/it.cloudnative.docker/">Docker</a>
     </h2>
     <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;419 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;No tag</span>
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;5354 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/cloudnative">cloudnative</a>&nbsp;</span>
 
     </div>
     <div class="post-item post-summary markdown-body">
-        网站 官方：https://golang.google.cn/ 标准库：https://studygolang.com/pkgdoc 标准库实例：https://books.studygolang.com/
+        Docker 官网：https://www.docker.com/ 仓库：https://hub.docker.com/ hello $ uname -r #查看centOS系统内核版本，Docker要求内核版本高于3.10 $ yum update #升级软件包
     </div>
 </div>
 
 <div class="post">
     <h2 class="post-item post-title">
-        <a href="https://yuanyatianchi.github.io/post/it.go.cmd/"></a>
+        <a href="https://yuanyatianchi.github.io/post/it.db.etcd/">etcd</a>
     </h2>
     <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1368 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;No tag</span>
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;5700 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/db">db</a>&nbsp;</span>
 
     </div>
     <div class="post-item post-summary markdown-body">
-        shell go Go语言中包含了大量用于处理Go语言代码的命令和工具。其中，go命令就是最常用的一个，它有许多子命令。这些子命令都拥有不同的功能，如下所示。 build：用于编译给定的代码包或Go语言源码文件及其依
+        etcd clients Golang https://github.com/etcd-io/etcd/tree/master/clientv3 go get go.etcd.io/etcd/clientv3 #解决包导入版本问题：https://segmentfault.com/q/1010000021762281/ client中有KV、Lease、Watcher等对象，通过这些对象来操作k
     </div>
 </div>
 
 <div class="post">
     <h2 class="post-item post-title">
-        <a href="https://yuanyatianchi.github.io/post/it.go.hello/"></a>
+        <a href="https://yuanyatianchi.github.io/post/it.versioncontrol.git/">Git</a>
     </h2>
     <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;2112 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;No tag</span>
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;2759 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/versioncontrol">versioncontrol</a>&nbsp;</span>
 
     </div>
     <div class="post-item post-summary markdown-body">
-        hello 中文官网：https://golang.google.cn/ 中文文档：https://studygolang.com/pkgdoc 环境 linux 安装：https://golang.google.cn/dl/
+        Git 192.30.253.113 github.com：修改host，提高GitHub的push和pull速度 命令行符号 ：可写可不写 &lt;&gt;：必须写且需要用你自己的内容替换 { }：必须在其中做出选择(选项之间以 | 隔开) 结构 工
     </div>
 </div>
 
 <div class="post">
     <h2 class="post-item post-title">
-        <a href="https://yuanyatianchi.github.io/post/it.go.project.yuanyacrontab/"></a>
+        <a href="https://yuanyatianchi.github.io/post/it.go.base/">go.base</a>
     </h2>
     <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;13693 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;No tag</span>
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;34175 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/go">go</a>&nbsp;</span>
 
     </div>
     <div class="post-item post-summary markdown-body">
-        Golang分布式任务调度 传统方案-linux下的crontab 配置任务时,需要ssh登录脚本服务器进行操作 服务器宕机，任务将终止调度，需要人工迁移 排查问题低效，无法方便的查看任务状态与错误输出 分布式
+        go.base channel 函数调用栈 函数调用过程 https://www.bilibili.com/video/BV1hv411x7we?p=5 ， 虚拟地址空间：栈、堆、（只读）数据段、代码段 代码段：我们按照编程语言的语法定义的函数，会被编译器编译为一堆堆机器指令，写入可执行文件，程序执行时，可执行文件被加载到内存，
     </div>
 </div>
 
 <div class="post">
     <h2 class="post-item post-title">
-        <a href="https://yuanyatianchi.github.io/post/it.go.project.yuanyatools/"></a>
+        <a href="https://yuanyatianchi.github.io/post/it.go.books/">go.book</a>
     </h2>
     <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1537 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;No tag</span>
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;420 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/go">go</a>&nbsp;</span>
 
     </div>
     <div class="post-item post-summary markdown-body">
-        YuanyaTools Excel https://github.com/360EntSecGroup-Skylar/excelize 安装 github.com/360EntSecGroup-Skylar/excelize 如果使用Go Modules管理软件包，安装v2 github.com/360EntSecGroup-Skylar/excelize/v2 读 import ( &quot;github.com/360EntSecGroup-Skylar/excelize&quot; ) func readExcel(excelPath string) [][]string { xlsx, err := excelize.OpenFile(excelPath) if err != nil { fmt.Println(&quot;open excel error,&quot;, err.Error()) os.Exit(1) } sheetIndex := xlsx.GetActiveSheetIndex() //获取激活状态下sheetIndex sheetName := xlsx.GetSheetName(sheetIndex) //根据sheetIndex获取shee
+        go.book 网站 官方：https://golang.google.cn/ 标准库：https://studygolang.com/pkgdoc 标准库实例：https://books.studygolang.com
     </div>
 </div>
 
 <div class="post">
     <h2 class="post-item post-title">
-        <a href="https://yuanyatianchi.github.io/post/it.go.%E5%8E%9F%E7%90%86/"></a>
+        <a href="https://yuanyatianchi.github.io/post/it.go.cmd/">go.cmd</a>
     </h2>
     <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;34174 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;No tag</span>
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1369 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/go">go</a>&nbsp;</span>
 
     </div>
     <div class="post-item post-summary markdown-body">
-        channel 函数调用栈 函数调用过程 https://www.bilibili.com/video/BV1hv411x7we?p=5 ， 虚拟地址空间：栈、堆、（只读）数据段、代码段 代码段：我们按照编程语言的语法定义的函数，会被编译器编译为一堆堆机器指令，写入可执行文件，程序执行时，可执行文件被加载到内存，这
+        go.cmd shell go Go语言中包含了大量用于处理Go语言代码的命令和工具。其中，go命令就是最常用的一个，它有许多子命令。这些子命令都拥有不同的功能，如下所示。 build：用于编译给定的代码包或Go语言源码文件及其
     </div>
 </div>
 
 <div class="post">
     <h2 class="post-item post-title">
-        <a href="https://yuanyatianchi.github.io/post/it.go.%E5%A3%B0%E6%98%8E/"></a>
+        <a href="https://yuanyatianchi.github.io/post/it.go.hello/">go.hello</a>
     </h2>
     <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;14839 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;No tag</span>
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;2112 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/go">go</a>&nbsp;</span>
 
     </div>
     <div class="post-item post-summary markdown-body">
-        声明 本包：package 包命名：自己开发的程序，一般采用域名作为顶级包名，这样就不会重复了，没有域名可以使用github.com/&lt;username&gt;作为顶级路径 main包：go build 同时要满
+        go.hello 中文官网：https://golang.google.cn/ 中文文档：https://studygolang.com/pkgdoc 环境 linux 安装：https://golang.google.cn/dl/
     </div>
 </div>
 
@@ -361,7 +361,7 @@
             </span>
             
             <span>
-                <a href="/tags/go.project/">go.project</a>
+                <a href="/tags/go/">go</a>
             </span>
             
             <span>
@@ -370,6 +370,10 @@
             
             <span>
                 <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/project/">project</a>
             </span>
             
             <span>
@@ -480,7 +484,7 @@
             </span>
             
             <span>
-                <a href="/tags/go.project/">go.project</a>
+                <a href="/tags/go/">go</a>
             </span>
             
             <span>
@@ -489,6 +493,10 @@
             
             <span>
                 <a href="/tags/mq/">mq</a>
+            </span>
+            
+            <span>
+                <a href="/tags/project/">project</a>
             </span>
             
             <span>

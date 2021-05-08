@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>project on 鸢雅</title>
+    <link>https://yuanyatianchi.github.io/tags/project/</link>
+    <description>Recent content in project on 鸢雅</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language><atom:link href="https://yuanyatianchi.github.io/tags/project/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>YuanyaCrontab</title>
+      <link>https://yuanyatianchi.github.io/post/it.go.project.yuanyacrontab/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.go.project.yuanyacrontab/</guid>
+      <description>Golang分布式任务调度 传统方案-linux下的crontab 配置任务时,需要ssh登录脚本服务器进行操作 服务器宕机，任务将终止调度，需要人工迁移 排查问题低效，无法方便的查看任务状态与错误输出 分布式</description>
+    </item>
+    
+    <item>
+      <title>YuanyaDocker</title>
+      <link>https://yuanyatianchi.github.io/post/it.go.project.yuanyadocker/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.go.project.yuanyadocker/</guid>
+      <description>MyDocker Docker 是一个使用了 Linux Namespace Cgroups 的虚拟化工具。 Linux Namespace Linux Namespace 是 Kernel 的一个功能，它可以隔离一系列的系统资源，比如 PIO ( Process ID ）、User ID、Network 等。可能会想到 chroot 命令，就像 chroot 允许把当前目录变成根目录一样（被隔离开来</description>
+    </item>
+    
+    <item>
+      <title>YuanyaTools</title>
+      <link>https://yuanyatianchi.github.io/post/it.go.project.yuanyatools/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.go.project.yuanyatools/</guid>
+      <description>YuanyaTools Excel https://github.com/360EntSecGroup-Skylar/excelize 安装 github.com/360EntSecGroup-Skylar/excelize 如果使用Go Modules管理软件包，安装v2 github.com/360EntSecGroup-Skylar/excelize/v2 读 import ( &amp;quot;github.com/360EntSecGroup-Skylar/excelize&amp;quot; ) func readExcel(excelPath string) [][]string { xlsx, err := excelize.OpenFile(excelPath) if err != nil { fmt.Println(&amp;quot;open excel error,&amp;quot;, err.Error()) os.Exit(1) } sheetIndex := xlsx.GetActiveSheetIndex() //获取激活状态下sheetIndex sheetName := xlsx.GetSheetName(sheetIndex) //根据sheetIndex获取shee</description>
+    </item>
+    
+  </channel>
+</rss>
