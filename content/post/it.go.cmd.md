@@ -1,6 +1,22 @@
-# shell
 
-## go
+
++++
+
+title = "go.cmd"
+description = "go.cmd"
+tags = ["it", "go"]
+
++++
+
+
+
+# go.cmd
+
+
+
+## shell
+
+### go
 
 Go语言中包含了大量用于处理Go语言代码的命令和工具。其中，go命令就是最常用的一个，它有许多子命令。这些子命令都拥有不同的功能，如下所示。
 
@@ -20,7 +36,7 @@ Go语言中包含了大量用于处理Go语言代码的命令和工具。其中�
 
 
 
-### get
+#### get
 
 ```shell
 go get github.com/go-sql-driver/mysql #命令可以下载依赖包
@@ -31,7 +47,7 @@ go get -u=patch #将会升级到最新的修订版本
 
 
 
-### module
+#### module
 
 Go语言从v1.5开始开始引入`vendor`模式，如果项目目录下有vendor目录，那么go工具链会优先使用`vendor`内的包进行编译、测试等。godep是一个通过vender模式实现的Go语言的第三方依赖管理工具，类似的还有由社区维护准官方包管理工具dep
 

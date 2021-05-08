@@ -1,4 +1,20 @@
-# 网站
+
+
++++
+
+title = "go.book"
+description = "go.book"
+tags = ["it", "go"]
+
++++
+
+
+
+# go.book
+
+
+
+## 网站
 
 官方：https://golang.google.cn/
 
@@ -6,7 +22,7 @@
 
 标准库实例：https://books.studygolang.com/The-Golang-Standard-Library-by-Example/
 
-# 书
+## 书
 
 实践：http://www.topgoer.com/
 

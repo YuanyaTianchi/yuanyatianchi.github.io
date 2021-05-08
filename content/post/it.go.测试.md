@@ -1,3 +1,15 @@
+
+
++++
+
+title = "go.测试"
+description = "go.测试"
+tags = ["it", "go"]
+
++++
+
+
+
 # 测试
 
 Debugging Sucks !  Testing Rocks !

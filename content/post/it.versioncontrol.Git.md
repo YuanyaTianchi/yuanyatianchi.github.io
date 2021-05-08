@@ -1,14 +1,16 @@
+
+
 +++
 
-title = "git"
-description = "git"
+title = "Git"
+description = "Git"
 tags = ["it", "versioncontrol"]
 
 +++
 
 
 
-# git
+# Git
 
 - 192.30.253.113 [github.com](http://github.com)：修改host，提高GitHub的push和pull速度
 - 命令行符号

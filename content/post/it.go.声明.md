@@ -1,3 +1,15 @@
+
+
++++
+
+title = "go.声明"
+description = "go.声明"
+tags = ["it", "go"]
+
++++
+
+
+
 ## 声明
 
 ### 本包：package
