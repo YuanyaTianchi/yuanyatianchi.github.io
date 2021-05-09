@@ -12,6 +12,8 @@ tags = ["it", "cloudnative"]
 
 # Kubernetes.base
 
+文章出自：https://draveness.me/，这里拷贝方便学习
+
 ## 架构设计与实现原理
 
 Kubernetes 为软件工程师提供了强大的容器编排能力，模糊了开发和运维之间的边界，让我们开发、管理和维护一个大型的分布式系统和项目变得更加容易
