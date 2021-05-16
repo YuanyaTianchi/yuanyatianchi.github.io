@@ -15,22 +15,25 @@
 <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/amzrk2/cdn-stcapi@1/favicons/favicon.ico" />
 
 
-<title>鸢雅 - A minimal Hugo theme.</title>
+<title>Makefile - 鸢雅</title>
 
 
 <meta name="author" content="DSRKafuU" />
 
 
-<meta name="description" content="A minimal Hugo theme with nice theme color." />
+<meta name="description" content="Makefile" />
 
 
+<meta name="keywords" content="it, base" />
 
-<meta property="og:title" content="鸢雅" />
-<meta name="twitter:title" content="鸢雅" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://yuanyatianchi.github.io/" /><meta property="og:image" content="https://yuanyatianchi.github.io/img/og.png" />
+
+<meta property="og:title" content="Makefile" />
+<meta name="twitter:title" content="Makefile" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yuanyatianchi.github.io/post/it.base.makefile/" /><meta property="og:description" content="Makefile" />
+<meta name="twitter:description" content="Makefile" /><meta property="og:image" content="https://yuanyatianchi.github.io/img/og.png" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://yuanyatianchi.github.io/img/og.png" /><meta property="og:updated_time" content="2020-11-11T00:00:00+00:00" />
+<meta name="twitter:image" content="https://yuanyatianchi.github.io/img/og.png" />
 
 
 <style>
@@ -85,148 +88,69 @@
             
             <div class="col-12 col-md-9 float-left content">
                 
-
-
-
-<div class="post">
+<article>
+    
     <h2 class="post-item post-title">
-        <a href="https://yuanyatianchi.github.io/post/it.base.winenv/">WinEnv</a>
+        <a href="https://yuanyatianchi.github.io/post/it.base.makefile/">Makefile</a>
     </h2>
     <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;758 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/base">base</a>&nbsp;</span>
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;345 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/base">base</a>&nbsp;</span>
 
     </div>
-    <div class="post-item post-summary markdown-body">
-        Windows环境 database mysql https://dev.mysql.com/downloads/ 下载并解压：https://dev.mysql.com/downloads/mysql/ ，c++ 2019可再发行软件包(运行库)：https://aka.ms/vs/16/re
-    </div>
-</div>
+    
+    <div class="post-content markdown-body">
+        <h1 id="makefile">Makefile</h1>
+<p>make 是一个自动化构建工具，会在当前目录下寻找 <code>Makefile</code> 或 <code>makefile</code> 文件。如果存在相应的文件，它就会依据其中定义好的规则完成构建任务。</p>
+<p>命名为</p>
+<p>makefile基本规则</p>
+<pre><code class="language-makefile">[target] ... : [prerequisites] ...
+    &lt;tab&gt;[command]
+    ...
+    ...
+</code></pre>
+<ul>
+<li>targets：规则的目标</li>
+<li>prerequisites：可选的要生成 targets 需要的文件或者是目标。</li>
+<li>command：make 需要执行的命令（任意的 shell 命令）。可以有多条命令，每一条命令占一行。</li>
+</ul>
+<pre><code class="language-makefile"># 伪目标定义。不创建目标文件，而是去执行这些目标下面的命令。如 make clean
+.PHONY: all build run gotool clean help
 
-<div class="post">
-    <h2 class="post-item post-title">
-        <a href="https://yuanyatianchi.github.io/post/it.go.project.yuanyacrontab/">YuanyaCrontab</a>
-    </h2>
-    <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;13693 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/go">go</a>&nbsp;<a href="/tags/project">project</a>&nbsp;</span>
+# 变量定义
+BINARY=&quot;main&quot;
 
-    </div>
-    <div class="post-item post-summary markdown-body">
-        Golang分布式任务调度 传统方案-linux下的crontab 配置任务时,需要ssh登录脚本服务器进行操作 服务器宕机，任务将终止调度，需要人工迁移 排查问题低效，无法方便的查看任务状态与错误输出 分布式
-    </div>
-</div>
+all: gotool build
 
-<div class="post">
-    <h2 class="post-item post-title">
-        <a href="https://yuanyatianchi.github.io/post/it.go.project.yuanyadocker/">YuanyaDocker</a>
-    </h2>
-    <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;7868 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/go">go</a>&nbsp;<a href="/tags/project">project</a>&nbsp;</span>
+build:
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ${BINARY}
 
-    </div>
-    <div class="post-item post-summary markdown-body">
-        MyDocker Docker 是一个使用了 Linux Namespace Cgroups 的虚拟化工具。 Linux Namespace Linux Namespace 是 Kernel 的一个功能，它可以隔离一系列的系统资源，比如 PIO ( Process ID ）、User ID、Network 等。可能会想到 chroot 命令，就像 chroot 允许把当前目录变成根目录一样（被隔离开来
-    </div>
-</div>
+run:
+	@go run ./
 
-<div class="post">
-    <h2 class="post-item post-title">
-        <a href="https://yuanyatianchi.github.io/post/it.go.project.yuanyatools/">YuanyaTools</a>
-    </h2>
-    <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1537 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/go">go</a>&nbsp;<a href="/tags/project">project</a>&nbsp;</span>
+gotool:
+	go fmt ./
+	go vet ./
 
-    </div>
-    <div class="post-item post-summary markdown-body">
-        YuanyaTools Excel https://github.com/360EntSecGroup-Skylar/excelize 安装 github.com/360EntSecGroup-Skylar/excelize 如果使用Go Modules管理软件包，安装v2 github.com/360EntSecGroup-Skylar/excelize/v2 读 import ( &quot;github.com/360EntSecGroup-Skylar/excelize&quot; ) func readExcel(excelPath string) [][]string { xlsx, err := excelize.OpenFile(excelPath) if err != nil { fmt.Println(&quot;open excel error,&quot;, err.Error()) os.Exit(1) } sheetIndex := xlsx.GetActiveSheetIndex() //获取激活状态下sheetIndex sheetName := xlsx.GetSheetName(sheetIndex) //根据sheetIndex获取shee
-    </div>
-</div>
+clean:
+	@if [ -f ${BINARY} ] ; then rm ${BINARY} ; fi
 
-<div class="post">
-    <h2 class="post-item post-title">
-        <a href="https://yuanyatianchi.github.io/post/it.base.networkprogramming/">网络编程</a>
-    </h2>
-    <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;4 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/base">base</a>&nbsp;</span>
+help:
+	@echo &quot;make - 格式化 Go 代码, 并编译生成二进制文件&quot;
+	@echo &quot;make build - 编译 Go 代码, 生成二进制文件&quot;
+	@echo &quot;make run - 直接运行 Go 代码&quot;
+	@echo &quot;make clean - 移除二进制文件和 vim swap files&quot;
+	@echo &quot;make gotool - 运行 Go 工具 'fmt' and 'vet'&quot;
+</code></pre>
 
     </div>
-    <div class="post-item post-summary markdown-body">
-        网络编程
-    </div>
-</div>
-
-<div class="post">
-    <h2 class="post-item post-title">
-        <a href="https://yuanyatianchi.github.io/post/it.base.%E9%9D%A2%E8%AF%95%E5%A4%A7%E7%BA%B2/">面试大纲</a>
-    </h2>
-    <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1916 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/it">it</a>&nbsp;<a href="/tags/base">base</a>&nbsp;</span>
-
-    </div>
-    <div class="post-item post-summary markdown-body">
-        面试大纲 算法 ascii：A-65、a-97 dp：base case、状态、选择、dp定义 dfs：backtrack(路径, 选择列表)、结束条件-决策树底层 bfs：要扩散的节点、已扩散的节点 math：平方
-    </div>
-</div>
+</article>
 
 
-
-
-
-
-
-
-<div class="pagination">
-    
-    <div class="pag-first">
-        <a href="/"><i class="iconfont icon-caret-back-circle-sharp"></i></a>
-    </div>
-    
-    
-    <div class="pag-previous">
-        <a href="/page/3/"><i class="iconfont icon-chevron-back-circle-sharp"></i></a>
-    </div>
-    
-    
-    
-    
-    
-    
-    
-    <div class="pag-item">
-        <a href="/">1</a>
-    </div>
-    
-    
-    
-    
-    
-    
-    
-    <div class="pag-item">
-        <a href="/page/2/">2</a>
-    </div>
-    
-    
-    
-    
-    
-    
-    
-    <div class="pag-item">
-        <a href="/page/3/">3</a>
-    </div>
-    
-    
-    
-    
-    
-    
-    
-    <div class="pag-item pag-current">
-        <a href="/page/4/">4</a>
-    </div>
-    
-    
-    
-    
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
 </div>
 
 
@@ -338,9 +262,8 @@
             
         </div>
     </div>
-    
-    
-    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3><nav id="TableOfContents"></nav></div>
 </aside>
         </div>
         <div class="btn">
@@ -460,6 +383,13 @@
             </span>
             
         </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3>
+        <nav id="TableOfContents"></nav>
     </div>
     
     

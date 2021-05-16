@@ -85,7 +85,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://yuanyatianchi.github.io/post/it.go.cmd/</guid>
-      <description>go.cmd shell go Go语言中包含了大量用于处理Go语言代码的命令和工具。其中，go命令就是最常用的一个，它有许多子命令。这些子命令都拥有不同的功能，如下所示。 build：用于编译给定的代码包或Go语言源码文件及其</description>
+      <description>go.cmd https://golang.org/cmd/ Name Synopsis addr2line Addr2line is a minimal simulation of the GNU addr2line tool, just enough to support pprof. api Binary api computes the exported API of a set of Go packages. asm Asm, typically invoked as “go tool asm”, assembles the source file into an object file named for the basename of the argument source file with a .o suffix. buildid Buildid displays or updates the build ID stored in a Go package or binary. cgo Cgo enables the creation of Go packages that call C code. compile Compile, typically invoked as</description>
     </item>
     
     <item>
@@ -203,6 +203,15 @@
       
       <guid>https://yuanyatianchi.github.io/post/it.sys.linux/</guid>
       <description>linux Linux Linus Benedict Torvalds（Linux之父）编写的开源操作系统的内核 广义上的基于 Linux内核 的 Linux操作系统 内核版本：https://www.kernel.org/ 内核版本分为三个部分：主版本号、</description>
+    </item>
+    
+    <item>
+      <title>Makefile</title>
+      <link>https://yuanyatianchi.github.io/post/it.base.makefile/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yuanyatianchi.github.io/post/it.base.makefile/</guid>
+      <description>Makefile make 是一个自动化构建工具，会在当前目录下寻找 Makefile 或 makefile 文件。如果存在相应的文件，它就会依据其中定义好的规则完成构建任务。 命名为 makefile基本规则 [target] ... : [prerequisites] ... &amp;lt;tab&amp;gt;[command] ... ... targets：规则的目标 prereq</description>
     </item>
     
     <item>
