@@ -1,4 +1,18 @@
-# rand
+
+
++++
+
+title = "crypto"
+description = "crypto"
+tags = ["it","go","lib"]
+
++++
+
+
+
+# it.go.lib.crypto
+
+## rand
 
 ```go
 func main() {
