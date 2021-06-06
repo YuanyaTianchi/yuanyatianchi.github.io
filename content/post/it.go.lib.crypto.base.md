@@ -10,6 +10,30 @@ tags = ["it","go","lib"]
 
 # base
 
+一次简单但完整的 SSL/TLS 实现：http://www.cnblogs.com/JeffreySun/archive/2010/06/24/1627247.html
+
+- client 向 server 请求数字证书
+- server 向 client 发送数字证书
+- client 对 server 证书进行验证，验证正确后向 server 发送一个随机字符串 `randString`
+  - 数字证书内容主要包括：
+    - Issuer：证书的发布机构
+    - Valid from , Valid to：证书的有效期
+    - Public key：公钥
+    - Subject：主体。证书的所有者，一般是某个人或者某个公司名称、机构的名称、公司网站的网址等
+    - Signature algorithm：签名算法。指这个数字证书的数字签名所使用的加密算法
+    - Thumbprint, Thumbprint algorithm：指纹 & 指纹算法。指纹即证书的 hash 值，指纹算法即所使用的 hash 算法。为了防止篡改，证书的发布机构将使用其私钥进行加密后的密文写入证书。即证书中此项实际写入内容为`server证书的hash值 & 所使用的hash算法 通过CA机构的私钥加密得到的密文`，也表示 CA 机构在 server 证书上的签名
+  - 注意：client 持有一系列世界上值得信赖的 CA 机构的证书（操作系统或浏览器自带），证书中包含有 CA 机构的公钥
+  - 获取 CA 证书：通过 server 证书的 Issuer 信息，在本地（操作系统或浏览器）获取该 CA 机构的证书信息（如果有的话）
+  - 校验 server 证书
+    - 知道了 CA 机构对 server 证书所使用的签名算法`Signature algorithm`，就可以使用 CA 证书的`Public key`对`Thumbprint, Thumbprint algorithm`进行解密，得到`server证书的hash值 & 所使用的hash算法`
+    - 通过该 hash 算法对 server 证书进行 hash 值计算，如果`解密得到的hash值 == 计算得到的hash值`，表示该证书正确
+- server 对 randString 使用 server 私钥加密，并发送给 client
+- client 收到后进行校验，如果`使用server公钥对server私钥加密的randString密文解密 == client自己发送的randString`，则确认 server 正确。然后 client 生成一个对称加密算法及其密钥，并通过server证书上Signature algorithm指定的签名算法使用Public key加密后发送给 server
+- server 使用其私钥解密获取到接下来通信使用的对称加密算法&密钥
+- client & server 使用对称加密开始安全通信......
+
+
+
 ## 常识
 
 ### 网络数据传输威胁
@@ -1290,7 +1314,7 @@ PKI的组成要素主要有以下三个：
 
   　　4、http的连接很简单，是无状态的；HTTPS协议是由SSL/TLS+HTTP协议构建的可进行加密传输、
 
-##### SL/TLS
+##### SSL/TLS
 
 - SSL/TLS：SSL，secure sockets layer，安全套接层。TLS，transport layer security，传输层安全。TLS是SSL的继任者。
 
