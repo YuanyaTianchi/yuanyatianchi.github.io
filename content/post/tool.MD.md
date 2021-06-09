@@ -65,7 +65,7 @@ http://blog.lisp4fun.com/2017/11/21/mermaiduse
 ### 流程图
 
 ```mermaid
-graph LR
+graph TB
   单独节点
   开始 -- 带注释写法1 --> 结束
   开始 -->|带注释写法2| 结束

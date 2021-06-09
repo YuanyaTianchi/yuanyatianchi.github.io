@@ -10,7 +10,7 @@ tags = ["it", "sys"]
 
 
 
-# linux
+# Linux
 
 - Linux
   - Linus Benedict Torvalds（Linux之父）编写的开源操作系统的内核
@@ -20,10 +20,6 @@ tags = ["it", "sys"]
   - 次版本号是奇数为开发版，偶数为稳定版。但是实际上在2.6以后不这么区分了
 - 发行版本：RedHat Enterprise Linux、Fedora、CentOS、Debian、Ubuntu...
 - 终端：图形终端，命令行终端，远程终端（SSH、VNC）
-
-
-
-## 概论
 
 
 
@@ -473,7 +469,6 @@ tar x
 - PATH：指定命令的搜索路径
   - PATH=$PAHT:<PATH 1>:<PATH 2>:--------:< PATH n >
   - export PATH
-- 
 
 临时：仅对当前 shell(bash) 或其子 shell(bash) 生效
 
@@ -505,320 +500,7 @@ source /etc/profile
 
 
 
-## 用户
 
-
-
-```shell
-useradd user1 #添加新用户
-#创建用户后会在/home中创建用户对应的目录，目录名与用户名一致
-ls -a /home/yuanya #会有一些隐藏文件
-tail -10 /etc/passwd #会有用户相关内容
-tail -10 /etc/shaow #会有用户相关内容，密码相关
-
-id #查看当前用户
-id root #查看指定用户。可以借此验证是否存在指定用户
-#用户会有唯一id，系统是通过id识别不同用户的。root用户uid=0，如果把普通用户的uid改为0，则也会被系统当作root用户对待
-#用户有用户组，创建时不指定用户组则属于其同名组，即用户组名与用户名一致，只有该用户一人
-groupadd group1 #新建用户组
-groupdel group1 #删除用户组
-useradd user2 group1 #添加新用户并指定用户组
-
-passwd #为当前用户自己设置密码
-passwd yuanya #为指定用户设置密码
-
-userdel yuanya#删除用户，用户的家目录/home/yuanya会被保留，文件所属用户变为数字，只有root用户可以使用，加-r则不会保留家目录。/etc/passwd、/etc/shaow中相关用户信息都将被删除
-
-man usermod #usermod用于修改用户属性
-usermod /home/yuanya yuanyatianchi #修改家目录/home/yuanya的名字为yuanyatianchi，相当于搬家
-usernod -g group1 yuanya #将指定用户分配到指定用户组
-
-man chage #更改用户密码过期信息
-
-#root用户切换普通用户无需密码，普通用户切换其它用户需要密码
-su - user1 #切换用户，"-"表示用户及用户运行环境的完全切换，这里运行环境切换指自动进入到user1的家目录/home/user1，root的家目录是/root
-su user1 #不完全切换，仍在之前用户的家目录中，但是已经没有ls读取权限了，需要手动切换user1自己的家目录
-```
-
-## 网络配置
-
-##### 网卡
-
-查看
-
-```shell
-ip addr #查看网卡及相关信息。简写，等价于ip addr ls、ip addr show
-ip addr ls ens33 #查看指定网卡。不能省略ls或show
-ip addr add 10.0.0.1/24 dev ens33 #设置ip
-
-ip link #查看网卡物理连接情况。ip link ls、ip link show等都是一样的
-ip link ens33 #查看指定网卡
-ip link set dev ens33 up #网卡启动
-ip link set dev ens33 down #网卡停止
-```
-
-修改
-
-- 网卡接口命名修改：默认为`ens33`或`enp0s3`之类的。没有特殊需求默认即可
-  - `vim /etc/default/grub`编辑grub，在`GRUB_CMDLINE_LINUX`参数内容的末尾`rhgb quiet`的后面添加` biosdevname=0 net.ifnames=0`两项，网卡命名受这两个参数影响（如下表）
-  - `grub2-mkconfig -o /boot/grub2/grub.cfg`更新到真正的启动配置文件
-  - `reboot`重启
-
-|       | biosdevname | net.ifnames | 网卡名           |
-| ----- | ----------- | ----------- | ---------------- |
-| 默认  | 0           | 1           | ens33或enp0s3... |
-| 组合1 | 1           | 0           | em1              |
-| 组合2 | 0           | 0           | eth0             |
-
-
-
-##### 网关
-
-```shell
-ip route #查看网关信息。ip route ls、ip route show等都是一样的
-ip route | column -t #格式化一下
-
-#设置路由
-ip route add default gw <网关ip> #设置默认路由
-ip route add -host<指定ip> gw<网关ip> #为目的地址设置指定网关
-ip route add -net<指定网段> netmask <子网掩码> gw<网关ip> #为目的网段设置指定网关
-ip route add 192.168.56.0/24 via 192.168.56.2 dev ens33 #设置静态路由
-
-#删除路由
-ip route del 192.168.56.0/24 #删除静态路由
-```
-
-
-
-##### 网络故障排除命令
-
-- 从上到下逐步分析，基本能够解决大部分网络问题了
-- ping www.baidu.com：到目标主机是否畅通
-- traceroute www.baidu.com：追踪路由。centos7没有原装
-- mtr www.baidu.com：检查到目标主机之间是否有数据丢失。centos7没有原装
-- nslookup www.baidu.com：搜索域名的ip。centos7没有原装
-- telnet www.baidu.com：检查端口连接状态，键入^]然后quit退出telnet。centos7没有原装
-- tcpdump -i any -n host 10.0.0.1 and port 80 -w /tmp/filename：更细致的分析数据包，抓包工具，后面详细讲。centos7没有原装。centos7没有原装
-- netstat -ntpl：查看本机服务监听地址。n显示ip地址而不是域名，t以tcp截取显示的内容（udp等就不显示了），p显示端口对应的进程，l即listen表示处于监听状态的服务。centos7没有原装，通过ss -ntpl代替
-- ss -ntpl：查看本机服务监听地址。n显示ip地址而不是域名，t以tcp截取显示的内容（udp等就不显示了），p显示端口对应的进程，l即listen表示处于监听状态的服务
-
-##### 网络服务管理
-
-- 前面的很多配置都是临时的，网卡重启后就重置了，通过配置文件修改才能实现持久配置
-
-- 网络服务管理程序分为两种，分别为SysV和systemd（centos7中新的），最好不要同时使用两套网络管理系统，可以选择关闭其一
-
-  - SysV
-    - service network start|stop|restart|status：service的操作
-    - chkconfig -list network：查看SysV服务在不同运行级别中的启用状况
-    - `chkconfig --level 2345 network <on|off>`：打开或关闭运行级别为2、3、4、5的SysV服务。这样就将网络管理都交给systemd的NetworkManager了
-
-  - systemd的NetworkManager额外功能在于：比如插入网线（或者连接无线）可以识别网卡激活状态自动进行一些网络激活，对个人电脑来说颇有用处，对服务器来说稍显鸡肋。如果都是新写一些脚本，可以使用systemd；如果有一些SysV的脚本需要延用，为了方便可以继续使用SysV
-    - systemctl list-unit-files NetworkManager.service：查看是否开启
-    - systemctl start|stop|restart NetworkManger.service：启动、停止、重启NetworkManger
-    - systemctl enable|disable NetworkManger：启用、禁用NetworkManger
-
-
-##### 网络配置相关文件
-
-- /etc/sysconfig/network-scripts/ifcfg-ens33（根据网卡名有变）
-
-  - BOOTPROTO="dhcp"：遵循dhcp协议的动态ip，可以改为"none"表示静态ip
-
-  - ONBOOT="yes"：是否开机启动，"no"时则需要手动启动网卡
-
-  - 静态内容
-
-    ```shell
-    TYPE=Ethernet
-    UUID=045d35e8-49bc-4865-b0
-    NAME=eth0
-    DEVICE=eth0
-    ONBOOT=yes
-    B0OTPROTO=none #静态
-    IPADDR=10.211.55.3 #地址
-    NETMASK=255.255.255.0 #子网掩码
-    GATEWAY=10.211.55.1 #网关
-    DNS1=114.114.114.114 #nds，可以有3个，NDS1、NDS2、NDS3
-    ```
-
-  - service network restart或systemctl restart NetworkManger.service重启网卡即可生效
-
-- 主机
-
-  - `hostname`查看
-  
-  - `hostname 临时主机名`
-  
-  - `hostname set-hostname 永久主机名`
-  
-  - hosts配置文件：/etc/hosts。因为有些服务绑定的可能是主机名，所以记得在hosts文件的最后面中配置映射。否则可能启动时会卡住某些服务直到超时，会很慢
-  
-    ```shell
-    127.0.0.1 主机名如yuanya.tianchi
-    ```
-  
-  - reboot重启主机以验证
-  
-    
-
-## 软件管理
-
-> 包管理器是方便软件安装、卸载，解决软件依赖关系的重要工具
-
-- Centos、RedHat使用yum包管理器，软件安装包格式为rpm（RedhatPackageManager）
-- Debian、Ubuntu使用apt包管理器，软件安装包格式为deb（）
-
-软件包管理器
-rpm包和rpm命令
-yum仓库
-源代码编译安装
-内核升级
-grub配置文件
-
-###### rpm
-
-- rpm包格式
-  - vim-common-7.4.10-5.el7.x86_64.rpm
-  - 软件名称-软件版本.系统版本.平台.rpm
-- 参数
-  - `-q`：查询软件包
-  - `-i`：安装软件包
-  - `-e`：卸载软件包
-- ls -l查看/dev，这里面都是设备文件，发现c和b的文件类型，c表示字符设备，b表示块设备，把光盘加载到虚拟机即加载到/dev/sr0中的，`dd if=/dev/sr0 of=/xxx/xxx.iso`就可以把真的光盘做成光盘镜像，块设备不能通过cp等命令直接进行操作，需要挂载（类似于windows中插入光盘后会自动挂载弹出新盘符，linux需要自行手动操作），`mount /dev/sr0 /mnt `，linux下推荐挂载到/mnt目录，-t可以指定挂载类型，默认则会是自动识别。之后可以发现文件是只读的，但是可以拷贝
-- `rmp -qa | more`：a是查询所有的意思，可以查询所有系统安装的软件包，软件包很多，通过管道符` | more`分屏显示，按空格下一页，按q退出
-- `rmp -q vim-common`：根据软件名查询软件包名
-- `rmp -e vim-enhanced`：卸载软件
-- `rmp -i vim-enhanced-7.4.160-5.el7.x86_64.rpm`：安装软件包。vim-enhanced依赖vim-common，如果vim-common没有被安装，将安装失败，所以需要先安装vim-common，如果把两个软件包都放在同一个目录，也可以自动安装依赖
-
-###### yum
-
-- rpm问题很明显了，如果是一个庞大的依赖树，将会非常恐怖，难以人工安装，所以就有了yum仓库（包管理器），用于实现rmp安装自动依赖；还有如果版本不符合要求，还需要通过源代码编译安装软件包
-- rpm包的问题：需要自己解决依赖关系，软件包来源不可靠
-- Centos yum源：http://mirror.centos.org/centos/7/
-- 国内镜像：https://developer.aliyun.com/mirror/
-
-- 配置yum源
-
-```shell
-#备份
-mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bk
-#下载ailiyun的yum源配置文件，无wget用curl亦可
-wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
-#安装epel，用于扩展yum仓库可以安装的软件包，比如最新的linux内核等
-install epel-release -y
-#epel的aliyun镜像配置
-wget http://mirrors.aliyun.com/repo/epel-7.repo -O /etc/yum.repos.d/epel.repo
-#清空并刷新缓存
-yum clean all && yum makecache
-
-# 查看当前源上可下载的指定软件所有版本
-yum list docker-ce --showduplicates|sort -r
-```
-
-###### apt
-
-替换为阿里源：https://blog.csdn.net/wangyijieonline/article/details/105360138
-
-```shell
-lsb_release -a #查看代号codename
-```
-
-到阿里源看下对应代号的源是否存在：http://archive.ubuntu.com/ubuntu/dists/ ，存在则可以根据模板进行替换
-
-```sh
-#把所有的TODO替换成系统的codename
-deb http://mirrors.aliyun.com/ubuntu/ TODO main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ TODO main restricted universe multiverse
-
-deb http://mirrors.aliyun.com/ubuntu/ TODO-security main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ TODO-security main restricted universe multiverse
-
-deb http://mirrors.aliyun.com/ubuntu/ TODO-updates main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ TODO-updates main restricted universe multiverse
-
-deb http://mirrors.aliyun.com/ubuntu/ TODO-proposed main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ TODO-proposed main restricted universe multiverse
-
-deb http://mirrors.aliyun.com/ubuntu/ TODO-backports main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ TODO-backports main restricted universe multiverse
-```
-
-```sh
-#以codename=focal为例
-deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
-
-deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
-
-deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
-
-deb http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
-
-deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
-```
-
-
-
-###### wget
-
-```shell
-yum install wget -y
-```
-
-- yum常用选项：-y：安装、更新过程中选yes
-  - `yum install [软件名]`：安装软件包
-  - `yum remove [软件名]`：卸载软件包
-  - `yum list`查看软件列表，listl grouplist查看软件包
-  - `yum update`检查yum仓库并更新所有可更新软件包，`yum update [软件名]`更新指定软件包
-- 如果要使用yum中没有的或者还未更新的包，可以使用使用源代码编译安装的方式安装软件包
-
-
-
-###### 二进制安装
-
-即类似与windows上的大部分软件安装方式，安装过程也需要授权各种协议，也非常麻烦
-
-
-
-###### 源代码编译安装
-
-- 将源代码编译成可以执行程序，copy到指定目录使用即可
-- 源代码编译安装
-  - 获取压缩包：wget https://openresty.org/download/openresty-1.15.8.1.tar.gz
-  - 解压：tar -zxf openresty-VERSION.tar.gz
-  - 进入目录：cd openresty-VERSION/
-  - ./configure --prefix=/usr/local/openresty：当前的系统环境已经预设在源代码中了，但是没有与真正的系统环境匹配，运行可执行文件configure使其配置（没有的话看看有没有README等指导），--prefix指定程序目录
-  - make -j2：编译。j2表示用2个逻辑上的cpu进行编译，如果代码之间没有上下文依赖关系则可以提高编译速度
-  - make install：把编译好的程序安装到--prefix指定的目录
-- 源代码编译安装可能会遇到各种错误，比如依赖问题，需要根据提示逐一解决，非常麻烦，不到迫不得已还是yum吧
-
-
-
-- linux内核升级
-  - rpm格式内核
-    - uname -r：查看内核版本
-    - yum install kernel-3.10.0：升级指定内核版本
-    - yum update：升级已安装的软件包（包括linux内核）和补丁
-  - 源代码编译安装内核
-    - yum install gcc gcc-C++ make ncurses-devel openssl-develeurutls-Deu-uevet：安装依赖包，可以看到有这么多依赖包，如果提前不知道，直接安装的话就需要逐个查看报错并安装解决
-    - 下载并解压缩内核并解压：https://www.kernel.org ，生成环境一定要用稳定stable或者长期支持langterm版本，tar xvf linux-5.1..10.tar.xz -C /usr/src/kernels解压（tar已经直接支持xz格式了）
-    - 配置内核编译参数
-      - cd /usr/src/kernels/linux-5.1.10/
-      - make menuconfig | allyesconfig | allnoconfig。选择menuconfig弹出会出来界面菜单自行配置，allyesconfig则全部配置yes，allnoconfig则全部配置no（甚至可能无法启动）
-        - menuconfig配置支持NTFS文件系统：找到Filesytems，找到NTFS file system support，空格进行选择，默认为空[ ]表示no，变为[M]表示作为内核的模块，将编译进内核使用模块的方式加载，模块意味着可以移除，以减小内核体积，[*]表示固化到内核中，不能被移除。选中NTFS后还出现了子选项，比如NTFS write support表示写入支持，子选项的[\*]表示固化到父选项，而不是内核。
-        - 其实这个未安装的内核，其所有配置都在内核目录下的.config文件中，启用的项等于m或者y，未启用的则被#注释掉了，非常熟悉的话甚至可以直接修改配置文件
-        - 当前使用中的内核的配置文件，在/boot目录下，如果想要沿用当前系统内核配置，拷贝配置文件即可：cp /boot/config-kernelversion.platform /usr/src/kernels/linux-5.1.10/.config
-        - 当然仍然可以再make menuconfig进入菜单进行更多修改
-    - 编译：make -j2 all，通过lscpu查看CPU信息
-    - 安装内核：注意保证磁盘空间充足，df -h可以查看磁盘分区信息
-      - 先安装内核所支持的模块：make modules_install
-      - 再安装内核：make install
-    - reboot重启进入系统引导界面，可以发现新安装的内核可以选择了
 
 ## grub配置
 
@@ -858,495 +540,19 @@ yum install wget -y
     
         - exit退出根回到虚拟的root中，然后reboot
 
-## 进程管理
 
-- 进程：进行中的程序。运行中的程序，从程序开始运行到终止的整个生命周期是可管理的。C程序的启动是从main函数`int main(int agrc, char*argv[])`开始的，终止的方式分为正常终止、异常终止，正常终止有从main返回、调用exit等方式，异常终止有调用abort、接收信号等方式。计算机资源不足时等情况进行，进程和权限有着密不可分的关系。
 
+## 快捷键
 
-### 进程查看
+- TAB快捷键补全文件（目录）名
+- CTRL+L清屏
+- CTRL+C终止（命令）程序
 
-##### ps
+## 添加执行权限
 
-- `ps`：process status，进程状态
-- 参数
-  - `-e`：可以查看更多进程，类似于win中的系统进程
-  - `-f`：额外的信息UID、PPID
-  - `-L`：Light，表示轻量级，轻量级进程，实际上即线程
+chmod a+x 文件名，a表示所有，x表示执行
 
-```sh
-ps -efL
-```
-
-- 内容
-  - PID：唯一标识进程（不同用户使用同样的程序也是不同的进程）
-  - TTY：终端的次要装置号码（minor device number of tty）。即表示当前执行程序的终端
-  - UID：效用户id。表示进程是由哪个用户启动的信息（可修改），默认显示为启动进程的用户
-  - PPID：进程的父进程id。（linux的 0号进程 和 1 号进程：https://www.cnblogs.com/alantu2018/p/8526970.html ，注意centos7的systemd即以前的init）
-
-- `pstree`：查看进程的树形结构，父子进程关系清晰，但是是静态查看的，ps是动态刷新的。非默认安装的程序，需要自行下载
-
-##### top
-
-- `top`：系统状态，包括进程状态，是动态更新的
-- 参数
-  - `-p 1`：指定pid查看进程
-
-```sh
-top
-```
-
-- 内容
-
-  - 系统状态
-    - up：运行时长
-    - users：当前登录用户数量
-    - load average：平均负载，系统进行采用对不同时间内的系统负载进行的计算，3个数值分别是1、5、15分钟内的负载，1即满负载
-    - Tasks：任务状态
-      - total：当前运行的总进程数
-      - running：运行进程数
-      - sleeping：睡眠进程数
-      - stopped：停止进程数
-      - zombie：僵尸进程数
-    - %Cpu(s)：cpu使用情况（平均值）
-      - us：用户空间使用cpu占比
-      - sy：内核空间使用cpu占比
-      - ni：用户进程空间内改变过优先级的进程使用cpu占比
-      - id：空闲cpu占比
-      - wa：等待输入输出的CPU时间百分比
-      - hi：硬件CPU中断占用百分比
-      - si：软中断占用百分比
-      - st：虚拟机占用百分比
-    - KiB Mem：内存状态
-      - total：物理内存总量
-      - used：使用内存量
-      - free：空闲内存量
-      - buffers：用作内核缓存的内存量
-    - KiB Swap：交换区状态
-      - total：交换区总量
-      - used：使用交换区量
-      - free：空闲交换区量
-      - buffers：缓冲的交换区量。内存中的内容被换出到交换区，而后又被换入到内存，但使用过的交换区尚未被覆盖，该数值即为这些内容已存在于内存中的交换区的大小，相应的内存再次被换出时可不必再对交换区写入
-  - 进程状态：
-    - PID：进程id
-    - USER：进程所有者的用户名
-    - PR：优先级
-    - NI：nice值。负值表示高优先级，正值表示低优先级
-    - VIRT：进程使用的虚拟内存总量，单位kb。VIRT=SWAP+RES
-    - RES：进程使用的、未被换出的物理内存大小，单位kb。RES=CODE+DATA
-    - SHR：共享内存大小，单位kb
-    - S：进程状态(D=不可中断的睡眠状态,R=运行,S=睡眠,T=跟踪/停止,Z=僵尸进程
-    - %CPU：上次更新到现在的CPU时间占用百分比
-    - %MEM：进程使用的物理内存百分比
-    - TIME+：进程使用的CPU时间总计，单位1/100秒
-    - COMMAND：命令名/命令行
-
-  - 操作
-    - `s`：按s可以输入数字更改状态刷新间隔（默认3秒/次），回车确认
-
-
-
-### 控制命令
-
-#### 优先级
-
-##### nice
-
-- `nice`：优先级调整。优先级值从-20到19，值越小优先级越高，抢占资源就越多。
-  - `-n 10 ./demo.sh`：设置demo.sh的优先级为10。写一个无限循环的脚本demo.sh并运行
-- `renice`：重新设置优先级
-  -  `-n 15`：重新设置优先级值为15
-
-#### 作业控制
-
-##### jobs
-
-- `jobs`：查看后台作业的工作程序
-  - 内容
-    - 
-  - `bg 1`指定程序序号使其到后台运行
-  - `fg 1`指定程序序号使其到前台运行，通过CTRL+Z可以再入后台并暂停挂起，可以通过bg或fg再运行
-
-##### &
-
-- `&`：使程序后台运行
-
-```shell
-./demo.sh &
-```
-
-
-
-### 进程的通信方式—信号
-
-> 信号是进程间通信方式之一，典型用法是：终端用户输入中断命令，通过信号机制停止一个程序的运行。
-
-##### kill
-
-- `kill`
-- 参数
-  - `-l`：查看所有信号
-  - SIGINT：2号信号，通知前台进程组终止进程，可以被程序处理，快捷键CTRL+C
-  - SIGKILL：9号信号，立即强制结束程序，不能被阻塞和处理，kill -9 [pid]
-- nohup：一般与&符号配合运行一个命令
-
-  - nohup命令使进程忽略hangup（挂起）信号：比如一个进程正在前台运行，关闭该终端则将发起hangup信号，会使该进程被关掉，如果使用nohup则忽略该信号，即使关闭终端也不会被关闭，但是会变成一个孤儿进程，因为终端关闭了，其父进程没了，但是会被新终端的1号进程作为父进程，nohup启动的进程仍然是用户有关的，会随着用户终端而改变
-- 守护（Daemon）进程：随着开机启动，是用户无关的、在用户之前启动的进程，不需要用户终端的，因为没有终端打印日志等信息，所以一般是以文件的形式记录日志信息
-
-  - 守护进程会将其使用的目录切换为根目录，这是什么意思呢，比如windows下，如果使用一个软件的时候，你要删除这个软件所在的目录，会提示目录被使用无法删除，实际上进程运行是基于所在目录的，而根目录只有在关机或重启时才会被卸载
-- 系统日志：/proc，这个目录下所有的内容在硬盘中默认是不存在的，它是操作系统去内存中读取信息以文件的形式进行呈现。比如启动了一个进程，会有与进程号同名的目录，类似于：/proc/27451，进入即可看到关于进程属性的文件
-
-  - ps -ef | grep sshd：sshd为例
-  - ls -l cwd：可以看到该进程使用的目录
-  - ls -l fd：可以看到标准输入输出及其输入输出的目录，输入一般是/dev/null表示没有，因为因为终端都没有；输出如果是nohup则一般是输出到，如果是Daemon程序一般是通过socket输出给系统日志程序，系统日志程序将打印到默认的/var/log/下进程对应的目录文件下
-- cd /var/log：存放系统日志，由进程通过socket通信给日志系统，写入该目录对应文件。下面是一些常见日志
-
-  - tail -f /var/log/message：该文件被写入一些系统常规日志
-  - tail -f /var/log/dmesg：内核启动日志
-  - tail -f /var/log/secure：安全日志
-  - tail -f /var/log/cron：cron周期任务日志信息
-- 使用screen命令：因为守护进程就是为了使进程脱离终端，防止进程因终端关闭而关闭，screen工具也可以实现，进入终端操作时先进入screen的环境中，即使终端因为某些原因比如网络中断而断开，screen还是可以继续运行程序，下次连接时也能过screen恢复，
-  - yum install screen
-  - screen进入screen环境
-  - 先按ctrl+a，然后按d，即可退出(detached) screen环境
-  - screen -ls查看screen的会话，会话有sessionid唯一标识
-  - screen -r sessionid恢复会话
-- 服务管理工具systemctl
-
-  - service：执行简单，但是启动停止重启的脚本完全由你自己编写，服务控制的好坏全凭编写脚本的人决定
-    - cd /etc/init.d：该目录存放service启动的各种服务脚本，比如network
-    - 级别：chkconfig --list，可以发现已经被systemd取代了，https://blog.csdn.net/ctthuangcheng/article/details/51219848
-      - 运行级别0：系统停机状态，系统默认运行级别不能设为0，否则不能正常启动
-      - 运行级别1：单用户工作状态，root权限，用于系统维护，禁止远程登陆
-      - 运行级别2：多用户状态(没有NFS)
-      - 运行级别3：完全的多用户状态(有NFS)，登陆后进入控制台命令行模式
-      - 运行级别4：系统未使用，保留
-      - 运行级别5：X11控制台，登陆后进入图形GUI模式
-      - 运行级别6：系统正常关闭并重启，默认运行级别不能设为6，否则不能正常启动
-  - systemctl：
-    - vi /usr/lib/systemd/system：该目录存放systemctl启动的各种服务脚本，比如sshd.service
-    - enable：随着开机启动
-    - 级别文件：cd /lib/systemd/system，有很多.service，其中级别相关的是：ls -l runlevel*.target
-    - 查看当前级别：systemctl get-default
-    - 设置默认开机级别：systemctl set-default multi-user.target
-- 
-- 
-
-### SELinux
-
-- 安全增强linux。一般是利用用户、文件的权限进行安全控制，即自主访问控制；强制访问控制：给用户、进程、文件打上标签，只要用户、进程、文件的标签能对应一致即可以允许访问和控制，比如之前的通过grub进入救援模式修改etc中的password和shadow，selinux就会拒绝访问linux的密码，就需要在根目录下/.autorelabel
-- 会降低服务器性能
-- MAC（强制访问控制）与DAC（自主访问控制)
-- 查看SELinux的命令
-  - getenforce：查看selinux的状态。默认有3种状态，在/etc/selinux/config文件中，持久修改的话需要重启，临时修改可以通过如setenfortce 0设置
-  - 查看标签（label）：ps -Z查看进程标签，id -Z查看用户标签，ls -Z查看文件标签
-  - /usr/sbin/sestatus
-  - ps -Z and ls -z and id -z
-- 关闭SELinux
-  - setenforce 0
-  - letc/selinux/sysconfig
-
-
-
-## 内存
-
-### 状态查看
-
-##### top
-
-- `top`：可以查看内存和交换
-
-
-
-##### free
-
-- `free`：查看内存和交换，默认单位bit，`-m`、`-g`等参数指定单位
-
-```sh
-free
-```
-
-
-
-## 磁盘
-
-
-
-
-
-##### lsblk
-
-- `lsblk [-dfimpt] [device]`：list block device，列出存储设备，即磁盘
-  - `-d`：仅列出磁盘本身，并不会列出该磁盘的分区数据 
-  - `-f`：同时列出该磁盘内的文件系统名称
-  - `-i`：使用 ASCII 的线段输出，不要使用复杂的编码 （再某些环境下很有用） 
-  - `-m`：同时输出该设备在 /dev 下面的权限数据 （rwx 的数据） 
-  - `-p`：列出该设备的完整文件名！而不是仅列出最后的名字而已。 
-  - `-t`：列出该磁盘设备的详细数据，包括磁盘伫列机制、预读写的数据量大小等
-
-```sh
-lsblk
-lsblk /dev/sdb
-```
-
-- 内容
-  - NAME：设备文件名，会省略 /dev 等前导目录
-  - MAJ:MIN：主要：次要设备代码。核心认识的设备都是通过这两个代码来熟悉的
-  - RM：是否为可卸载设备 （removable device），如光盘、USB 磁盘等等 
-  - SIZE：当然就是容量啰！ 
-  - RO：是否为只读设备的意思 
-  - TYPE：是磁盘 （disk）、分区 （partition） 还是只读存储器 （rom） 等输出 
-  - MOUTPOINT：就是前一章谈到的挂载点！ 
-
-##### blkid
-
-- `blkid`：可以列出设备的uuid（全域单一识别码），与`lsblk -f`类似。Linux 会将系统内所有的设备都给予一个独一无二的识别码， 这个识别码就可以拿来作为挂载或者是使用这个设备/文件系统之用了
-
-```sh
-blkid
-blkid /dev/sda*
-```
-
-
-
-##### parted
-
-- `parted`
-
-```sh
-# 与`fdisk -l`展示的信息基本一致
-parted -l
-
-# 列出 /dev/vda 磁盘的相关数据
-parted /dev/sda print
-```
-
-- 内容
-  - Model：磁盘的模块名称（厂商）
-  - Disk：磁盘的总容量
-  - Sector size（logical/physical）：每个逻辑/物理扇区容量
-  - Partition Table：分区表的格式 （MBR/GPT） 
-
-##### df
-
-- `df`：可以理解为`fdisk`的补充，可以看到分区挂载的目录等
-
-```sh
-df -h
-```
-
-
-
-### 分区
-
-##### gdisk/fdisk
-
-> gdisk/fdisk操作基本一致
-
-- `gdisk`：
-  
-  - `-l`：查看磁盘列表
-- 内容：
-  - Start：起点扇区。磁盘在linux中也是作为文件，如`/dev/sd?`，以扇区划分
-  - End：止点扇区
-  - Size：是分区的容量
-  - Code：Linux 为 8300，swap 为 8200。不过这个项目只是一个提示而已，不见得真的代表此分区内的文件系统，Linux 大概都是 8200/8300/8e00 等三种格式， Windows 几乎都用 0700 这样，gdisk下按`L`查看。文件系统类型一般为linux（或其它）类型，ntfs就不能被linux文件系统读取，除非格式化为linux文件系统，或者编译内核时设置开启ntfs
-- 注意
-  - 切忌操作使用中的分区
-  
-  - GPT分区表使用gdisk分区，MBR分区表使用fdisk分区，否则将分区失败，甚至干掉分区记录
-  
-  - fdisk 有时会使用柱面 （cylinder） 作为分区的最小单位，与 gdisk 默认使用 sector 不太一 
-  
-    样，另外， MBR 分区是有限制的 （Primary, Extended, Logical…）
-
-```sh
-# 操作指定磁盘/dev/sda，将进入交互模式
-gdisk /dev/sda
-```
-
-- 交互：`m`查看操作，`p`查看当前分区信息，更多操作根据`m`查看的信息进行即可
-
-```sh
-Command (? for help): n
-Partition number (1-128, default 1): 
-First sector (34-4140724, default = 2048) or {+-}size{KMGTP}: 
-Last sector (2048-4140724, default = 4140724) or {+-}size{KMGTP}: +1g
-Current type is 'Linux filesystem'
-Hex code or GUID (L to show codes, Enter = 8300): 
-Changed type of partition to 'Linux filesystem'
-```
-
-```sh
-# 查看分区表
-cat /proc/partitions
-# 如果操作分区更新的是linux正在使用的磁盘，分区表不会更新，可以通过重启linux或者partprobe更新
-partprobe -s
-```
-
-##### partprobe
-
-- `partprobe`：更新 Linux 的分区表信息（重启linux亦可），
-  - `-s`：将打印信息
-
-```sh
-partprobe
-partprobe -s
-```
-
-
-
-
-
-### raid
-
-- 软件RAID的使用：RAID（磁盘阵列）
-  - RAID的常见级别及含义
-    - RAID 0 striping条带方式，提高单盘吞吐率
-    - RAID 1 mirroring镜像方式，提高可靠性，需要两块磁盘组成，其中有给做镜像备份
-    - RAID5有奇偶校验，至少需要3块硬盘，2块硬盘写数据，还有1块做奇偶校验（存储2块数据盘的校验数据，该盘损坏，校验数据还是可以通过2块数据盘重新生成），当某一块数据硬盘损坏了，奇偶校验的硬盘就通过奇偶校验来通过未损坏的数据盘来还原数据，但是如果2块数据盘都损坏了，还是没办法了
-    - RAID 10是RAID 1与RAIDO的结合，共4块，两块硬盘做raid1，两块做raid1和raid0
-  - raid控制器（raid卡）：硬件设备，通过数据读写自动计算校验值，自动计算把数据放在哪块硬盘上的，甚至可以带有缓存功能加速硬盘访问
-  - 软件RAID的使用：对cpu性能消耗较大，一般不实际使用，而是使用raid卡
-    - 需要安装软件包yum install mdadm，练习raid建议划分3个同样大小的空白分区，做软件raid如果分区有大有小默认采用最小的空间，fdisk -l /dev/sd??
-    - mdadm -C /dev/md0 -a yes -l1 -n2 /dev/sdb1 /dev/sdc1：-C /dev/md0创建raid，-a yes表示全部提示都选择yes，比如有数据、格式化等提示，所以要注意分区会被格式化，-l1指定raid级别为raid1，-n2表示2块硬盘是活动的，/dev/sdb1 /dev/sdc1即指定这两块硬盘，实际上可以简写为通配符形式/dev/sd[b,c]1。
-    - 可能会提示may not suitable as a boot device什么的，因为是软件不支持
-
-### 物理卷
-
-
-
-### 逻辑卷
-
-- 逻辑卷管理：在物理卷之上的虚拟卷，linux根目录就是逻辑卷的，可以将一块硬盘拆分为多个逻辑卷，也可以将多个硬盘合并为一个逻辑卷，根据场景对逻辑卷进行缩放容
-
-###### pvcreate
-
-- 新建逻辑卷
-  - 先添加几个磁盘/dev/sdb1、/dev/sdc1、/dev/sdd1：`pvcreate /dev/sdb1 /dev/sdc1 /dev/sdd1`或者简写`pvcreate /dev/sd[b,c,d]1`，注意前面做了软件raid的磁盘如果没有停掉raid将失败
-    - 停止raid：`mdadm --stop /dev/md0`，破坏超级块：`dd if=/dev/zero of=/dev/sdb1 bs=1M count=1`、`dd if=/dev/zero of=/dev/sdc1 bs=1M count=1`
-    - 重新创建一下：`pvcreate /dev/sd[b,c,d]1`，`pvs`查看。信息：lvm即逻辑卷管理器、PSIZE即物理大小、PREE即物理卷的物理空间剩余量
-    - `vgcreate vg1 /deb/sdb1 dev/sdc1`给物理卷分组，`pvs`查看可以发现已经被分到vg1这个卷组了
-    - `vgs`查看卷组
-    - `lvcreate -L 100M -n lv1 vg1`：从卷组vg1创建名字为lv1大小为100M的逻辑卷，`lvs`查看逻辑卷
-
-```sh
-
-```
-
-
-
-- 使用逻辑卷：
-  - 格式化：mkdir /mnt/test、mfs.xfs /dev/vg1/lv1
-  - 进行挂载：fdisk /dev/sd?? pv vg1 lv1 xfs mount。命令解释：fdisk命令用来分区，用/dev/sd??磁盘建立一个pv，通过pv创建一个vg1，通过vg1创建lv1，lv1上通过xfs命令创建文件系统，mount将文件系统进行挂载。这个复杂过程相当实现了：pv vg1 lv1实现可动态扩展的功能，xfs使可以以文件形式操作的功能，mount实现内存和管理的映射。所以如果不需要扩展，可以直接fdisk /dev/sd?? xfs mount在sd磁盘设备上使用文件系统即可，如果还需要实现更复杂的功能还可以在其上进行raid功能（但就不能直接在磁盘上搭建逻辑卷了，需要在raid的基础上比如搭建一个/dev/md0，然后再在其上进行逻辑卷实现）
-- 用途：可以用来扩展现有的如root、user、src 等分区
-- 扩充逻辑卷
-  - vgextend  centos /dev/sdd1，将/dev/sdd1这个pv划分到centos这个vg下
-  - lvextend -L +50G /dev/centos/root
-  - df -h查看发现文件系统的容量并没有变大，也需要告知文件系统卷已经扩大了，xfs_growfs /dev/centos/root
-- 缩容
-- 可以发现，卷管理实际上就是一层一层的，从物理磁盘到逻辑卷到文件系统
-
-### 系统综合状态
-
-##### sar
-
-- 使用sar命令查看系统综合状态，可以对系统进行全面的体检
-- 参数
-  - sar -u 1 10：-u是cpu信息。1是采样时间间隔，每1秒采样10次
-  - sar -r 1 10：-r显示内存情况
-  - sar -b 1 10：-b显示IO信息
-  - sar -d 1 10：-d磁盘信息
-  - -q 1 10：进程信息
-
-- 使用第三方命令iftop查看网络流量情况
-  - yum install epel-release
-  - yum install iftop
-  - iftop -P：默认只监听eth0的网络接口
-- 更多好用的工具自行到网络上找寻
-
-## shell
-
-> shell：在计算机科学中，Shell俗称壳（用来区别于核），是指"为使用者提供操作界面"的软件-命令解析（解释）器，即用于解释用户对操作系统的操作，bash即shell实现之一，其它还有cat/etc/shells等
-
-shell会把用户所执行的命令翻译给内核，内核将命令执行的结果反馈给用户。ls为例，当输入ls时，首先由shell接收到用户执行的命令，对命令选项和参数进行分析，ls是查看文件的，将交给文件系统（属于内核层面了），然后内核把ls要查看的文件和目录翻译成硬盘对应的扇区（ssd硬盘是另外结构），硬件会把查询的结果交给内核，内核在返回给shell，最后返回给用户
-
-
-
-
-
-### linux启动过程
-
-- BIOS：基本输入输出系统。是主板上的功能，通过bios选择要引导的介质 - 硬盘、或光盘，如果选择了硬盘，就会有一个引导的部分-MBR
-- MBR：硬盘的主引导记录部分，就进入到linux的过程了（以下）
-- BootLoader(grub)：BootLoader指启动和引导内核的工具，现在用的grub2.0，可以引导linux内核（选择哪个内核启动），甚至是windows系统
-- kernel：内核启动
-- systemd（centos7，6中是init）：systemd启动（1号进程）。centos6时，init启动后的所有系统初始化内容都是由shell脚本完成（/etc/rc.d目录下会有大量脚本，比如用于激活软件raid、lvm等系统初始化工作），centos7中则有些内容改变为systemd的配置文件方式（到/etc/systemd/system目录下，根据启动级别来到/user/lib/systemd/system目录下，在这个目录下读取各种各样的配置文件），由应用程序引导。
-- 系统初始化（）：比如通过驱动程序加载各种硬件，是由shell脚本完成的
-- shell：shell开始工作
-
-
-
-- bios：系统启动的时候按F2进入界面来选择不同的引导介质，如果选择了硬盘，就会有一个引导的部分-mbr，通过`dd`命令可以查看MBR（linux中一切皆文件，磁盘也可以当作文件被读取）
-  - `dd if=/dev/sda of=mbr.bin bs=446 count=1`，if是磁盘，of指定输出文件，bs指定块大小，count指定1个块。因为mbr.bin是没有文件系统的，所以不能通过cat直接查看其中内容，这里使用`hexdump -C mbr.bin`用16进制的方式去查，-C将能够显示为字符的内容显示为字符
-  - `dd if=/dev/sda of=mbr2.bin bs=512 count=1`，扩大到512字节，mbr将包括自盘分区表，最后的55 aa即证明引导扇区是正确的
-- BootLoader：cd /boot/grub2
-  - `grub2-editenv list`：显示默认引导的内核
-  - `uname -r`：查看当前所使用的内核
-
-### base
-
-- 命令中也大量使用了shell脚本，以/sbin/grub2-mkconfig为例，`file /sbin/grub2-mkconfig`可以看到文件的描述shell script，vim打开可以发现也就是一个shell脚本
-
-- shell脚本区别于py、php等脚本，无需掌握那些语言函数，完全由命令构成
-- UNIX的哲学：一条命令只做一件事
-- 为了组合命令和多次执行，使用脚本文件来保存需要执行的命令
-- 如果是二进制可执行文件，赋予可执行（-x）权限即可，但是如果是shell脚本文件想要执行，还需要额外赋予该文件可读（-r）权限(`chmod u+rx filename`)
-
-```sh
-#比如某个目录经常反复cd进入并ls查看
-cd /var ; ls ; pwd ; du -sh ; du -sh *
-```
-
-可以保存为sh文件，比如叫tmp.sh
-
-```sh
-#一般shell脚本头部上会加这样一个申明，这个申明叫做"Sha-Bang"
-#!/bin/bash
-cd /var ; ls ; pwd ; du -sh ; du -sh *
-```
-
-```sh
-#赋予权限
-chmod u+rx tmp.sh
-#可以通过bash执行，在bash中"#!/bin/bash"将被当作注释
-bash ./tmp.sh
-#直接运行，当前系统是什么shell就将用什么shell解释，"#!/bin/bash"将是非注释的，它将告诉系统使用/bin/bash来解释执行
-./tmp.sh
-```
-
-- 执行命令的方式
-  - `bash ./filename.sh`：会在当前终端下fork一个叫做bash的子进程，通过子进程去运行脚本，所以执行脚本后当前终端线程并没有真正进入到/var目录，因为是子进程进到目录的。注意：通过bash执行脚本是不用赋予执行权限的，因为是通过bash的
-  - `./filename.sh`：也是产生子进程然后运行，不同的是通过Sha-Bang去解释运行脚本的。直接运行脚本文件，必须有可执行权限，
-  - `source ./filename.sh`：在当前进程运行，所以当前终端进入到了/var目录
-  - `. ./filename.sh`：开头的`.`即source的缩写
-- 内建命令和外部命令的区别
-  - 内建命令：内建命令不需要创建子进程，将对当前Shell 生效，如cd、pwd、source等
-  - 外部命令：需要创建子进程，不会对当前shell生效，如bash
-
-### 管道
-
-
-
-## 待整理
-
-- 快捷键：
-  - TAB快捷键补全文件（目录）名
-  - CTRL+L清屏
-  - CTRL+C终止（命令）程序
-- 添加执行权限：chmod a+x 文件名，a表示所有，x表示执行
-- 
-
-##### 重定向符号
+## 重定向符号
 
 https://blog.csdn.net/hellozpc/article/details/46721811
 
@@ -1364,23 +570,23 @@ https://blog.csdn.net/hellozpc/article/details/46721811
   - `>&`：将一个标准错误输出重定向到一个文件或设备 覆盖原来的文件 c-shell
   - `|&`：将一个标准错误 管道 输送 到另一个命令作为输入
 
-##### 别名
+## 别名
 
 
 
-##### sysctl
+## sysctl
 
-##### 可以查看和修改系统参数
+可以查看和修改系统参数
 
 
 
-##### grubby
+## grubby
 
 可以修改内核参数
 
 
 
-##### 图形界面黑屏
+## 图形界面黑屏
 
 centos7上，使用root用户登录，会出现图形界面黑屏问题，在输入用户名密码之前是有图形界面的，但是输入用户名密码之后桌面出现一秒钟之后转为黑屏
 
@@ -1414,7 +620,7 @@ VMware: No 3D enabled (0, Success).
 
 
 
-##### sh -c
+## sh -c
 
 这个命令将权限不够，因为重定向符号 “>” 和 ">>" 也是 bash 的命令。我们使用 sudo 只是让 echo 命令具有了 root 权限
 
@@ -1432,7 +638,7 @@ sudo sh -c echo "hahah" >> test.csv`
 
 
 
-##### 关闭swap分区
+## 关闭swap分区
 
 ```sh
 # 删除 swap 区所有内容，即临时关闭
@@ -1447,7 +653,7 @@ free -h
 
 
 
-##### 修改静态主机名hostname
+## 修改静态主机名hostname
 
 ```sh
 vim /etc/hostname
@@ -1460,67 +666,29 @@ hostnamectl
 
 
 
-##### 开放端口
+## ubuntu查看内核
 
-新增/删除 端口 需要重启防火墙服务
-
-```sh
-#centos7启动防火墙
-systemctl start firewalld.service
-#centos7停止防火墙/关闭防火墙
-systemctl stop firewalld.service
-#centos7重启防火墙
-systemctl restart firewalld.service
- 
-#设置开机启用防火墙
-systemctl enable firewalld.service
-#设置开机不启动防火墙
-systemctl disable firewalld.service
-
-#centos7查看防火墙所有信息
-firewall-cmd --list-all
-#centos7查看防火墙开放的端口信息
-firewall-cmd --list-ports
-# 重启防火墙
-firewall-cmd --reload
+```shell
+# x86_64,x64,AMD64基本上是同一个东西
+arch
 ```
 
-```sh
-# 新增开放一个端口号
-firewall-cmd --zone=public --add-port=80/tcp --permanent
-#说明:
-#–zone #作用域
-#–add-port=80/tcp #添加端口，格式为：端口/通讯协议
-#–permanent 永久生效，没有此参数重启后失效
- 
-#多个端口:
-firewall-cmd --zone=public --add-port=80-90/tcp --permanent
+## ubuntu18.04配置apt源
 
-#查看本机已经启用的监听端口（即运行中的，开放不代表运行）
-ss -ant
+`/etc/apt/sources.list`
 
-#删除
-firewall-cmd --zone=public --remove-port=80/tcp --permanent
 ```
-
-
-
-##### 设置静态ip
-
-```sh
-$ vim /etc/sysconfig/network-scripts/ifcfg-enp0s3
-# 动态dhcp修改为静态ip
-BOOTPROTO="static"
-# 添加ip设置
-IPADDR=192.168.31.100
-GATEWAY=192.168.31.1
-NETMASK=255.255.255.0
-DNS1=192.168.31.1
-# 重启网络
-$ systemctl restart network
+deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
 ```
-
-
 
 
 
