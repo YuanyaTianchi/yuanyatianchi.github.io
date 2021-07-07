@@ -16,9 +16,9 @@ tags = ["it", "cloudnative"]
 
 仓库：https://hub.docker.com/
 
+文档：https://docs.docker.com/reference/
 
-
-## hello
+## 安装
 
 ```shell
 $ uname -r #查看centOS系统内核版本，Docker要求内核版本高于3.10
@@ -44,7 +44,25 @@ systemctl start docker #启动docker
 
 
 
-doocker镜像加速：https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors 获取阿里docker镜像加速地址。以网易的镜像地址为例，修改/etc/docker/daemon.json
+
+
+信息
+
+```shell
+$ doAcker --help
+$ docker version #版本信息
+$ docker info #相信信息
+```
+
+
+
+## 镜像
+
+### 镜像加速配置
+
+从https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors 获取个人专属的阿里docker镜像加速地址
+
+/etc/docker/daemon.json
 
 ```json
 {
@@ -58,19 +76,263 @@ doocker镜像加速：https://cr.console.aliyun.com/cn-hangzhou/instances/mirror
 service docker restart
 ```
 
+### 镜像管理
+
+###### 镜像搜索
+
+
+
+###### 镜像拉取
+
+
+
+###### 镜像导出
+
+```shell
+# 一般导出命名后缀为.tar
+docker save arm64v8/centos:latest -o ./centos.arm64.tar
+```
+
+
+
+###### 镜像导入
+
+```shell
+docker load < centos.arm64.tar
+```
+
+
+
+###### 镜像构建
+
+https://www.runoob.com/docker/docker-build-command.html
+
+```shell
+# 默认使用当前目录下的 Dockerfile 构建镜像
+$ docker build
+```
+
+| option  | description                                                  |
+| ------- | ------------------------------------------------------------ |
+| -f      | 指定要使用的Dockerfile                                       |
+| -t;-tag | 镜像的名字及标签，通常 name:tag 或者 name 格式；可以在一次构建中为一个镜像设置多个标签。 |
+
+
+
+###### 提交容器为镜像
+
+```shell
+docker commit 261314c94305 imagexxx
+```
+
+| option | description                    |
+| ------ | ------------------------------ |
+| -a     | 提交的镜像作者                 |
+| -c     | 使用Dockerfile指令来创建镜像； |
+| -m     | 提交时的说明文字；             |
+| -p     | 在commit时，将容器暂停。       |
+
+
+
+### 跨平台构建
+
+https://juejin.cn/post/6844903605355577358
+
+https://zhuanlan.zhihu.com/p/106054643
+
+https://github.com/multiarch/qemu-user-static
+
+在x86机器上模拟arm架构指令来构建arm架构的镜像，使用 [multiarch/qemu-user-static](https://github.com/multiarch/qemu-user-static) 来实现在x86主机上模拟arm环境
+
+**multiarch/qemu-user-static** 是通过 QEMU 和 binfmt_misc 启用不同多架构容器的执行。以下是 Docker 的示例。
+
+
+
+这里有一个简单的 hello 代码
+
+```go
+package main
+
+func main() {
+    fmt.Println("hello")
+}
+```
+
+```makefile
+.PHONY: build-main build-container clean
+
+build-main:
+  CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build ./cmd/main.go
+
+build-image: build-main
+  docker build 
+
+clean:
+	rm -rf ./bin
+```
+
+ 
+
+为可执行程序模拟 arm 环境
+
+```shell
+# 交叉编译成一个 arm 可执行文件
+$ make build-main -f Makefile.arm64.mk
+
+# 但是当前是 x86 环境所以执行失败
+$ ./bin/hello-aarch64
+bash: bin/hello-aarch64: cannot execute binary file: Exec format error
+
+# 下载并解压 qemu-arm-static 可执行文件
+$ curl -L -o qemu-arm-static-v5.1.0-8.tar.gz https://github.com/multiarch/qemu-user-static/releases/download/v5.1.0-8/qemu-aarch64-static.tar.gz && tar -zxf qemu-arm-static-v5.1.0-8.tar.gz
+
+# 通过 qemu-arm-static 执行 hello-arm64
+$ qemu-arm-static hello-arm64
+hello
+```
+
+
+
+为容器模拟 arm 环境
+
+```shell
+# 当前环境是x86
+$ uname -m
+x86_64
+
+# 在 x86 上执行一个 arm centos 镜像时，会因无法解析 arm 指令而报错
+$ docker run --rm -t arm64v8/centos uname -m
+standard_init_linux.go:211: exec user process caused "exec format error"
+
+# 此时执行 qemu-user-static 镜像，将为我们设置模拟 arm 环境
+$ docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+
+# 之后就可以执行这个 arm centos 镜像了，因为 qemu-user-static将arm架构的指令解释成x86架构的指令执行
+$ docker run --rm -t arm64v8/ubuntu uname -m
+aarch64
+```
+
+现在 arm64v8/centos 已经可以 run 了，将其作为基础镜像编写 Dockerfile ，build 后 run 起来即可
+
+```dockerfile
+FROM arm64v8/centos
+```
+
+```shell
+$ make build-image -f Makefile.arm64.mk
+
+$ docker run -it arm64/hello:0.1 bash
+hello
+```
+
+
+
+## 容器
+
+加载镜像运行容器
+
+```shell
+docker run -it --name 容器名称 镜像名称 /bin.bash
+```
+
+
+
+启动
+
+
+
+停止
+
+
+
+## 代理
+
+https://note.qidong.name/2020/05/docker-proxy/
+
+有时因为网络原因，比如公司NAT，或其它啥的，需要使用代理。 Docker的代理配置，略显复杂，因为有三种场景。 但基本原理都是一致的，都是利用Linux的`http_proxy`等环境变量。
+
+
+
+### dockerd
+
+https://docs.docker.com/config/daemon/systemd/
+
+执行`docker pull`时，是由守护进程`dockerd`来执行。 因此，代理需要配在`dockerd`的环境中。 而这个环境，则是受`systemd`所管控，因此实际是`systemd`的配置。
+
+```shell
+sudo mkdir -p /etc/systemd/system/docker.service.d
+sudo touch /etc/systemd/system/docker.service.d/proxy.conf
+```
+
+`proxy.conf`文件（可以是任意`*.conf`的形式）内容如下
+
+```ini
+[Service]
+Environment="HTTP_PROXY=http://proxy.example.com:8080/"
+Environment="HTTPS_PROXY=https://proxy.example.com:8080/"
+Environment="NO_PROXY=127.0.0.1,私有仓库ip,example.com"
+```
+
+其中，`proxy.example.com:8080`要换成可用的免密代理。 通常使用`cntlm`在本机自建免密代理，去对接公司的代理。 可参考《[Linux下安装配置Cntlm代理](https://note.qidong.name/2018/11/cntlm-proxy/)》。
+
+
+
+重启。`dockerd`代理的修改比较特殊，它实际上是改`systemd`的配置，因此需要重载`systemd`并重启`dockerd`才能生效。
+
+```shell
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
+
+
+
+### Container
+
+https://docs.docker.com/network/proxy/
+
+在容器运行阶段，如果需要代理上网，则需要配置`~/.docker/config.json`。 以下配置，只在Docker 17.07及以上版本生效。
+
+```json
+{
+  "proxies":
+  {
+    "default":
+    {
+      "httpProxy": "http://proxy.example.com:8080",
+      "httpsProxy": "http://proxy.example.com:8080",
+      "noProxy": "localhost,127.0.0.1,.example.com"
+    }
+  }
+}
+```
+
+这个是用户级的配置，除了`proxies`，`docker login`等相关信息也会在其中。 而且还可以配置信息展示的格式、插件参数等。
+
+此外，容器的网络代理，也可以直接在其运行时通过`-e`注入`http_proxy`等环境变量。 这两种方法分别适合不同场景。 `config.json`非常方便，默认在所有配置修改后启动的容器生效，适合个人开发环境。 在CI/CD的自动构建环境、或者实际上线运行的环境中，这种方法就不太合适，用`-e`注入这种显式配置会更好，减轻对构建、部署环境的依赖。 当然，在这些环境中，最好用良好的设计避免配置代理上网。
+
+
+
+### docker build
+
+https://docs.docker.com/engine/reference/commandline/cli/#automatic-proxy-configuration-for-containers
+
+虽然`docker build`的本质，也是启动一个容器，但是环境会略有不同，用户级配置无效。 在构建时，需要注入`http_proxy`等参数。
+
+```sh
+docker build . \
+    --build-arg "HTTP_PROXY=http://proxy.example.com:8080/" \
+    --build-arg "HTTPS_PROXY=http://proxy.example.com:8080/" \
+    --build-arg "NO_PROXY=localhost,127.0.0.1,.example.com" \
+    -t your/image:tag
+```
+
+**注意**：无论是`docker run`还是`docker build`，默认是网络隔绝的。 如果代理使用的是`localhost:3128`这类，则会无效。 这类仅限本地的代理，必须加上`--network host`才能正常使用。 而一般则需要配置代理的外部IP，而且代理本身要开启gateway模式。
+
 
 
 ## client
 
-命令：https://docs.docker.com/reference/
-
-```shell
-$ docker --help
-$ docker version #版本信息
-$ docker info #相信信息
-```
-
-
+命令：
 
 ### 镜像
 
