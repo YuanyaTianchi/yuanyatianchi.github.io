@@ -60,8 +60,8 @@ ln -s /it/go/goland/bin/goland.sh /usr/bin/goland.sh
 
 # 别名。使 goland nohup，并将其产生的 stdout 重定向到 /dev/null
 vim /etc/profile
-#添加如下内容
-alias goland='nohup goland.sh & >/dev/null'
+#添加如下内容，goland将不输出任何信息，也不会产生 nohup.out
+alias goland='nohup goland.sh >/dev/null & 2>&1'
 ```
 
 2. 破解

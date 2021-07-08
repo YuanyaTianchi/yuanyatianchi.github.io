@@ -16,11 +16,11 @@ make 是一个自动化构建工具，会在当前目录下寻找 `Makefile` 或
 
 命名为
 
-makefile基本规则
+makefile基本规则。注意：**规则前必须使用键盘"TAB"键，即制表符\t，否则将无法识别到command**，从而报错 `make: 对“command”无需做任何事`。
 
 ```makefile
 [target] ... : [prerequisites] ...
-    <tab>[command]
+	<tab>[command]
     ...
     ...
 ```

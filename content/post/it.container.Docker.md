@@ -4,7 +4,7 @@
 
 title = "Docker"
 description = "Docker"
-tags = ["it", "cloudnative"]
+tags = ["it", "container"]
 
 +++
 
@@ -109,7 +109,7 @@ https://www.runoob.com/docker/docker-build-command.html
 
 ```shell
 # 默认使用当前目录下的 Dockerfile 构建镜像
-$ docker build
+$ docker build -t yuanya:1.0
 ```
 
 | option  | description                                                  |
@@ -184,7 +184,7 @@ $ ./bin/hello-aarch64
 bash: bin/hello-aarch64: cannot execute binary file: Exec format error
 
 # 下载并解压 qemu-arm-static 可执行文件
-$ curl -L -o qemu-arm-static-v5.1.0-8.tar.gz https://github.com/multiarch/qemu-user-static/releases/download/v5.1.0-8/qemu-aarch64-static.tar.gz && tar -zxf qemu-arm-static-v5.1.0-8.tar.gz
+$ wget -o qemu-arm-static-v5.1.0-8.tar.gz https://github.com/multiarch/qemu-user-static/releases/download/v5.1.0-8/qemu-arm-static.tar.gz && tar -zxf qemu-arm-static-v5.1.0-8.tar.gz
 
 # 通过 qemu-arm-static 执行 hello-arm64
 $ qemu-arm-static hello-arm64
@@ -245,7 +245,11 @@ docker run -it --name 容器名称 镜像名称 /bin.bash
 
 
 
-## 代理
+## 网络
+
+
+
+### 代理
 
 https://note.qidong.name/2020/05/docker-proxy/
 
@@ -253,7 +257,7 @@ https://note.qidong.name/2020/05/docker-proxy/
 
 
 
-### dockerd
+#### dockerd
 
 https://docs.docker.com/config/daemon/systemd/
 
@@ -286,7 +290,7 @@ sudo systemctl restart docker
 
 
 
-### Container
+#### Container
 
 https://docs.docker.com/network/proxy/
 
@@ -312,7 +316,7 @@ https://docs.docker.com/network/proxy/
 
 
 
-### docker build
+#### docker build
 
 https://docs.docker.com/engine/reference/commandline/cli/#automatic-proxy-configuration-for-containers
 
@@ -327,6 +331,39 @@ docker build . \
 ```
 
 **注意**：无论是`docker run`还是`docker build`，默认是网络隔绝的。 如果代理使用的是`localhost:3128`这类，则会无效。 这类仅限本地的代理，必须加上`--network host`才能正常使用。 而一般则需要配置代理的外部IP，而且代理本身要开启gateway模式。
+
+
+
+### 修改Docker0默认网段
+
+https://blog.51cto.com/lisea/1940023
+
+Docker 服务启动后默认会创建一个 docker0 网桥（其上有一个 docker0 内部接口），它在内核层连通了其他的物理或虚拟网卡，这就将所有容器和本地主机都放到同一个物理网络。Docker 默认指定了 docker0 接口 的 IP 地址和子网掩码，让主机和容器之间可以通过网桥相互通信，它还给出了 MTU（接口允许接收的最大传输单元），通常是 1500 Bytes，或宿主主机网络路由上支持的默认值。这些值都可以在服务启动的时候进行配置。
+
+```shell
+# 查看
+$ ifconfig docker0
+docker0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        inet 172.17.0.1  netmask 255.255.0.0  broadcast 172.17.255.255
+        ether 02:42:61:ff:7b:91  txqueuelen 0  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+```
+
+修改文件 `/etc/docker/daemon.json` 添加内容 `"bip": "ip/netmask"` 即可。注意切勿与宿主机同网段
+
+```json
+{
+  "bip": "192.168.100.1/24"
+}
+```
+
+```shell
+# 重启即可
+$ systemctl restart docker
+```
 
 
 

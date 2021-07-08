@@ -4,7 +4,7 @@
 
 title = "Kubernetes.hello"
 description = "Kubernetes.hello"
-tags = ["it", "cloudnative"]
+tags = ["it", "container"]
 
 +++
 
