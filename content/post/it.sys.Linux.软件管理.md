@@ -41,6 +41,8 @@ grub配置文件
 - `rmp -e vim-enhanced`：卸载软件
 - `rmp -i vim-enhanced-7.4.160-5.el7.x86_64.rpm`：安装软件包。vim-enhanced依赖vim-common，如果vim-common没有被安装，将安装失败，所以需要先安装vim-common，如果把两个软件包都放在同一个目录，也可以自动安装依赖
 
+
+
 ###### yum
 
 - rpm问题很明显了，如果是一个庞大的依赖树，将会非常恐怖，难以人工安装，所以就有了yum仓库（包管理器），用于实现rmp安装自动依赖；还有如果版本不符合要求，还需要通过源代码编译安装软件包
@@ -56,7 +58,7 @@ mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bk
 #下载ailiyun的yum源配置文件，无wget用curl亦可
 wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
 #安装epel，用于扩展yum仓库可以安装的软件包，比如最新的linux内核等
-install epel-release -y
+yum install epel-release -y
 #epel的aliyun镜像配置
 wget http://mirrors.aliyun.com/repo/epel-7.repo -O /etc/yum.repos.d/epel.repo
 #清空并刷新缓存
@@ -65,6 +67,8 @@ yum clean all && yum makecache
 # 查看当前源上可下载的指定软件所有版本
 yum list docker-ce --showduplicates|sort -r
 ```
+
+
 
 ###### apt
 

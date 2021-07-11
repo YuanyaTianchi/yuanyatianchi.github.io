@@ -210,14 +210,18 @@ lsof -i:端口号
 ```sh
 $ vim /etc/sysconfig/network-scripts/ifcfg-enp0s3
 # 动态dhcp修改为静态ip
-BOOTPROTO="static"
+BOOTPROTO=static
 # 添加ip设置
 IPADDR=192.168.31.100
 GATEWAY=192.168.31.1
 NETMASK=255.255.255.0
 DNS1=192.168.31.1
-# 重启网络
+
+# centos7 重启网络
 $ systemctl restart network
+
+# centos8 重启 enp0s3 网卡
+$ nmcli connection down enp0s3 && nmcli connection up enp0s3
 ```
 
 

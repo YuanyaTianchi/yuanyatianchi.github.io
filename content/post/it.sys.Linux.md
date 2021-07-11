@@ -26,7 +26,7 @@ tags = ["it", "sys"]
 ## hello
 
 - 镜像
-  - CentOS：http://mirrors.aliyun.com/centos/ ，7.8.2003/isos/x86_64/CentOS-7-x86_64-DVD-2003.iso
+  - CentOS：http://mirrors.aliyun.com/centos/ ，一般下载dvd版本即可
   - Ubuntu：http://mirrors.aliyun.com/ubuntu-releases/ ，20.04/ubuntu-20.04.1-live-server-amd64.iso
 
 ### 环境
@@ -43,19 +43,21 @@ tags = ["it", "sys"]
 
 5. 设置 → 存储 → 控制器: IDE → 右侧光盘图标选择虚拟盘 → OK
 
-6. 启动 → Install CentOS Linux 7 → English
+6. 设置 → 网络 → 选择桥接网卡
 
-7. DATE & TIME → Asia Shanghai
+7. 启动 → Install CentOS Linux 7 → English
 
-8. SOFTWARE SELECTION → Minimal Install （按需选择）
+8. DATE & TIME → Asia Shanghai
 
-9. INSTALL ATION DESTINATION → 直接点done即可
+9. SOFTWARE SELECTION → Minimal Install （按需选择）
 
-10. NETWORK & HOST NAME → Ethernet (enp0s3)：ON
+10. INSTALL ATION DESTINATION → 直接点done即可
 
-11. 开始安装 → 设置 ROOT PASSWORD → 安装成功后 reboot
+11. NETWORK & HOST NAME → Ethernet (enp0s3)：ON
 
-12. 虚拟机与宿主机 共享粘贴板、拖拽文件
+12. 开始安装 → 设置 ROOT PASSWORD → 安装成功后 reboot
+
+13. 虚拟机与宿主机 共享粘贴板、拖拽文件
 
     1. 设置 - 常规 - 高级 - 共享粘贴板 双向 & 拖放 双向
 
@@ -75,6 +77,20 @@ tags = ["it", "sys"]
        ```
 
     5. 虚拟机窗口上方菜单栏 - 设备 - 安装增强功能（会挂载一个光盘，重新安装要先弹出iso，否则报"未能加载虚拟光盘"）
+
+       ```shell
+       # centos8上遇到问题
+       #提示 please install the gcc make perl packages from your modules，执行后再重新安装增强功能，
+       yum install gcc perl make -y
+       # 然后查看日志又提示 please install libelf-dev, libelf-devel or elfutils-libelf-devel
+       yum -y install elfutils-libelf-devel
+       # 还是不行，尝试其它可能影响的内容
+       yum -y install gcc-c++
+       # 若是以上相关软件或内核更新后，增强功能还无法正常使用，使用一次性更新所有软件（这次可以了）
+       yum update
+       ```
+
+       
 
 
 

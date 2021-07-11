@@ -30,12 +30,14 @@ $ yum update #升级软件包及内核（选做）
 ```sh
 # 设置稳定存储库（配置docker源）
 wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo
+
 # 查看 yum 源上有哪些 docker-ce 版本
 yum list docker-ce --showduplicates|sort -r
+
 # 安装最新版本的docker-ce
 yum install docker-ce -y
-# 如果是centos8，默认使用podman代替docker，所以需要containerd.io，根据提示安装对应版本即可
-yum install -y https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.2-3.3.el7.x86_64.rpm
+#如果是centos8，默认使用 podman 代替 docker，会提示冲突，根据提示使用 --allowerasing 替换冲突的软件包
+yum install docker-ce -y --allowerasing
 
 #启动
 systemctl enable docker #设置docker为开机启动
@@ -136,11 +138,11 @@ docker commit 261314c94305 imagexxx
 
 ### 跨平台构建
 
+qemu-user-static：https://github.com/multiarch/qemu-user-static
+
 https://juejin.cn/post/6844903605355577358
 
 https://zhuanlan.zhihu.com/p/106054643
-
-https://github.com/multiarch/qemu-user-static
 
 在x86机器上模拟arm架构指令来构建arm架构的镜像，使用 [multiarch/qemu-user-static](https://github.com/multiarch/qemu-user-static) 来实现在x86主机上模拟arm环境
 
@@ -148,57 +150,15 @@ https://github.com/multiarch/qemu-user-static
 
 
 
-这里有一个简单的 hello 代码
-
-```go
-package main
-
-func main() {
-    fmt.Println("hello")
-}
-```
-
-```makefile
-.PHONY: build-main build-container clean
-
-build-main:
-  CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build ./cmd/main.go
-
-build-image: build-main
-  docker build 
-
-clean:
-	rm -rf ./bin
-```
-
- 
-
-为可执行程序模拟 arm 环境
+通过 qemu-user-static （该程序使用内核 binfmt_misc 文件系统功能）可以模拟各种环境
 
 ```shell
-# 交叉编译成一个 arm 可执行文件
-$ make build-main -f Makefile.arm64.mk
+# 我的环境是 centos8
+$ uname -mrs
+Linux 4.18.0-305.7.1.el8_4.x86_64 x86_64
 
-# 但是当前是 x86 环境所以执行失败
-$ ./bin/hello-aarch64
-bash: bin/hello-aarch64: cannot execute binary file: Exec format error
-
-# 下载并解压 qemu-arm-static 可执行文件
-$ wget -o qemu-arm-static-v5.1.0-8.tar.gz https://github.com/multiarch/qemu-user-static/releases/download/v5.1.0-8/qemu-arm-static.tar.gz && tar -zxf qemu-arm-static-v5.1.0-8.tar.gz
-
-# 通过 qemu-arm-static 执行 hello-arm64
-$ qemu-arm-static hello-arm64
-hello
-```
-
-
-
-为容器模拟 arm 环境
-
-```shell
-# 当前环境是x86
-$ uname -m
-x86_64
+# 拉取一个 arm 的 centos 镜像
+$ docker pull arm64v8/centos
 
 # 在 x86 上执行一个 arm centos 镜像时，会因无法解析 arm 指令而报错
 $ docker run --rm -t arm64v8/centos uname -m
@@ -206,22 +166,106 @@ standard_init_linux.go:211: exec user process caused "exec format error"
 
 # 此时执行 qemu-user-static 镜像，将为我们设置模拟 arm 环境
 $ docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+Setting /usr/bin/qemu-alpha-static as binfmt interpreter for alpha
+Setting /usr/bin/qemu-arm-static as binfmt interpreter for arm
+Setting /usr/bin/qemu-armeb-static as binfmt interpreter for armeb
+Setting /usr/bin/qemu-sparc-static as binfmt interpreter for sparc
+Setting /usr/bin/qemu-sparc32plus-static as binfmt interpreter for sparc32plus
+Setting /usr/bin/qemu-sparc64-static as binfmt interpreter for sparc64
+Setting /usr/bin/qemu-ppc-static as binfmt interpreter for ppc
+Setting /usr/bin/qemu-ppc64-static as binfmt interpreter for ppc64
+Setting /usr/bin/qemu-ppc64le-static as binfmt interpreter for ppc64le
+Setting /usr/bin/qemu-m68k-static as binfmt interpreter for m68k
+Setting /usr/bin/qemu-mips-static as binfmt interpreter for mips
+Setting /usr/bin/qemu-mipsel-static as binfmt interpreter for mipsel
+Setting /usr/bin/qemu-mipsn32-static as binfmt interpreter for mipsn32
+Setting /usr/bin/qemu-mipsn32el-static as binfmt interpreter for mipsn32el
+Setting /usr/bin/qemu-mips64-static as binfmt interpreter for mips64
+Setting /usr/bin/qemu-mips64el-static as binfmt interpreter for mips64el
+Setting /usr/bin/qemu-sh4-static as binfmt interpreter for sh4
+Setting /usr/bin/qemu-sh4eb-static as binfmt interpreter for sh4eb
+Setting /usr/bin/qemu-s390x-static as binfmt interpreter for s390x
+Setting /usr/bin/qemu-aarch64-static as binfmt interpreter for aarch64
+Setting /usr/bin/qemu-aarch64_be-static as binfmt interpreter for aarch64_be
+Setting /usr/bin/qemu-hppa-static as binfmt interpreter for hppa
+Setting /usr/bin/qemu-riscv32-static as binfmt interpreter for riscv32
+Setting /usr/bin/qemu-riscv64-static as binfmt interpreter for riscv64
+Setting /usr/bin/qemu-xtensa-static as binfmt interpreter for xtensa
+Setting /usr/bin/qemu-xtensaeb-static as binfmt interpreter for xtensaeb
+Setting /usr/bin/qemu-microblaze-static as binfmt interpreter for microblaze
+Setting /usr/bin/qemu-microblazeel-static as binfmt interpreter for microblazeel
+Setting /usr/bin/qemu-or1k-static as binfmt interpreter for or1k
+
+# centos7会出现报错 sh: write error: Invalid argument，因为使用 -p yes 选项至少需要内核版本 4.10 上的 binfmt_misc，https://github.com/multiarch/qemu-user-static/issues/100。可以去掉 -p yes 选项，之后还有一堆其它问题，直接放弃，换 centos8 了
+$ docker run --rm --privileged multiarch/qemu-user-static --reset
 
 # 之后就可以执行这个 arm centos 镜像了，因为 qemu-user-static将arm架构的指令解释成x86架构的指令执行
-$ docker run --rm -t arm64v8/ubuntu uname -m
+$ docker run --rm -t arm64v8/centos uname -m
 aarch64
+
+# 这里将 hello.arm 所在目录挂载进来执行
+docker run --rm -t -v /it/go/gopath/src/yuanyatianchi.io/hello/bin:/usr/bin/qemu-aarch64-static arm64v8/centos ls /go/bin
 ```
 
-现在 arm64v8/centos 已经可以 run 了，将其作为基础镜像编写 Dockerfile ，build 后 run 起来即可
+
+
+现在 arm64v8/centos 已经可以 run 了，将其作为基础镜像编写 Dockerfile ，build 后 run 起来即可，这里用一个 hello 代码
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("hello")
+}
+```
 
 ```dockerfile
 FROM arm64v8/centos
+
+COPY ./bin/hello /usr/bin
+```
+
+```makefile
+.PHONY: build-hello build-image export-image clean
+
+# 构建程序
+build-hello: ./cmd/hello.go
+	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o ./bin/hello ./cmd/hello.go
+
+# 构建镜像
+build-image: build-hello
+	docker build . -t hello:v1.0
+
+# 导出镜像
+export-image: build-image
+	docker save hello:v1.0 -o ./bin/hello.tar
+
+clean:
+	rm -rf ./bin
 ```
 
 ```shell
-$ make build-image -f Makefile.arm64.mk
+# 构建并导出镜像
+$ make export-image
+CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o ./bin/hello ./cmd/hello.go
+docker build . -t hello:v1.0
+Sending build context to Docker daemon  7.443MB
+Step 1/2 : FROM arm64v8/centos
+ ---> a0477e85b8ae
+Step 2/2 : COPY ./bin/hello /usr/bin
+ ---> 8a0e7d42e2f7
+Successfully built 8a0e7d42e2f7
+Successfully tagged hello:v1.0
+docker save hello:v1.0 -o ./bin/hello.tar
 
-$ docker run -it arm64/hello:0.1 bash
+# 可以看到镜像包
+$ ls ./bin/
+hello  hello.tar
+
+# 验证一下执行 hello
+$ docker run --rm -t hello:v1.0 hello
 hello
 ```
 
@@ -290,7 +334,7 @@ sudo systemctl restart docker
 
 
 
-#### Container
+#### container
 
 https://docs.docker.com/network/proxy/
 

@@ -121,6 +121,8 @@ go build -tags darwin
 
 
 
+
+
 ##### other
 
 明：
@@ -166,6 +168,71 @@ go build -tags darwin
 此标记可以让我们去自定义在编译期间使用一些Go语言自带工具（如`vet`、`asm`等）的方式。
 
 
+
+#### 交叉编译执行
+
+cmd/hello.go
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("hello")
+}
+```
+
+Makefile
+
+```makefile
+.PHONY: build build-hello.amd build-hello.arm clean
+
+all: build-hello.amd build-hello.arm
+
+build-hello.amd64: ./cmd/hello.go
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./bin/hello.amd64 ./cmd/hello.go
+
+build-hello.arm64: ./cmd/hello.go
+	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o ./bin/hello.arm64 ./cmd/hello.go
+
+clean:
+	rm -rf ./bin
+```
+
+编译 & 执行
+
+```sh
+# 编译 x86 可执行文件 & 交叉编译 arm 可执行文件
+$ make all
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./bin/hello.amd64 ./cmd/hello.go
+CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o ./bin/hello.arm64 ./cmd/hello.go
+
+# x86-64 文件可以执行
+$ file ./bin/hello.amd64
+./bin/hello.amd: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, not stripped
+$ ./bin/hello.amd64
+hello
+
+# ARM aarch64 文件不可以执行
+$ file ./bin/hello.arm64
+./bin/hello.arm: ELF 64-bit LSB executable, ARM aarch64, version 1 (SYSV), statically linked, not stripped
+$ ./bin/hello.arm64
+-bash: ./bin/hello.arm: 无法执行二进制文件: 可执行文件格式错误
+```
+
+通过 qemu-aarch64-static （该程序使用内核 binfmt_misc 功能）模拟 aarch 环境
+
+```shell
+# 下载 qemu-aarch64-static
+$ curl -L -O https://github.com/multiarch/qemu-user-static/releases/download/v5.1.0-8/qemu-aarch64-static.tar.gz
+$ tar -zxf qemu-aarch64-static.tar.gz
+$ mv qemu-aarch64-static /usr/bin/qemu-aarch64-static
+
+# 使用 qemu-aarch64-static 执行 hello.aarch64
+$ qemu-aarch64-static ./bin/hello.arm64
+hello
+```
 
 
 

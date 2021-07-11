@@ -23,11 +23,10 @@ tags = ["it", "go"]
 
 - 安装：https://golang.google.cn/dl/ ，下载解压版直接解压即可
 
-
-
 - 环境变量：`/it/go/go/bin:/it/go/gopath/bin`。一些插件可能需要用到比如protoc-gen-go
 
 ```shell
+# 修改 /etc/profile 或者 ~/.bashrc
 vim /etc/profile
 # 写入如下内容
 export PATH=$PATH:/it/go/go/bin:/it/go/gopath/bin
@@ -38,16 +37,21 @@ source /etc/profile
 - 配置
 
 ```shell
-#必要配置
-go env -w GOROOT=D:\it\go\Go
-go env -w GOPATH=D:\it\go\GoPath
+# 必要配置
+go env -w GOROOT=/it/go/go
+go env -w GOPATH=/it/go/gopath
+# gomod
 go env -w GO111MODULE=on
-go env -w GOPROXY=https://goproxy.cn,direct #七牛云代理。"goproxy.io"、"goproxy.cn"、"mirrors.aliyun.com/goproxy/" 等任选其一
+# 七牛云代理。"goproxy.io"、"goproxy.cn"、"mirrors.aliyun.com/goproxy/" 等任选其一
+go env -w GOPROXY=https://goproxy.cn,direct 
 
-#可选配置
-go env -w GOPRIVATE=*.gitlab.com,*.gitee.com #设置GOPRIVATE来跳过私有库，比如常用的Gitlab或Gitee，中间使用逗号分隔
-go env -w GOSUMDB=off #如果在运行go mod vendor时，提示Get https://sum.golang.org/lookup/xxxxxx: dial tcp 216.58.200.49:443: i/o timeout，则是因为Go 1.13设置了默认的GOSUMDB=sum.golang.org，这个网站是被墙了的，用于验证包的有效性，可以通过这个命令关闭。私有仓库自动忽略验证
-go env -w GOSUMDB="sum.golang.google.cn" #可以设置 GOSUMDB="sum.golang.google.cn"， 这个是专门为国内提供的sum 验证服务
+# 可选配置
+# 设置GOPRIVATE来跳过私有库，比如常用的Gitlab或Gitee，中间使用逗号分隔
+go env -w GOPRIVATE=*.gitlab.com,*.gitee.com 
+# 如果在运行go mod vendor时，提示Get https://sum.golang.org/lookup/xxxxxx: dial tcp 216.58.200.49:443: i/o timeout，则是因为Go 1.13设置了默认的GOSUMDB=sum.golang.org，这个网站是被墙了的，用于验证包的有效性，可以通过这个命令关闭。私有仓库自动忽略验证
+go env -w GOSUMDB=off 
+# 可以设置 GOSUMDB="sum.golang.google.cn"， 这个是专门为国内提供的sum 验证服务
+go env -w GOSUMDB="sum.golang.google.cn" 
 ```
 
 ### goland
@@ -55,13 +59,10 @@ go env -w GOSUMDB="sum.golang.google.cn" #可以设置 GOSUMDB="sum.golang.googl
 1. 下载并解压：https://www.jetbrains.com/go/download/other.html
 
 ```sh
-# 软连接
-ln -s /it/go/goland/bin/goland.sh /usr/bin/goland.sh
-
 # 别名。使 goland nohup，并将其产生的 stdout 重定向到 /dev/null
-vim /etc/profile
+$ vim /etc/profile
 #添加如下内容，goland将不输出任何信息，也不会产生 nohup.out
-alias goland='nohup goland.sh >/dev/null & 2>&1'
+alias goland='nohup /it/go/goland/bin/goland.sh >/dev/null & 2>&1'
 ```
 
 2. 破解
