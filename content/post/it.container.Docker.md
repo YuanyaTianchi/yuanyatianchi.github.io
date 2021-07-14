@@ -75,7 +75,7 @@ $ docker info #相信信息
 然后重启docker即可
 
 ```shell
-service docker restart
+systemctl restart docker
 ```
 
 ### 镜像管理
